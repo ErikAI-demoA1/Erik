@@ -41,6 +41,38 @@
   <section style="text-align: center; margin-top: 20px;">
   <img src="APP_Download/erikai2025.jpg" alt="ErikAI 2025" style="max-width: 90%; border-radius: 12px; box-shadow: 0 0 12px rgba(0,0,0,0.3);">
   </section>
+  <form id="searchForm" target="_blank">
+  <input type="text" id="query" placeholder="Zadaj, čo chceš hľadať..." required>
+  <select id="engine">
+    <option value="google">Google</option>
+    <option value="youtube">YouTube</option>
+    <option value="wikipedia">Wikipedia</option>
+  </select>
+  <button type="submit">Hľadaj</button>
+</form>
+
+<script>
+  document.getElementById("searchForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const query = encodeURIComponent(document.getElementById("query").value);
+    const engine = document.getElementById("engine").value;
+    let url = "";
+
+    switch (engine) {
+      case "google":
+        url = `https://www.google.com/search?q=${query}`;
+        break;
+      case "youtube":
+        url = `https://www.youtube.com/results?search_query=${query}`;
+        break;
+      case "wikipedia":
+        url = `https://en.wikipedia.org/wiki/Special:Search?search=${query}`;
+        break;
+    }
+
+    window.open(url, "_blank");
+  });
+</script>
   <section>
     <h2> 🥳 čoskoro možno ďalší projekt</h2>
     <p>Už čoskoro. <br>
