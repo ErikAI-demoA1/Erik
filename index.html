@@ -449,6 +449,136 @@ case "reddit":
   </div>
   <p style="margin-top: 10px;">Ďakujem, že pomáhaš udržať projekt <strong>ErikAI</strong> nažive. ❤️</p>
   </section>
+    <section style="text-align: center; padding: 30px;">
+  <h2>🌐 Vyber si jazyk a otvor Google Translate</h2>
+  <input type="text" id="langFilter" placeholder="Hľadaj jazyk..." style="padding: 8px; width: 80%; max-width: 300px; margin-bottom: 10px;" onkeyup="filterLanguages()">
+  
+  <select id="languageSelect" size="10" style="padding: 8px; width: 90%; max-width: 400px;">
+    <!-- VLOŽENÉ JAZYKY -->
+    <option value="af">afrikánčina</option>
+    <option value="sq">albánčina</option>
+    <option value="am">amharčina</option>
+    <option value="ar">arabčina</option>
+    <option value="hy">arménčina</option>
+    <option value="az">azerbajdžančina</option>
+    <option value="eu">baskičtina</option>
+    <option value="be">bieloruština</option>
+    <option value="bn">bengálčina</option>
+    <option value="bs">bosniačtina</option>
+    <option value="bg">bulharčina</option>
+    <option value="ca">katalánčina</option>
+    <option value="ceb">cebuánčina</option>
+    <option value="zh-CN">čínština (zjednodušená)</option>
+    <option value="zh-TW">čínština (tradičná)</option>
+    <option value="hr">chorvátčina</option>
+    <option value="cs">čeština</option>
+    <option value="da">dánčina</option>
+    <option value="nl">holandčina</option>
+    <option value="en">angličtina</option>
+    <option value="eo">esperanto</option>
+    <option value="et">estónčina</option>
+    <option value="fi">fínčina</option>
+    <option value="fr">francúzština</option>
+    <option value="gl">galícijčina</option>
+    <option value="ka">gruzínčina</option>
+    <option value="de">nemčina</option>
+    <option value="el">gréčtina</option>
+    <option value="gu">gudžarátčina</option>
+    <option value="ht">haitská kreolčina</option>
+    <option value="ha">hauština</option>
+    <option value="haw">havajčina</option>
+    <option value="iw">hebrejčina</option>
+    <option value="hi">hindčina</option>
+    <option value="hmn">hmongčina</option>
+    <option value="hu">maďarčina</option>
+    <option value="is">islandčina</option>
+    <option value="ig">igboština</option>
+    <option value="id">indonézština</option>
+    <option value="ga">írčina</option>
+    <option value="it">taliančina</option>
+    <option value="ja">japončina</option>
+    <option value="jw">jávčina</option>
+    <option value="kn">kannadčina</option>
+    <option value="kk">kazaština</option>
+    <option value="km">khmérčina</option>
+    <option value="ko">kórejčina</option>
+    <option value="ku">kurdčina (kurmandží)</option>
+    <option value="ky">kirgizština</option>
+    <option value="lo">laoština</option>
+    <option value="la">latínčina</option>
+    <option value="lv">lotyština</option>
+    <option value="lt">litovčina</option>
+    <option value="lb">luxemburčina</option>
+    <option value="mk">macedónčina</option>
+    <option value="mg">malgaština</option>
+    <option value="ms">malajčina</option>
+    <option value="ml">malajálamčina</option>
+    <option value="mt">maltčina</option>
+    <option value="mi">maorijčina</option>
+    <option value="mr">maráthčina</option>
+    <option value="mn">mongolčina</option>
+    <option value="my">barmčina</option>
+    <option value="ne">nepálčina</option>
+    <option value="no">nórčina</option>
+    <option value="ny">ňandža</option>
+    <option value="fa">perzština</option>
+    <option value="pl">poľština</option>
+    <option value="pt">portugalčina</option>
+    <option value="pa">pandžábčina</option>
+    <option value="ro">rumunčina</option>
+    <option value="ru">ruština</option>
+    <option value="sm">samojčina</option>
+    <option value="gd">škótska gaelčina</option>
+    <option value="sr">srbčina</option>
+    <option value="st">sesotho</option>
+    <option value="sn">šončina</option>
+    <option value="sd">sindhčina</option>
+    <option value="si">sinhálčina</option>
+    <option value="sk">slovenčina</option>
+    <option value="sl">slovinčina</option>
+    <option value="so">somálčina</option>
+    <option value="es">španielčina</option>
+    <option value="su">sundčina</option>
+    <option value="sw">swahilčina</option>
+    <option value="sv">švédčina</option>
+    <option value="tl">tagalog (filipínčina)</option>
+    <option value="tg">tadžičtina</option>
+    <option value="ta">tamilčina</option>
+    <option value="te">telugčina</option>
+    <option value="th">thajčina</option>
+    <option value="tr">turečtina</option>
+    <option value="uk">ukrajinčina</option>
+    <option value="ur">urdčina</option>
+    <option value="uz">uzbečtina</option>
+    <option value="vi">vietnamčina</option>
+    <option value="cy">walesčina</option>
+    <option value="xh">xhoština</option>
+    <option value="yi">jidiš</option>
+    <option value="yo">jorubčina</option>
+    <option value="zu">zuluština</option>
+  </select><br><br>
+
+  <button onclick="openTranslate()" style="padding: 10px 20px; background-color: #d40000; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+    🌐 Otvoriť Google Translate
+  </button>
+</section>
+
+<script>
+function filterLanguages() {
+  const input = document.getElementById("langFilter").value.toLowerCase();
+  const select = document.getElementById("languageSelect");
+  for (let i = 0; i < select.options.length; i++) {
+    const option = select.options[i];
+    const text = option.text.toLowerCase();
+    option.style.display = text.includes(input) ? "" : "none";
+  }
+}
+
+function openTranslate() {
+  const lang = document.getElementById("languageSelect").value;
+  window.open(`https://translate.google.com/?sl=auto&tl=${lang}`, '_blank');
+}
+</script>
   <p style="font-size: 14px; color: gray; margin-top: 20px;">
   © 2025 Erik Mohylák. Všetky práva vyhradené. ErikAI, turnaj a ostatné veci čo sú tú, tak sú duševným vlastníctvom autora. Kopírovanie alebo úpravy sú zakázané bez súhlasu.
   </p>
