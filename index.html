@@ -420,6 +420,18 @@ case "reddit":
     ✉️ <strong>Napíš mi:</strong> <a href="mailto:emohylak@gmail.com">emohylak@gmail.com</a>
   </p>
   </section>
+    <section id="kalkulacka" style="padding: 20px; background-color: #f4f4f4; margin-top: 40px; border-radius: 12px;">
+  <h2 style="color: #d40000;">🧮 ErikAI – Vedecká kalkulačka</h2>
+  <p>Zadaj matematický výraz a vypočíta sa:</p>
+  <input type="text" id="calcInput" style="width: 80%; padding: 10px; font-size: 16px;" placeholder="napr. sqrt(25) + log(100)">
+  <button onclick="calculateExpression()" style="padding: 10px 20px; font-size: 16px; margin-left: 10px;">Vypočítaj</button>
+  <h3>Výsledok:</h3>
+  <p id="calcOutput" style="font-size: 18px; font-weight: bold; color: #333;"></p>
+</section><script>
+  function calculateExpression() {
+    const input = document.getElementById("calcInput").value;
+    let expression = input.toLowerCase()
+      .replace(/\bsqrt
   <section style="margin-top: 40px;">
   <h2>💖 Podpor ErikAI</h2>
   <p>Ak sa ti ErikAI páči a chceš podporiť jeho vývoj, budem ti veľmi vďačný za dobrovoľný príspevok.</p>
