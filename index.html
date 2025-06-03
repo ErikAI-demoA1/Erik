@@ -173,6 +173,42 @@ case "reddit":
     <p>Už čoskoro. <br>
     <a href="/files/čoskoro.pdf" class="download-button" download>Stiahnuť čoskoro niečo</a></p>
   </section>
+  section style="margin-top: 40px;">
+  <h2>🌐 ErikAI – Prekladač (z angličtiny do slovenčiny)</h2>
+  <p>Zadaj anglický text a preloží sa do slovenčiny.</p>
+  <textarea id="inputText" rows="4" style="width: 100%; max-width: 600px;"></textarea><br>
+  <button onclick="translateText()" style="margin-top: 10px;">Preložiť</button>
+  <h3>Preklad:</h3>
+  <p id="outputText" style="white-space: pre-wrap; background: #f2f2f2; padding: 10px; border-radius: 6px;"></p>
+</section>
+
+<script>
+  function translateText() {
+    const input = document.getElementById("inputText").value;
+    fetch("https://libretranslate.com/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        q: input,
+        source: "en",
+        target: "sk",
+        format: "text"
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("outputText").innerText = data.translatedText;
+    })
+    .catch(() => {
+      document.getElementById("outputText").innerText = "⚠️ Preklad sa nepodaril.";
+    });
+  }
+</script>
+
+<section id="erikai-popis" style="padding: 20px;">
+  <h2>Čo je ErikAI?</h2>
+  ...
+</section>
   <section style="margin-top: 40px;">
   <h2>🧠 Čo všetko dokáže ErikAI?</h2>
   <p><strong>ErikAI</strong> je offline aplikácia s inteligentným ovládaním, ktorú si môžeš prispôsobiť podľa seba. Nevyžaduje pripojenie na internet, ale napriek tomu poskytuje výkonné možnosti, ktoré ti uľahčia život.</p>
