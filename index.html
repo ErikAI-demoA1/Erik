@@ -65,6 +65,18 @@
   <section style="text-align: center; margin-top: 20px;">
   <p id="datetime" style="font-size: 16px; color: #555;"></p>
 </section>
+  <div id="google_translate_element" style="text-align: center; margin-top: 20px;"></div>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'sk',
+      includedLanguages: 'sk,en,cs,pl,de,fr,it,es,hu,ru,uk,zh',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      autoDisplay: true
+    }, 'google_translate_element');
+  }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script>
   function updateDateTime() {
