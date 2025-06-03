@@ -49,6 +49,7 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
 </p>
   <form id="searchForm" target="_blank">
   <input type="text" id="query" placeholder="Zadaj, čo chceš hľadať..." required>
+    <button type="button" onclick="startDictation()" style="margin-left: 5px;">🎤</button>
   <select id="engine">
   <option value="google">Google</option>
   <option value="youtube">YouTube</option>
@@ -103,6 +104,28 @@ case "reddit":
     window.open(url, "_blank");
   });
 </script>
+  <script>
+  function startDictation() {
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = 'sk-SK';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = function(event) {
+        document.getElementById('query').value = event.results[0][0].transcript;
+      };
+
+      recognition.onerror = function(event) {
+        alert('Hlasové vyhľadávanie zlyhalo: ' + event.error);
+      };
+
+      recognition.start();
+    } else {
+      alert('Tvoj prehliadač nepodporuje hlasové vyhľadávanie.');
+    }
+  }
+  </script>
   <small>Vyhľadávanie využíva verejné odkazy na služby ako Google, ChatGPT, DeepSeek atď. Nie sme ich vlastníci ani partneri.</small>
   <section>
     <h2> 🥳 čoskoro možno ďalší projekt</h2>
