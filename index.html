@@ -68,6 +68,25 @@
       case "wikipedia":
         url = `https://en.wikipedia.org/wiki/Special:Search?search=${query}`;
         break;
+        case "bing":
+  url = `https://www.bing.com/search?q=${query}`;
+  break;
+
+case "duckduckgo":
+  url = `https://duckduckgo.com/?q=${query}`;
+  break;
+
+case "brave":
+  url = `https://search.brave.com/search?q=${query}`;
+  break;
+
+case "perplexity":
+  url = `https://www.perplexity.ai/search?q=${query}`;
+  break;
+
+case "reddit":
+  url = `https://www.reddit.com/search/?q=${query}`;
+  break;
     }
 
     window.open(url, "_blank");
