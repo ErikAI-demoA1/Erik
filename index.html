@@ -181,40 +181,20 @@ case "reddit":
   <h3>Preklad:</h3>
   <p id="outputText" style="white-space: pre-wrap; background: #f2f2f2; padding: 10px; border-radius: 6px;"></p>
 </section>
-
-<script>
-  function translateText() {
-    const input = document.getElementById("inputText").value.trim();
-
-    if (!input) {
-      document.getElementById("outputText").textContent = "⚠️ Zadaj text na preklad.";
-      return;
-    }
-
-    fetch("https://libretranslate.de/translate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        q: input,
-        source: "en",
-        target: "sk",
-        format: "text"
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data && data.translatedText) {
-        document.getElementById("outputText").textContent = data.translatedText;
-      } else {
-        document.getElementById("outputText").textContent = "⚠️ Preklad sa nepodaril.";
-        console.log("API odpoveď:", data);
-      }
-    })
-    .catch(() => {
-      document.getElementById("outputText").textContent = "⚠️ Chyba pri pripojení k prekladaču.";
-    });
-  }
-</script>
+  <section style="margin-top: 40px;">
+  <h2>🌍 Prekladač Google Translate</h2>
+  <p>Ak potrebuješ preklad textu, klikni na tlačidlo nižšie a otvorí sa Google Prekladač:</p>
+  <a href="https://translate.google.com/?sl=en&tl=sk&op=translate" target="_blank" style="
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4285F4;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;">
+    🔁 Otvoriť Google Translate
+  </a>
+  </section>
 
   <section style="margin-top: 40px;">
   <h2>🧠 Čo všetko dokáže ErikAI?</h2>
