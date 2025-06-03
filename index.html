@@ -184,8 +184,14 @@ case "reddit":
 
 <script>
   function translateText() {
-    const input = document.getElementById("inputText").value;
-    fetch("https://libretranslate.com/translate", {
+    const input = document.getElementById("inputText").value.trim();
+
+    if (!input) {
+      document.getElementById("outputText").textContent = "⚠️ Zadaj text na preklad.";
+      return;
+    }
+
+    fetch("https://libretranslate.de/translate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -197,10 +203,15 @@ case "reddit":
     })
     .then(res => res.json())
     .then(data => {
-      document.getElementById("outputText").innerText = data.translatedText;
+      if (data && data.translatedText) {
+        document.getElementById("outputText").textContent = data.translatedText;
+      } else {
+        document.getElementById("outputText").textContent = "⚠️ Preklad sa nepodaril.";
+        console.log("API odpoveď:", data);
+      }
     })
     .catch(() => {
-      document.getElementById("outputText").innerText = "⚠️ Preklad sa nepodaril.";
+      document.getElementById("outputText").textContent = "⚠️ Chyba pri pripojení k prekladaču.";
     });
   }
 </script>
