@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,7 +7,6 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
     }
@@ -31,41 +31,37 @@
       border-radius: 5px;
       margin-top: 10px;
     }
+    body.light {
+      background-color: #f4f4f4;
+      color: black;
+    }
+    body.dark {
+      background-color: #111;
+      color: white;
+    }
+    #toggle-theme {
+      margin: 10px;
+      padding: 5px 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #e0e0e0;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    body.dark #toggle-theme {
+      background-color: #333;
+      color: white;
+    }
   </style>
+</head>
 <body>
+  <button id="toggle-theme">🌙 Tmavý režim</button>
+
   <header>
     <h1>ErikAI 2025 – Všetko o projekte</h1>
-    <p>Spoznaj svet Erika Mohyláka (odporúčam vám všetko si prečítať)</p>
+    <p>Spoznaj svet Erika Mohyláka (odporúcam vám všetko si prečítať)</p>
   </header>
-    <button id="toggle-theme">🌙 Tmavý režim</button>
-   <style>
-   body.light {
-  background-color: white;
-  color: black;
-}
-
-body.dark {
-  background-color: #111;
-  color: white;
-}
-
-#toggle-theme {
-  margin: 10px;
-  padding: 5px 12px;
-  border: none;
-  border-radius: 6px;
-  background-color: #e0e0e0;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-body.dark #toggle-theme {
-  background-color: #333;
-  color: white;
-}
-     <style>
-     </head>
      <script>
   const toggleBtn = document.getElementById('toggle-theme');
   const currentTheme = localStorage.getItem('theme') || 'light';
