@@ -188,6 +188,21 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
 <option value="coursera">Coursera</option>
 <option value="edx">edX</option>
 <option value="khanacademy">Khan Academy</option>
+    <option value="firefox">Firefox</option>
+<option value="quora">Quora</option>
+<option value="notion">Notion</option>
+<option value="deepl">DeepL Translator</option>
+<option value="soundcloud">SoundCloud</option>
+<option value="spotify">Spotify</option>
+<option value="github">GitHub</option>
+<option value="stackoverflow">Stack Overflow</option>
+<option value="duckduckgo">DuckDuckGo</option>
+<option value="opera">Opera Browser</option>
+<option value="edge">Microsoft Edge</option>
+<option value="reddit">Reddit</option>
+<option value="tiktok">TikTok</option>
+<option value="pinterest">Pinterest</option>
+<option value="telegram">Telegram</option>
 </select>
   <button type="submit">Hľadaj</button>
 </form>
@@ -279,6 +294,65 @@ case "edx":
   break;
 case "khanacademy":
   url = `https://www.khanacademy.org/search?page_search_query=${query}`;
+  break;
+        case "firefox":
+  url = `https://www.mozilla.org/en-US/search/?q=${query}`;
+  break;
+
+case "quora":
+  url = `https://www.quora.com/search?q=${query}`;
+  break;
+
+case "notion":
+  url = `https://www.notion.so/search?q=${query}`;
+  break;
+
+case "deepl":
+  url = `https://www.deepl.com/en/translator#en/sk/${query}`;
+  break;
+
+case "soundcloud":
+  url = `https://soundcloud.com/search?q=${query}`;
+  break;
+
+case "spotify":
+  url = `https://open.spotify.com/search/${query}`;
+  break;
+
+case "github":
+  url = `https://github.com/search?q=${query}`;
+  break;
+
+case "stackoverflow":
+  url = `https://stackoverflow.com/search?q=${query}`;
+  break;
+
+case "duckduckgo":
+  url = `https://duckduckgo.com/?q=${query}`;
+  break;
+
+case "opera":
+  url = `https://www.opera.com/search?q=${query}`;
+  break;
+
+case "edge":
+  url = `https://www.bing.com/search?q=${query}`;
+  break;
+
+case "reddit":
+  url = `https://www.reddit.com/search/?q=${query}`;
+  break;
+
+case "tiktok":
+  url = `https://www.tiktok.com/search?q=${query}`;
+  break;
+
+case "pinterest":
+  url = `https://www.pinterest.com/search/pins/?q=${query}`;
+  break;
+
+case "telegram":
+  url = `https://web.telegram.org/k/#q=${query}`;
   break;
   }
 
