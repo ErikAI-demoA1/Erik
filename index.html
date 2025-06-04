@@ -217,7 +217,7 @@ case "perplexity":
 case "reddit":
   url = `https://www.reddit.com/search/?q=${query}`;
   break;
-    }
+        
     case "instagram":
     url = `https://www.instagram.com/explore/search/keyword/?q=${query}`;
     break;
@@ -236,6 +236,7 @@ case "linkedin":
 case "pinterest":
     url = `https://www.pinterest.com/search/pins/?q=${query}`;
     break;
+  }
 
     window.open(url, "_blank");
   });
