@@ -203,6 +203,19 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
 <option value="tiktok">TikTok</option>
 <option value="pinterest">Pinterest</option>
 <option value="telegram">Telegram</option>
+    <option value="googlebooks">Google Books</option>
+<option value="goodreads">Goodreads</option>
+<option value="libgen">Library Genesis</option>
+<option value="bookdepository">Book Depository</option>
+    <option value="imdb">IMDb</option>
+<option value="rottentomatoes">Rotten Tomatoes</option>
+<option value="letterboxd">Letterboxd</option>
+    <option value="huggingface">Hugging Face</option>
+<option value="openai">OpenAI</option>
+    <option value="coinmarketcap">CoinMarketCap</option>
+<option value="coingecko">CoinGecko</option>
+    <option value="lastfm">Last.fm</option>
+<option value="bandcamp">Bandcamp</option>
 </select>
   <button type="submit">Hľadaj</button>
 </form>
@@ -353,6 +366,53 @@ case "pinterest":
 
 case "telegram":
   url = `https://web.telegram.org/k/#q=${query}`;
+  break;
+        case "googlebooks":
+  url = `https://www.google.com/search?tbm=bks&q=${query}`;
+  break;
+
+case "goodreads":
+  url = `https://www.goodreads.com/search?q=${query}`;
+  break;
+
+case "libgen":
+  url = `https://libgen.is/search.php?req=${query}`;
+  break;
+
+case "bookdepository":
+  url = `https://www.bookdepository.com/search?searchTerm=${query}`;
+  break;
+        case "imdb":
+  url = `https://www.imdb.com/find?q=${query}`;
+  break;
+
+case "rottentomatoes":
+  url = `https://www.rottentomatoes.com/search?search=${query}`;
+  break;
+
+case "letterboxd":
+  url = `https://letterboxd.com/search/${query}`;
+  break;
+        case "huggingface":
+  url = `https://huggingface.co/search/full-text?q=${query}`;
+  break;
+
+case "openai":
+  url = `https://platform.openai.com/docs/search?q=${query}`;
+  break;
+        case "coinmarketcap":
+  url = `https://coinmarketcap.com/search/?q=${query}`;
+  break;
+
+case "coingecko":
+  url = `https://www.coingecko.com/en/search?query=${query}`;
+  break;
+        case "lastfm":
+  url = `https://www.last.fm/search?q=${query}`;
+  break;
+
+case "bandcamp":
+  url = `https://bandcamp.com/search?q=${query}`;
   break;
   }
 
