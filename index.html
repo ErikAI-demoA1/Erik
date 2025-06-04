@@ -839,5 +839,16 @@ function sortSelectOptions(selectElement) {
 const engineSelect = document.getElementById("engine");
 sortSelectOptions(engineSelect);
     </script>
+    <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const selectElement = document.getElementById("engine");
+    const options = Array.from(selectElement.options);
+
+    options.sort((a, b) => a.text.localeCompare(b.text));
+
+    selectElement.innerHTML = "";
+    options.forEach(option => selectElement.add(option));
+  });
+    </script>
 </body>
 </html>
