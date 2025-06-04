@@ -216,6 +216,11 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
 <option value="coingecko">CoinGecko</option>
     <option value="lastfm">Last.fm</option>
 <option value="bandcamp">Bandcamp</option>
+    <option value="applesupport">Apple Support</option>
+    <option value="appstore">App Store</option>
+    <option value="applemusic">Apple Music</option>
+    <option value="icloud">iCloud</option>
+    <option value="appledev">Apple Developer</option>
 </select>
   <button type="submit">Hľadaj</button>
 </form>
@@ -413,6 +418,21 @@ case "coingecko":
 
 case "bandcamp":
   url = `https://bandcamp.com/search?q=${query}`;
+  break;
+        case "applesupport":
+  url = `https://support.apple.com/en-us/search?query=${query}`;
+  break;
+        case "appstore":
+  url = `https://apps.apple.com/us/search?term=${query}`;
+  break;
+        case "applemusic":
+  url = `https://music.apple.com/search?term=${query}`;
+  break;
+        case "icloud":
+  url = `https://support.apple.com/icloud?query=${query}`;
+  break;
+        case "appledev":
+  url = `https://developer.apple.com/search/?q=${query}`;
   break;
   }
 
