@@ -162,15 +162,16 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
   <form id="searchForm" target="_blank">
   <input type="text" id="query" placeholder="Zadaj, čo chceš hľadať..." required>
     <button type="button" onclick="startDictation()" style="margin-left: 5px;">🎤</button>
-    function sortSelectOptions(selectElement) {
-    const options = Array.from(selectElement.options);
-    options.sort((a, b) => a.text.localeCompare(b.text));
-    selectElement.innerHTML = "";
-    options.forEach(option => selectElement.add(option));
+    <script>
+function sortSelectOptions(selectElement) {
+  const options = Array.from(selectElement.options);
+  options.sort((a, b) => a.text.localeCompare(b.text));
+  selectElement.innerHTML = "";
+  options.forEach(option => selectElement.add(option));
 }
-
 const engineSelect = document.getElementById("engine");
 sortSelectOptions(engineSelect);
+    </script>
   <select id="engine">
   <option value="google">Google</option>
   <option value="youtube">YouTube</option>
