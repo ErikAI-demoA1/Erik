@@ -177,6 +177,17 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
 <option value="twitter">X (Twitter)</option>
 <option value="linkedin">LinkedIn</option>
 <option value="pinterest">Pinterest</option>
+    <option value="yahoo">Yahoo</option>
+<option value="qwant">Qwant</option>
+<option value="startpage">Startpage</option>
+<option value="ecosia">Ecosia</option>
+<option value="tumblr">Tumblr</option>
+<option value="amazon">Amazon</option>
+<option value="ebay">eBay</option>
+<option value="aliexpress">AliExpress</option>
+<option value="coursera">Coursera</option>
+<option value="edx">edX</option>
+<option value="khanacademy">Khan Academy</option>
 </select>
   <button type="submit">Hľadaj</button>
 </form>
@@ -236,6 +247,39 @@ case "linkedin":
 case "pinterest":
     url = `https://www.pinterest.com/search/pins/?q=${query}`;
     break;
+        case "yahoo":
+  url = `https://search.yahoo.com/search?p=${query}`;
+  break;
+case "qwant":
+  url = `https://www.qwant.com/?q=${query}`;
+  break;
+case "startpage":
+  url = `https://www.startpage.com/sp/search?query=${query}`;
+  break;
+case "ecosia":
+  url = `https://www.ecosia.org/search?q=${query}`;
+  break;
+case "tumblr":
+  url = `https://www.tumblr.com/search/${query}`;
+  break;
+case "amazon":
+  url = `https://www.amazon.com/s?k=${query}`;
+  break;
+case "ebay":
+  url = `https://www.ebay.com/sch/i.html?_nkw=${query}`;
+  break;
+case "aliexpress":
+  url = `https://www.aliexpress.com/wholesale?SearchText=${query}`;
+  break;
+case "coursera":
+  url = `https://www.coursera.org/search?query=${query}`;
+  break;
+case "edx":
+  url = `https://www.edx.org/search?q=${query}`;
+  break;
+case "khanacademy":
+  url = `https://www.khanacademy.org/search?page_search_query=${query}`;
+  break;
   }
 
     window.open(url, "_blank");
