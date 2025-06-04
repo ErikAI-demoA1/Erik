@@ -171,6 +171,12 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
   <option value="brave">Brave</option>
   <option value="perplexity">Perplexity</option>
   <option value="reddit">Reddit</option>
+    <option value="instagram">Instagram</option>
+<option value="tiktok">TikTok</option>
+<option value="facebook">Facebook</option>
+<option value="twitter">X (Twitter)</option>
+<option value="linkedin">LinkedIn</option>
+<option value="pinterest">Pinterest</option>
 </select>
   <button type="submit">Hľadaj</button>
 </form>
@@ -212,6 +218,24 @@ case "reddit":
   url = `https://www.reddit.com/search/?q=${query}`;
   break;
     }
+    case "instagram":
+    url = `https://www.instagram.com/explore/search/keyword/?q=${query}`;
+    break;
+case "tiktok":
+    url = `https://www.tiktok.com/search?q=${query}`;
+    break;
+case "facebook":
+    url = `https://www.facebook.com/search/top?q=${query}`;
+    break;
+case "twitter":
+    url = `https://twitter.com/search?q=${query}`;
+    break;
+case "linkedin":
+    url = `https://www.linkedin.com/search/results/all/?keywords=${query}`;
+    break;
+case "pinterest":
+    url = `https://www.pinterest.com/search/pins/?q=${query}`;
+    break;
 
     window.open(url, "_blank");
   });
