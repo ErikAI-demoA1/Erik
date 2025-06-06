@@ -222,6 +222,46 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
     <option value="applemusic">Apple Music</option>
     <option value="icloud">iCloud</option>
     <option value="appledev">Apple Developer</option>
+    <option value="deezer">Deezer</option>
+<option value="applemusic">Apple Music</option>
+<option value="twitch">Twitch</option>
+<option value="mixcloud">Mixcloud</option>
+<option value="ted">TED Talks</option>
+<option value="dailymotion">Dailymotion</option>
+<option value="vimeo">Vimeo</option>
+<option value="news.google">Google News</option>
+<option value="bbc">BBC News</option>
+<option value="cnn">CNN</option>
+<option value="reuters">Reuters</option>
+<option value="nytimes">New York Times</option>
+<option value="forbes">Forbes</option>
+<option value="businessinsider">Business Insider</option>
+<option value="medium">Medium</option>
+<option value="devto">dev.to</option>
+<option value="npm">npmjs.com</option>
+<option value="pypi">PyPI (Python balíčky)</option>
+<option value="f-droid">F-Droid (open source apps)</option>
+<option value="apkpure">APKPure</option>
+<option value="apkmirror">APKMirror</option>
+<option value="unsplash">Unsplash (fotky)</option>
+<option value="pexels">Pexels</option>
+<option value="pixabay">Pixabay</option>
+<option value="canva">Canva</option>
+<option value="chatgpt">ChatGPT (OpenAI)</option>
+<option value="bard">Gemini (ex Bard)</option>
+<option value="notionai">Notion AI</option>
+<option value="figma">Figma</option>
+<option value="codepen">CodePen</option>
+<option value="replit">Replit</option>
+<option value="coursera">Coursera</option>
+<option value="udemy">Udemy</option>
+<option value="skillshare">Skillshare</option>
+<option value="quizlet">Quizlet</option>
+<option value="wolframalpha">WolframAlpha</option>
+<option value="desmos">Desmos (kalkulačka)</option>
+<option value="overleaf">Overleaf (LaTeX)</option>
+<option value="pubmed">PubMed (vedecké články)</option>
+<option value="arxiv">arXiv.org (výskum)</option>
 </select>
   <button type="submit">Hľadaj</button>
 </form>
@@ -434,6 +474,126 @@ case "bandcamp":
   break;
         case "appledev":
   url = `https://developer.apple.com/search/?q=${query}`;
+  break;
+        case "deezer":
+  url = `https://www.deezer.com/search/${query}`;
+  break;
+case "applemusic":
+  url = `https://music.apple.com/us/search?term=${query}`;
+  break;
+case "twitch":
+  url = `https://www.twitch.tv/search?term=${query}`;
+  break;
+case "mixcloud":
+  url = `https://www.mixcloud.com/search/?q=${query}`;
+  break;
+case "ted":
+  url = `https://www.ted.com/search?q=${query}`;
+  break;
+case "dailymotion":
+  url = `https://www.dailymotion.com/search/${query}`;
+  break;
+case "vimeo":
+  url = `https://vimeo.com/search?q=${query}`;
+  break;
+case "news.google":
+  url = `https://news.google.com/search?q=${query}`;
+  break;
+case "bbc":
+  url = `https://www.bbc.co.uk/search?q=${query}`;
+  break;
+case "cnn":
+  url = `https://www.cnn.com/search?q=${query}`;
+  break;
+case "reuters":
+  url = `https://www.reuters.com/site-search/?query=${query}`;
+  break;
+case "nytimes":
+  url = `https://www.nytimes.com/search?query=${query}`;
+  break;
+case "forbes":
+  url = `https://www.forbes.com/search/?q=${query}`;
+  break;
+case "businessinsider":
+  url = `https://www.businessinsider.com/s?q=${query}`;
+  break;
+case "medium":
+  url = `https://medium.com/search?q=${query}`;
+  break;
+case "devto":
+  url = `https://dev.to/search?q=${query}`;
+  break;
+case "npm":
+  url = `https://www.npmjs.com/search?q=${query}`;
+  break;
+case "pypi":
+  url = `https://pypi.org/search/?q=${query}`;
+  break;
+case "f-droid":
+  url = `https://f-droid.org/en/packages/?q=${query}`;
+  break;
+case "apkpure":
+  url = `https://apkpure.com/search?q=${query}`;
+  break;
+case "apkmirror":
+  url = `https://www.apkmirror.com/?post_type=app_release&searchtype=apk&s=${query}`;
+  break;
+case "unsplash":
+  url = `https://unsplash.com/s/photos/${query}`;
+  break;
+case "pexels":
+  url = `https://www.pexels.com/search/${query}`;
+  break;
+case "pixabay":
+  url = `https://pixabay.com/images/search/${query}`;
+  break;
+case "canva":
+  url = `https://www.canva.com/search?q=${query}`;
+  break;
+case "chatgpt":
+  url = `https://chat.openai.com/?q=${query}`;
+  break;
+case "bard":
+  url = `https://gemini.google.com/?q=${query}`;
+  break;
+case "notionai":
+  url = `https://www.notion.so/search?q=${query}`;
+  break;
+case "figma":
+  url = `https://www.figma.com/community/search?resource_type=all&sort_by=relevance&q=${query}`;
+  break;
+case "codepen":
+  url = `https://codepen.io/search/pens?q=${query}`;
+  break;
+case "replit":
+  url = `https://replit.com/search?q=${query}`;
+  break;
+case "coursera":
+  url = `https://www.coursera.org/search?query=${query}`;
+  break;
+case "udemy":
+  url = `https://www.udemy.com/courses/search/?q=${query}`;
+  break;
+case "skillshare":
+  url = `https://www.skillshare.com/search?query=${query}`;
+  break;
+case "quizlet":
+  url = `https://quizlet.com/subject/${query}`;
+  break;
+case "wolframalpha":
+  url = `https://www.wolframalpha.com/input?i=${query}`;
+  break;
+case "desmos":
+  url = `https://www.desmos.com/search?q=${query}`;
+  break;
+case "overleaf":
+  url = `https://www.overleaf.com/search?q=${query}`;
+  break;
+case "pubmed":
+  url = `https://pubmed.ncbi.nlm.nih.gov/?term=${query}`;
+  break;
+case "arxiv":
+  url = `https://arxiv.org/search/?query=${query}&searchtype=all`;
   break;
   }
 
