@@ -262,6 +262,21 @@ Toto je ľahšia webová verzia <strong>ErikAI</strong> – dostupná pre všetk
 <option value="overleaf">Overleaf (LaTeX)</option>
 <option value="pubmed">PubMed (vedecké články)</option>
 <option value="arxiv">arXiv.org (výskum)</option>
+    <option value="brloh">Brloh.sk</option>
+<option value="videohrytv">Videohry.tv</option>
+<option value="gamefan">GameFan.sk</option>
+<option value="gog">GOG.com</option>
+<option value="epicgames">Epic Games Store</option>
+<option value="steam">Steam</option>
+<option value="humblebundle">Humble Bundle</option>
+<option value="greenmangaming">Green Man Gaming</option>
+<option value="fanatical">Fanatical.com</option>
+<option value="instantgaming">Instant Gaming</option>
+<option value="allkeyshop">AllKeyShop (porovnanie cien)</option>
+<option value="playstationstore">PlayStation Store</option>
+<option value="nintendoshop">Nintendo eShop</option>
+<option value="xboxstore">Xbox Store</option>
+<option value="cdkeys">CDKeys.com</option>
 </select>
   <button type="submit">Hľadaj</button>
 </form>
@@ -594,6 +609,65 @@ case "pubmed":
   break;
 case "arxiv":
   url = `https://arxiv.org/search/?query=${query}&searchtype=all`;
+  break;
+        case "brloh":
+  url = `https://www.brloh.sk/search?search=${query}`;
+  break;
+
+case "videohrytv":
+  url = `https://www.videohry.tv/index.php?route=product/search&search=${query}`;
+  break;
+
+case "gamefan":
+  url = `https://www.gamefan.sk/?s=${query}`;
+  break;
+
+case "gog":
+  url = `https://www.gog.com/en/games?search=${query}`;
+  break;
+
+case "epicgames":
+  url = `https://store.epicgames.com/en-US/browse?q=${query}`;
+  break;
+
+case "steam":
+  url = `https://store.steampowered.com/search/?term=${query}`;
+  break;
+
+case "humblebundle":
+  url = `https://www.humblebundle.com/store/search?sort=bestselling&search=${query}`;
+  break;
+
+case "greenmangaming":
+  url = `https://www.greenmangaming.com/search-results/?query=${query}`;
+  break;
+
+case "fanatical":
+  url = `https://www.fanatical.com/en/search?search=${query}`;
+  break;
+
+case "instantgaming":
+  url = `https://www.instant-gaming.com/en/search/?q=${query}`;
+  break;
+
+case "allkeyshop":
+  url = `https://www.allkeyshop.com/blog/catalogue/search-${query}/`;
+  break;
+
+case "playstationstore":
+  url = `https://store.playstation.com/en-sk/search/${query}`;
+  break;
+
+case "nintendoshop":
+  url = `https://www.nintendo.com/store/search?q=${query}`;
+  break;
+
+case "xboxstore":
+  url = `https://www.xbox.com/en-us/search?q=${query}`;
+  break;
+
+case "cdkeys":
+  url = `https://www.cdkeys.com/catalogsearch/result/?q=${query}`;
   break;
   }
 
@@ -1444,7 +1518,7 @@ function openTranslate() {
 
   <h3>📈 Technické parametre:</h3>
   <ul>
-    <li>🧠 Web verzia: <strong>1335 riadkov</strong> HTML/CSS/JS</li>
+    <li>🧠 Web verzia: <strong>1570 riadkov</strong> HTML/CSS/JS</li>
     <li>📱 Aplikácia:
       <ul>
         <li>ActivityMain.java: ~1180 riadkov</li>
