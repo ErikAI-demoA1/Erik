@@ -26,9 +26,6 @@ const odpovede = {
   "futbal": "Futbal je najpopulárnejší šport na svete.",
   "erikai": "ErikAI je offline umelá inteligencia vytvorená tebou.",
 };
-<script src="erikai-chat.js?v=" + new Date().getTime()></script>
-function getAIResponse(text) {
-  const lower = text.toLowerCase().trim();
 
   if (lower.startsWith("vyhľadaj:")) {
     const query = lower.replace("vyhľadaj:", "").trim();
@@ -39,3 +36,4 @@ function getAIResponse(text) {
   return odpovede[lower] || "Prepáč, túto otázku ešte nepoznám.";
 }
 });
+<script src="erikai-chat.js?v=" + new Date().getTime()></script>
