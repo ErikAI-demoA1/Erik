@@ -21,18 +21,20 @@ document.addEventListener("DOMContentLoaded", function () {
     chat.appendChild(msg);
     chat.scrollTop = chat.scrollHeight;
   }
-const odpovede = {
-  "pes": "Pes domáci alebo pes je taxón z rodu Canis. Je to domestikovaná podoba vlka dravého. Presné zaradenie tohto taxónu v rámci rodu Canis je sporné .",
-  "futbal": "Futbal je najpopulárnejší šport na svete.",
-  "erikai": "ErikAI je offline umelá inteligencia vytvorená tebou.",
-};
 
-  if (lower.startsWith("vyhľadaj:")) {
-    const query = lower.replace("vyhľadaj:", "").trim();
-    window.open("https://www.google.com/search?q=" + encodeURIComponent(query), "_blank");
-    return `🔍 Vyhľadávam: ${query}`;
+  const odpovede = {
+    "pes": "Pes domáci alebo pes je taxón z rodu Canis. Je to domestikovaná podoba vlka dravého. Presné zaradenie tohto taxónu v rámci rodu Canis je sporné.",
+    "futbal": "Futbal je najpopulárnejší šport na svete.",
+    "erikai": "ErikAI je offline umelá inteligencia vytvorená tebou.",
+  };
+
+  function getAIResponse(text) {
+    const lower = text.toLowerCase().trim();
+    if (lower.startsWith("vyhľadaj:")) {
+      const query = lower.replace("vyhľadaj:", "").trim();
+      window.open("https://www.google.com/search?q=" + encodeURIComponent(query), "_blank");
+      return `🔍 Vyhľadávam: ${query}`;
+    }
+    return odpovede[lower] || "Prepáč, túto otázku ešte nepoznám.";
   }
-
-  return odpovede[lower] || "Prepáč, túto otázku ešte nepoznám.";
-}
 });
