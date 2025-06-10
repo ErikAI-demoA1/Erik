@@ -1,1 +1,25 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ErikAI Chat</title>
+  <style>
+    body { font-family: Arial; background: #f2f2f2; padding: 20px; }
+    #chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; background: white; }
+    .message { margin-bottom: 10px; }
+    input { padding: 10px; width: 80%; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>💬 Chat s ErikAI</h2>
+  <div id="chat-box"></div>
+  <form id="chat-form">
+    <input id="user-input" placeholder="Napíš otázku..." autocomplete="off" />
+    <button type="submit">Odoslať</button>
+  </form>
 
+  <script src="erikai-chat.js"></script>
+</body>
+</html>
