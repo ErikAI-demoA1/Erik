@@ -49,13 +49,8 @@
     <button type="submit">Odoslať</button>
   </form>
 
-  <script>
-    // Po načítaní stránky dynamicky načítame JS s aktuálnym časovým parametrom
-    document.addEventListener("DOMContentLoaded", () => {
-      const script = document.createElement("script");
-      script.src = "erikai-chat.js?v=" + new Date().getTime();
-      document.body.appendChild(script);
-    });
+  <script src="erikai-chat.js?v=999">
+    
   </script>
 
 </body>
