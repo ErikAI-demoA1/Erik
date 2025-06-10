@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chat.scrollTop = chat.scrollHeight;
   }
 const odpovede = {
-  "pes": "Pes je verný štvornohý spoločník.",
+  "pes": "Pes domáci alebo pes je taxón z rodu Canis. Je to domestikovaná podoba vlka dravého. Presné zaradenie tohto taxónu v rámci rodu Canis je sporné .",
   "futbal": "Futbal je najpopulárnejší šport na svete.",
   "erikai": "ErikAI je offline umelá inteligencia vytvorená tebou.",
 };
