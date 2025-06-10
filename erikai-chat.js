@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const odpovede = {
     "pes": "Pes domáci alebo pes je taxón z rodu Canis. Je to domestikovaná podoba vlka dravého. Presné zaradenie tohto taxónu v rámci rodu Canis je sporné.",
-    "futbal": "Futbal je najpopulárnejší šport na svete.",
+    "futbal": "Futbal, zastarano kopaná, je kolektívna loptová hra, ktorá je považovaná za najpopulárnejší šport na svete. Podľa prieskumu FIFA hrá futbal pravidelne najmenej 300 miliónov ľudí vo viac ako 220 krajinách sveta. Dôvodom jeho popularity sú jednoduché pravidlá a minimálna náročnosť na vybavenie.",
     "erikai": "ErikAI je offline umelá inteligencia vytvorená tebou.",
   };
 
