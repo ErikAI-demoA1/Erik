@@ -46,6 +46,10 @@
     <button type="submit">Odoslať</button>
   </form>
 
-  <script src="erikai-chat.js"></script>
+<script>
+  const script = document.createElement("script");
+  script.src = "erikai-chat.js?v=" + new Date().getTime();
+  document.body.appendChild(script);
+</script>
 </body>
 </html>
