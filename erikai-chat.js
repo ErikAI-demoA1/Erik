@@ -21,23 +21,21 @@ document.addEventListener("DOMContentLoaded", function () {
     chat.appendChild(msg);
     chat.scrollTop = chat.scrollHeight;
   }
+const odpovede = {
+  "pes": "Pes je verný štvornohý spoločník.",
+  "futbal": "Futbal je najpopulárnejší šport na svete.",
+  "erikai": "ErikAI je offline umelá inteligencia vytvorená tebou.",
+};
 
-  function getAIResponse(text) {
-    if (text.startsWith("vyhľadaj:")) {
-      const query = text.replace("vyhľadaj:", "").trim();
-      window.open("https://www.google.com/search?q=" + encodeURIComponent(query), "_blank");
-      return `🔍 Vyhľadávam: ${query}`;
-    }
+function getAIResponse(text) {
+  const lower = text.toLowerCase().trim();
 
-    switch (text) {
-      case "pes":
-        return "Pes je verný štvornohý spoločník.";
-      case "futbal":
-        return "Futbal je najpopulárnejší šport na svete.";
-      case "erikai":
-        return "ErikAI je offline umelá inteligencia vytvorená Erikom Mohylákom.";
-      default:
-        return "Prepáč, túto otázku ešte nepoznám.";
-    }
+  if (lower.startsWith("vyhľadaj:")) {
+    const query = lower.replace("vyhľadaj:", "").trim();
+    window.open("https://www.google.com/search?q=" + encodeURIComponent(query), "_blank");
+    return `🔍 Vyhľadávam: ${query}`;
   }
+
+  return odpovede[lower] || "Prepáč, túto otázku ešte nepoznám.";
+}
 });
