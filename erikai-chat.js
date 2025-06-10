@@ -3,25 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const input = document.getElementById("user-input");
   const chat = document.getElementById("chat-box");
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const userText = input.value.trim();
-    if (!userText) return;
-
-    addMessage("Ty", userText);
-    const response = getAIResponse(userText.toLowerCase());
-    addMessage("ErikAI", response);
-    input.value = "";
-  });
-
-  function addMessage(sender, text) {
-    const msg = document.createElement("div");
-    msg.className = "message";
-    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    chat.appendChild(msg);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
   const odpovede = {
     "pes": "Pes domáci alebo pes je taxón z rodu Canis. Je to domestikovaná podoba vlka dravého. Presné zaradenie tohto taxónu v rámci rodu Canis je sporné.",
     "futbal": "Futbal je najpopulárnejší šport na svete.",
@@ -37,4 +18,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return odpovede[lower] || "Prepáč, túto otázku ešte nepoznám.";
   }
+
+  function addMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    addMessage("Ty", userText);
+    const response = getAIResponse(userText);
+    addMessage("ErikAI", response);
+    input.value = "";
+  });
 });
