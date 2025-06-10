@@ -36,4 +36,3 @@ const odpovede = {
   return odpovede[lower] || "Prepáč, túto otázku ešte nepoznám.";
 }
 });
-<script src="erikai-chat.js?v=" + new Date().getTime()></script>
