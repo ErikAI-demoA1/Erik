@@ -634,10 +634,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addMessage("ErikAI", response);
     input.value = "";
   });
-  // 🎤 Mikrofón – rozpoznanie reči
-const micBtn = document.getElementById("mic-btn");
-const input = document.getElementById("user-input");
-
+  
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
