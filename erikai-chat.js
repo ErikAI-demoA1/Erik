@@ -633,4 +633,37 @@ document.addEventListener("DOMContentLoaded", function () {
     addMessage("ErikAI", response);
     input.value = "";
   });
+  // 🎤 Mikrofón – rozpoznanie reči
+const micBtn = document.getElementById("mic-btn");
+const input = document.getElementById("user-input");
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "sk-SK";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  micBtn.addEventListener("click", () => {
+    recognition.start();
+    micBtn.disabled = true;
+    micBtn.textContent = "🎙️ Počúvam...";
+  });
+
+  recognition.addEventListener("result", (event) => {
+    const result = event.results[0][0].transcript;
+    input.value = result;
+    micBtn.disabled = false;
+    micBtn.textContent = "🎤";
+  });
+
+  recognition.addEventListener("end", () => {
+    micBtn.disabled = false;
+    micBtn.textContent = "🎤";
+  });
+} else {
+  micBtn.disabled = true;
+  micBtn.title = "Tvoj prehliadač nepodporuje mikrofón";
+}
 });
