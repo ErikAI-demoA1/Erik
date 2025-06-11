@@ -192,6 +192,24 @@ To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-
     <option value="yo">jorubčina</option>
     <option value="zu">zuluština</option>
   </select><br><br>
-
+<script>
+  document.getElementById("languageSelect").addEventListener("change", function () {
+    const jazyk = this.value;
+    const iframe = document.querySelector("iframe.goog-te-banner-frame");
+    if (!iframe) {
+      const translateScript = document.createElement("script");
+      translateScript.type = "text/javascript";
+      translateScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      document.head.appendChild(translateScript);
+    }
+    setTimeout(() => {
+      const select = document.querySelector(".goog-te-combo");
+      if (select) {
+        select.value = jazyk;
+        select.dispatchEvent(new Event("change"));
+      }
+    }, 500);
+  });
+</script>
 </body>
 </html>
