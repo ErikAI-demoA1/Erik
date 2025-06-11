@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 "google": "Google je technologická spoločnosť známa najmä svojím internetovým vyhľadávačom. Založili ju Larry Page a Sergey Brin v roku 1998. Dnes ponúka množstvo služieb ako Gmail, YouTube, Google Maps a Android.",
 "história": "História je veda, ktorá skúma minulosť ľudskej civilizácie. Analyzuje udalosti, osobnosti, spoločenské zmeny a kultúry. Pomáha nám pochopiť vývoj ľudstva a poučiť sa z minulých skúseností.",
 "vesmír": "Vesmír je nekonečný priestor, ktorý zahŕňa všetko existujúce — galaxie, hviezdy, planéty, čas a hmotu. Začal sa veľkým treskom pred približne 13,8 miliardami rokov a neustále sa rozpína.",
-"mobil": "Mobil, resp. mobilný telefón, je prenosné zariadenie určené na komunikáciu, písanie správ, prístup na internet a spúšťanie aplikácií. V dnešnej dobe ide najmä o smartfóny s dotykovým displejom a operačným systémom."
+"mobil": "Mobil, resp. mobilný telefón, je prenosné zariadenie určené na komunikáciu, písanie správ, prístup na internet a spúšťanie aplikácií. V dnešnej dobe ide najmä o smartfóny s dotykovým displejom a operačným systémom.",
 "facebook": "Facebook je sociálna sieť založená Markom Zuckerbergom v roku 2004. Umožňuje používateľom zdieľať príspevky, fotografie, videá a komunikovať s priateľmi. Je jednou z najväčších platforiem na svete s miliardami aktívnych používateľov mesačne.",
 "autobus": "Autobus je dopravný prostriedok určený na prepravu väčšieho počtu osôb. Jazdí po stanovených trasách a je bežne používaný v mestskej aj medzimestskej hromadnej doprave.",
 "robot": "Robot je stroj alebo zariadenie navrhnuté na vykonávanie úloh, ktoré môžu byť manuálne, automatické alebo programovateľné. Využíva sa v priemysle, domácnosti aj vedeckom výskume.",
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 "zdravie": "Zdravie je stav fyzickej, psychickej a sociálnej pohody. Je ovplyvňované stravou, pohybom, spánkom, stresom aj genetickými faktormi. Je jednou z najcennejších hodnôt v živote človeka.",
 "žiak": "Žiak je osoba zapísaná na školu, ktorá sa zúčastňuje vyučovania a získava vedomosti, zručnosti a návyky. Môže ísť o žiaka základnej, strednej alebo aj inej vzdelávacej inštitúcie.",
 "wifi router": "Wi-Fi router je zariadenie, ktoré sprostredkúva bezdrôtové pripojenie na internet. Pripája sa na modem a vytvára Wi-Fi signál, ktorý môžu používať viaceré zariadenia naraz.",
-"november": "November je jedenásty mesiac roka a na severnej pologuli je typicky jesenný. Je známy Sviatkom všetkých svätých, pamätnými udalosťami ako Deň boja za slobodu a demokraciu a prípravami na zimné obdobie."
+"november": "November je jedenásty mesiac roka a na severnej pologuli je typicky jesenný. Je známy Sviatkom všetkých svätých, pamätnými udalosťami ako Deň boja za slobodu a demokraciu a prípravami na zimné obdobie.",
 "youtube": "YouTube je najväčšia platforma na zdieľanie videí na svete, ktorú v roku 2005 založili traja bývalí zamestnanci PayPalu. Umožňuje sledovať, nahrávať a komentovať videá v rôznych kategóriách ako hudba, vzdelávanie, vlogy či hry.",
 "hokej": "Hokej je rýchla kolektívna hra na ľade, kde sa hráči snažia pomocou hokejky dopraviť puk do brány súpera. Je jedným z najobľúbenejších zimných športov, najmä v krajinách ako Kanada, Slovensko či Rusko.",
 "spotify": "Spotify je digitálna hudobná služba, ktorá umožňuje streamovať milióny skladieb, podcastov a playlistov. Bola založená v roku 2006 a patrí medzi najpopulárnejšie platformy na počúvanie hudby na svete.",
