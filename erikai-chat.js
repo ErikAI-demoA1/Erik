@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("chat-form");
+  const micBtn = document.getElementById("mic-btn");
   const input = document.getElementById("user-input");
   const chat = document.getElementById("chat-box");
 
