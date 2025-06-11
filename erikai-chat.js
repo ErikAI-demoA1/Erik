@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
   "marec": "Marec je tretí mesiac v roku podľa gregoriánskeho kalendára. Je známy ako mesiac, keď sa začína jar, dni sa predlžujú a príroda sa prebúdza po zime.",
   "vianoce": "Vianoce sú kresťanské sviatky, ktoré sa slávia 24. až 26. decembra a pripomínajú narodenie Ježiša Krista. Sú spojené s tradíciami ako darčeky, stromček, večera a rodinné stretnutia.",
   "wifi": "Wi-Fi je bezdrôtová technológia, ktorá umožňuje zariadeniam ako mobilné telefóny, notebooky alebo tablety pripájať sa k internetu bez použitia káblov, najčastejšie cez router.",
-  "pizza": "Pizza je obľúbené jedlo talianskeho pôvodu, ktoré sa pripravuje z cesta, paradajkovej omáčky a syra, pričom sa na ňu môžu pridávať rôzne ďalšie suroviny ako šunka, zelenina, saláma či huby."
-  "laska": "Láska je silný emocionálny a psychologický vzťah medzi ľuďmi, ktorý sa prejavuje citovým putom, dôverou, porozumením a starostlivosťou. Môže byť romantická, priateľská, rodičovská alebo platonická.",
+  "pizza": "Pizza je obľúbené jedlo talianskeho pôvodu, ktoré sa pripravuje z cesta, paradajkovej omáčky a syra, pričom sa na ňu môžu pridávať rôzne ďalšie suroviny ako šunka, zelenina, saláma či huby.",
+  "láska": "Láska je silný emocionálny a psychologický vzťah medzi ľuďmi, ktorý sa prejavuje citovým putom, dôverou, porozumením a starostlivosťou. Môže byť romantická, priateľská, rodičovská alebo platonická.",
   "github": "GitHub je webová platforma pre verzovanie zdrojového kódu, kde vývojári ukladajú, spravujú a spolupracujú na projektoch. Využíva systém Git a je populárna najmä pri open-source vývoji.",
   "programovanie": "Programovanie je proces písania inštrukcií v špeciálnom jazyku (napr. JavaScript, Python), ktorými človek určuje, ako sa má správať počítač alebo aplikácia.",
   "auto": "Auto, známe aj ako automobil, je dopravný prostriedok určený na cestnú dopravu, ktorý poháňa motor. Umožňuje ľuďom a tovarom pohybovať sa nezávisle na dlhšie vzdialenosti.",
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
   "sloboda": "Sloboda znamená stav, keď má človek možnosť konať, vyjadrovať sa a rozhodovať podľa vlastnej vôle bez neoprávnených zásahov zvonka. Je to základná ľudská hodnota a právo.",
   "príroda": "Príroda zahŕňa všetko živé a neživé v našom prostredí, ako sú zvieratá, rastliny, rieky, hory, vzduch a klíma. Je nevyhnutná pre život a jej ochrana je kľúčová.",
   "youtube": "YouTube je najväčšia online platforma pre zdieľanie a pozeranie videí. Umožňuje používateľom nahrávať, komentovať a sledovať videá v rôznych kategóriách ako hudba, vzdelávanie či zábava.",
-  "čas": "Čas je základná fyzikálna veličina, ktorá vyjadruje trvanie udalostí a poradie ich nasledovania. V každodennom živote ho meriame pomocou hodín, kalendárov a harmonogramov."
+  "čas": "Čas je základná fyzikálna veličina, ktorá vyjadruje trvanie udalostí a poradie ich nasledovania. V každodennom živote ho meriame pomocou hodín, kalendárov a harmonogramov.",
  "zem": "Zem je tretia planéta slnečnej sústavy a jediné známe miesto vo vesmíre, kde existuje život. Má tvar takmer guľového telesa a je zložená z jadra, plášťa a kôry. Na povrchu sa nachádzajú kontinenty, oceány, atmosféra a život v rôznych formách.",
 "mlieko": "Mlieko je biela tekutina produkovaná mliečnymi žľazami cicavcov. U ľudí je dôležitým výživovým produktom, bohatým na vápnik, bielkoviny a vitamíny. Používa sa na pitie aj pri výrobe jogurtov, syrov a ďalších potravín.",
 "január": "Január je prvý mesiac v roku podľa gregoriánskeho kalendára. Je to typicky zimný mesiac na severnej pologuli, kedy sa oslavuje Nový rok a pre mnohých je symbolom nových začiatkov.",
