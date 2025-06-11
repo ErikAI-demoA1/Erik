@@ -29,7 +29,37 @@ document.addEventListener("DOMContentLoaded", function () {
     "skúška": "Skúška je metóda, ktorá slúži na kontrolu výsledku (vzdelávania, výcviku, výpočtu).",
     "android": "Android je literárne a umelecké označenie umelo vytvorenej bytosti.. Android je stroj, ktorého účelom je správať sa, pracovať, poprípade myslieť ako človek. Názov „Android“ pochádza z gréckych výrazov andros (muž, človek) a -eides (rovnakého druhu, podobný). V literatúre, TV a filme sa táto definícia nedodržiava. Prví roboti vôbec, výrobky firmy R.U.R. zo rovnomenného románu Karla Čapka, boli androidi. Android Dat zo seriálu Star Trek bol robot. Robocop bol kyborg. Terminátor bol android. Okrem týchto existujú prípady, keď je ťažké rozhodnúť bez umelých kvót.",
     "iphone": "iPhone je rad smartphónov od firmy Apple Inc. iPhone je kombináciou mobilného telefónu, iPodu a moderného internetového zariadenia. Prvý iPhone predstavil bývalý riaditeľ spoločnosti Apple Inc. Steve Jobs 9. januára 2007 na konferencii Macworld Conference & Expo v San Franciscu. iPhone nemá zabudovanú klávesnicu, ovláda sa dotykovým displejom podobným PDA. Jeho operačný systém Apple označuje ako iOS (teda nie macOS, je však založený na rovnakom jadre ako štandardný Mac OS X). Prvý iPhone bol uvedený na americký trh v júni 2007 a neskôr tiež na trhy vo Spojenom kráľovstve, Nemecku, Francúzsku (všetky v r. 2007), v Írsku a Rakúsku sa dostal na trh v 2008.",
-  };
+  "basketbal": "Basketbal je kolektívny šport, pri ktorom sa dve päťčlenné družstvá snažia dostať loptu do súperovho koša. Hrá sa na palubovke s dvoma košmi a je populárny po celom svete, najmä v USA a Európe.",
+  "microsoft": "Microsoft je americká technologická spoločnosť, ktorú založil Bill Gates. Je známa najmä vďaka operačnému systému Windows a kancelárskemu balíku Microsoft Office, ktoré používajú milióny ľudí po celom svete.",
+  "škoda": "Škoda Auto je český výrobca automobilov so sídlom v Mladej Boleslavi. Spoločnosť má dlhoročnú tradíciu a vyrába osobné vozidlá, ktoré sú obľúbené pre ich spoľahlivosť a dostupnosť.",
+  "astronómia": "Astronómia je veda, ktorá sa zaoberá vesmírom, planétami, hviezdami a galaxiami. Študuje pohyby a vlastnosti nebeských telies a pomáha ľuďom porozumieť pôvodu a vývoju vesmíru.",
+  "napoleon": "Napoleon Bonaparte bol francúzsky vojvodca a cisár, ktorý viedol mnohé vojny v Európe počas 19. storočia. Je známy svojimi vojenskými stratégiami a tiež tým, že výrazne ovplyvnil európske dejiny.",
+  "android studio": "Android Studio je oficiálne vývojové prostredie (IDE) od Googlu, určené na tvorbu mobilných aplikácií pre operačný systém Android. Umožňuje programátorom písať kód v Jave, Kotlin či C++.",
+  "marec": "Marec je tretí mesiac v roku podľa gregoriánskeho kalendára. Je známy ako mesiac, keď sa začína jar, dni sa predlžujú a príroda sa prebúdza po zime.",
+  "vianoce": "Vianoce sú kresťanské sviatky, ktoré sa slávia 24. až 26. decembra a pripomínajú narodenie Ježiša Krista. Sú spojené s tradíciami ako darčeky, stromček, večera a rodinné stretnutia.",
+  "wifi": "Wi-Fi je bezdrôtová technológia, ktorá umožňuje zariadeniam ako mobilné telefóny, notebooky alebo tablety pripájať sa k internetu bez použitia káblov, najčastejšie cez router.",
+  "pizza": "Pizza je obľúbené jedlo talianskeho pôvodu, ktoré sa pripravuje z cesta, paradajkovej omáčky a syra, pričom sa na ňu môžu pridávať rôzne ďalšie suroviny ako šunka, zelenina, saláma či huby."
+"láska": "Láska je silný emocionálny a psychologický vzťah medzi ľuďmi, ktorý sa prejavuje citovým putom, dôverou, porozumením a starostlivosťou. Môže byť romantická, priateľská, rodičovská alebo platonická.",
+  "github": "GitHub je webová platforma pre verzovanie zdrojového kódu, kde vývojári ukladajú, spravujú a spolupracujú na projektoch. Využíva systém Git a je populárna najmä pri open-source vývoji.",
+  "programovanie": "Programovanie je proces písania inštrukcií v špeciálnom jazyku (napr. JavaScript, Python), ktorými človek určuje, ako sa má správať počítač alebo aplikácia.",
+  "auto": "Auto, známe aj ako automobil, je dopravný prostriedok určený na cestnú dopravu, ktorý poháňa motor. Umožňuje ľuďom a tovarom pohybovať sa nezávisle na dlhšie vzdialenosti.",
+  "fyzika": "Fyzika je prírodná veda, ktorá skúma vlastnosti hmoty, energie a ich vzájomné pôsobenie. Patrí medzi základné vedy a je nevyhnutná pre pochopenie fungovania sveta.",
+  "počítač": "Počítač je elektronické zariadenie, ktoré dokáže spracovávať dáta podľa presne definovaných inštrukcií. Používa sa na prácu, zábavu, komunikáciu a výskum.",
+  "sloboda": "Sloboda znamená stav, keď má človek možnosť konať, vyjadrovať sa a rozhodovať podľa vlastnej vôle bez neoprávnených zásahov zvonka. Je to základná ľudská hodnota a právo.",
+  "príroda": "Príroda zahŕňa všetko živé a neživé v našom prostredí, ako sú zvieratá, rastliny, rieky, hory, vzduch a klíma. Je nevyhnutná pre život a jej ochrana je kľúčová.",
+  "youtube": "YouTube je najväčšia online platforma pre zdieľanie a pozeranie videí. Umožňuje používateľom nahrávať, komentovať a sledovať videá v rôznych kategóriách ako hudba, vzdelávanie či zábava.",
+  "čas": "Čas je základná fyzikálna veličina, ktorá vyjadruje trvanie udalostí a poradie ich nasledovania. V každodennom živote ho meriame pomocou hodín, kalendárov a harmonogramov."
+ "zem": "Zem je tretia planéta slnečnej sústavy a jediné známe miesto vo vesmíre, kde existuje život. Má tvar takmer guľového telesa a je zložená z jadra, plášťa a kôry. Na povrchu sa nachádzajú kontinenty, oceány, atmosféra a život v rôznych formách.",
+"mlieko": "Mlieko je biela tekutina produkovaná mliečnymi žľazami cicavcov. U ľudí je dôležitým výživovým produktom, bohatým na vápnik, bielkoviny a vitamíny. Používa sa na pitie aj pri výrobe jogurtov, syrov a ďalších potravín.",
+"január": "Január je prvý mesiac v roku podľa gregoriánskeho kalendára. Je to typicky zimný mesiac na severnej pologuli, kedy sa oslavuje Nový rok a pre mnohých je symbolom nových začiatkov.",
+"tlačiareň": "Tlačiareň je zariadenie, ktoré prevádza digitálne dokumenty alebo obrázky do fyzickej formy, najčastejšie na papier. Existujú atramentové, laserové aj 3D tlačiarne. Používa sa v domácnostiach, školách aj kanceláriách.",
+"voda": "Voda je chemická zlúčenina pozostávajúca z dvoch atómov vodíka a jedného atómu kyslíka (H₂O). Je nevyhnutná pre život, tvorí väčšinu telesnej hmotnosti živej bytosti a pokrýva približne 71 % povrchu Zeme.",
+"učebnica": "Učebnica je kniha vytvorená na účely výučby. Obsahuje systematicky usporiadané informácie, ktoré pomáhajú žiakom a študentom pochopiť a zvládnuť učivo v danom predmete alebo odbore.",
+"google": "Google je technologická spoločnosť známa najmä svojím internetovým vyhľadávačom. Založili ju Larry Page a Sergey Brin v roku 1998. Dnes ponúka množstvo služieb ako Gmail, YouTube, Google Maps a Android.",
+"história": "História je veda, ktorá skúma minulosť ľudskej civilizácie. Analyzuje udalosti, osobnosti, spoločenské zmeny a kultúry. Pomáha nám pochopiť vývoj ľudstva a poučiť sa z minulých skúseností.",
+"vesmír": "Vesmír je nekonečný priestor, ktorý zahŕňa všetko existujúce — galaxie, hviezdy, planéty, čas a hmotu. Začal sa veľkým treskom pred približne 13,8 miliardami rokov a neustále sa rozpína.",
+"mobil": "Mobil, resp. mobilný telefón, je prenosné zariadenie určené na komunikáciu, písanie správ, prístup na internet a spúšťanie aplikácií. V dnešnej dobe ide najmä o smartfóny s dotykovým displejom a operačným systémom."
+};
 
   function getAIResponse(text) {
     const lower = text.toLowerCase().trim();
