@@ -645,11 +645,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
-  micBtn.addEventListener("click", () => {
-    recognition.start();
-    micBtn.disabled = true;
-    micBtn.textContent = "🎙️ Počúvam...";
-  });
+  micBtn.addEventListener("click", (e) => {
+  e.preventDefault(); // ⬅️ PRIDAJ TOTO
+  recognition.start();
+  micBtn.disabled = true;
+  micBtn.textContent = "🎙️ Počúvam...";
+});
 
   recognition.addEventListener("result", (event) => {
     const result = event.results[0][0].transcript;
