@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
   "vesmír": "Vesmír je nekonečný priestor, v ktorom sa nachádzajú planéty, hviezdy, galaxie a ďalšie nebeské telesá. Je predmetom výskumu astronómie a kozmológie. Obsahuje miliardy galaxií a vznikol podľa teórie veľkého tresku pred približne 13,8 miliardami rokov.",
   "mesiac": "Mesiac je prirodzená družica Zeme, ktorá obieha okolo našej planéty približne raz za 29,5 dňa. Má vplyv na príliv a odliv oceánov a je jediným mimozemským telesom, kde človek fyzicky pristál – misia Apollo 11 v roku 1969.",
   "slnko": "Slnko je hviezda v strede slnečnej sústavy, ktorá zabezpečuje svetlo a teplo potrebné pre život na Zemi. Má priemer približne 1,39 milióna km a tvorí ho prevažne vodík a hélium. Jeho energia vzniká jadrovou fúziou v jadre.",
-  "planéta": "Planéta je veľké nebeské teleso, ktoré obieha hviezdu a má dostatočnú hmotnosť na to, aby bola jej gravitácia vyvážená do guľovitého tvaru. V našej slnečnej sústave je osem planét – medzi nimi Zem, Mars, Jupiter, Saturn a ďalšie."
+  "planéta": "Planéta je veľké nebeské teleso, ktoré obieha hviezdu a má dostatočnú hmotnosť na to, aby bola jej gravitácia vyvážená do guľovitého tvaru. V našej slnečnej sústave je osem planét – medzi nimi Zem, Mars, Jupiter, Saturn a ďalšie.",
     "trenčín": "Trenčín je krajské mesto na západnom Slovensku, známe svojím hradom na brale nad riekou Váh.",
 "trnava": "Trnava je starobylé mesto prezývané slovenský Rím vďaka množstvu kostolov.",
 "martin": "Martin je kultúrne a historické centrum Slovenska, známe Matica slovenská a Slovenským národným múzeom.",
