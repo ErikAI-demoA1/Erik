@@ -44,7 +44,21 @@
       🇬🇧 English version is under development. Please use Slovak for now.
     </p>
   </section>
+<p id="cas" style="font-size: 16px; font-weight: bold;">🕒 Načítavam čas...</p>
 
+<script>
+function aktualizujCas() {
+  const teraz = new Date();
+  const formatter = new Intl.DateTimeFormat("sk-SK", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+    hour: "2-digit", minute: "2-digit", second: "2-digit"
+  });
+  document.getElementById("cas").textContent =
+    "🕒 Aktuálny čas: " + formatter.format(teraz);
+}
+setInterval(aktualizujCas, 1000);
+aktualizujCas();
+</script>
   <h2>💬 Chat s ErikAI</h2>
   <p style="color: #444; font-size: 14px; margin-bottom: 10px;">
   🤖 ErikAI aktuálne pozná viac ako <strong> 1210 odpovedí</strong> na známe otázky v slovenčine. Skús sa ho niečo opýtať!
