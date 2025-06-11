@@ -747,7 +747,7 @@ document.addEventListener("DOMContentLoaded", function () {
   "premena jednotiek": "Premena jednotiek znamená, že jednu fyzikálnu hodnotu prepočítame z jednej jednotky do inej (napr. cm na m, g na kg).",
   "priama úmera": "Priama úmera znamená, že ak sa jedna hodnota zväčšuje, druhá sa zväčšuje rovnakým pomerom. Grafom je stúpajúca priamka.",
   "nepriama úmera": "Nepriama úmera znamená, že ak sa jedna hodnota zväčšuje, druhá sa zmenšuje. Ich súčin je stále rovnaký.",
-  "premenné v rovnici": "Premenné v rovnici predstavujú neznáme hodnoty, ktoré chceme vypočítať. Typicky sa označujú ako x, y alebo z."
+  "premenné v rovnici": "Premenné v rovnici predstavujú neznáme hodnoty, ktoré chceme vypočítať. Typicky sa označujú ako x, y alebo z.",
   };
 
   function getAIResponse(text) {
