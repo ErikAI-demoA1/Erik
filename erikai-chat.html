@@ -55,6 +55,26 @@
   }
   </script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+  document.getElementById("languageSelect").addEventListener("change", function () {
+    const jazyk = this.value;
+    const combo = document.querySelector(".goog-te-combo");
+
+    if (combo) {
+      combo.value = jazyk;
+      combo.dispatchEvent(new Event("change"));
+    } else {
+      // Počkaj 1 sekundu, ak Google ešte nenačítal combo
+      setTimeout(() => {
+        const comboRetry = document.querySelector(".goog-te-combo");
+        if (comboRetry) {
+          comboRetry.value = jazyk;
+          comboRetry.dispatchEvent(new Event("change"));
+        }
+      }, 1000);
+    }
+  });
+  </script>
 <p id="cas" style="font-size: 16px; font-weight: bold;">🕒 Načítavam čas...</p>
 
 <script>
