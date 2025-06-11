@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
   "vianoce": "Vianoce sú kresťanské sviatky, ktoré sa slávia 24. až 26. decembra a pripomínajú narodenie Ježiša Krista. Sú spojené s tradíciami ako darčeky, stromček, večera a rodinné stretnutia.",
   "wifi": "Wi-Fi je bezdrôtová technológia, ktorá umožňuje zariadeniam ako mobilné telefóny, notebooky alebo tablety pripájať sa k internetu bez použitia káblov, najčastejšie cez router.",
   "pizza": "Pizza je obľúbené jedlo talianskeho pôvodu, ktoré sa pripravuje z cesta, paradajkovej omáčky a syra, pričom sa na ňu môžu pridávať rôzne ďalšie suroviny ako šunka, zelenina, saláma či huby."
-"láska": "Láska je silný emocionálny a psychologický vzťah medzi ľuďmi, ktorý sa prejavuje citovým putom, dôverou, porozumením a starostlivosťou. Môže byť romantická, priateľská, rodičovská alebo platonická.",
+  "laska": "Láska je silný emocionálny a psychologický vzťah medzi ľuďmi, ktorý sa prejavuje citovým putom, dôverou, porozumením a starostlivosťou. Môže byť romantická, priateľská, rodičovská alebo platonická.",
   "github": "GitHub je webová platforma pre verzovanie zdrojového kódu, kde vývojári ukladajú, spravujú a spolupracujú na projektoch. Využíva systém Git a je populárna najmä pri open-source vývoji.",
   "programovanie": "Programovanie je proces písania inštrukcií v špeciálnom jazyku (napr. JavaScript, Python), ktorými človek určuje, ako sa má správať počítač alebo aplikácia.",
   "auto": "Auto, známe aj ako automobil, je dopravný prostriedok určený na cestnú dopravu, ktorý poháňa motor. Umožňuje ľuďom a tovarom pohybovať sa nezávisle na dlhšie vzdialenosti.",
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
 "robot": "Robot je stroj alebo zariadenie navrhnuté na vykonávanie úloh, ktoré môžu byť manuálne, automatické alebo programovateľné. Využíva sa v priemysle, domácnosti aj vedeckom výskume.",
 "júl": "Júl je siedmy mesiac v roku podľa gregoriánskeho kalendára. Je to typicky letný mesiac na severnej pologuli, spojený s dovolenkami, teplým počasím a letnými prázdninami.",
 "čítanie": "Čítanie je proces vnímania a interpretácie písaného textu. Pomáha rozvíjať slovnú zásobu, myslenie, predstavivosť a je základným prvkom vzdelávania.",
-"počítač": "Počítač je elektronické zariadenie určené na spracovanie informácií. Používa sa na prácu, štúdium, zábavu aj komunikáciu. Skladá sa z hardvéru a softvéru.",
+"počítač1": "Počítač je elektronické zariadenie určené na spracovanie informácií. Používa sa na prácu, štúdium, zábavu aj komunikáciu. Skladá sa z hardvéru a softvéru.",
 "zdravie": "Zdravie je stav fyzickej, psychickej a sociálnej pohody. Je ovplyvňované stravou, pohybom, spánkom, stresom aj genetickými faktormi. Je jednou z najcennejších hodnôt v živote človeka.",
 "žiak": "Žiak je osoba zapísaná na školu, ktorá sa zúčastňuje vyučovania a získava vedomosti, zručnosti a návyky. Môže ísť o žiaka základnej, strednej alebo aj inej vzdelávacej inštitúcie.",
 "wifi router": "Wi-Fi router je zariadenie, ktoré sprostredkúva bezdrôtové pripojenie na internet. Pripája sa na modem a vytvára Wi-Fi signál, ktorý môžu používať viaceré zariadenia naraz.",
