@@ -75,34 +75,14 @@
       <option value="com.ubercab">Uber</option>
       <option value="com.google.android.apps.messaging">Správy (Google)</option>
       <option value="com.google.android.apps.translate">Google Prekladač</option>
-<option value="sk.tatrabanka.tbapp">Tatra Banka</option>
-<option value="com.vub.vubmobilbanking">VÚB Mobil Banking</option>
-<option value="com.ryanair.cheapflights">Ryanair</option>
-<option value="cz.mall.app">Mall.sk</option>
-<option value="sk.zlava">ZľavaDňa</option>
-<option value="sk.vinted">Vinted</option>
-<option value="com.aliexpress.mobile">AliExpress</option>
-<option value="com.ebay.mobile">eBay</option>
-  <option value="com.google.android.youtube">YouTube</option>
-  <option value="com.whatsapp">WhatsApp</option>
-  <option value="com.instagram.android">Instagram</option>
-  <option value="com.facebook.katana">Facebook</option>
-  <option value="com.discord">Discord</option>
-  <option value="com.twitter.android">Twitter</option>
-  <option value="com.snapchat.android">Snapchat</option>
-  <option value="com.tiktok.android">TikTok</option>
-  <option value="com.spotify.music">Spotify</option>
-  <option value="com.netflix.mediaclient">Netflix</option>
-  <option value="com.google.android.apps.maps">Google Mapy</option>
-  <option value="com.ubercab">Uber</option>
-  <option value="com.google.android.apps.translate">Google Prekladač</option>
-  <option value="sk.tatrabanka.tbapp">Tatra Banka</option>
-  <option value="com.vub.vubmobilbanking">VÚB Mobil Banking</option>
-  <option value="cz.mall.app">Mall.sk</option>
-  <option value="sk.zlava">ZľavaDňa</option>
-  <option value="com.vinted">Vinted</option>
-  <option value="com.aliexpress.mobile">AliExpress</option>
-  <option value="com.ebay.mobile">eBay</option>
+      <option value="sk.tatrabanka.tbapp">Tatra Banka</option>
+      <option value="com.vub.vubmobilbanking">VÚB Mobil Banking</option>
+      <option value="com.ryanair.cheapflights">Ryanair</option>
+      <option value="cz.mall.app">Mall.sk</option>
+      <option value="sk.zlava">ZľavaDňa</option>
+      <option value="sk.vinted">Vinted</option>
+      <option value="com.aliexpress.mobile">AliExpress</option>
+      <option value="com.ebay.mobile">eBay</option>
   <option value="com.revolut.revolut">Revolut</option>
   <option value="sk.csob.smartbanking">ČSOB SmartBanking</option>
   <option value="com.slsp.mbanking">Slovenská sporiteľňa</option>
@@ -123,6 +103,26 @@
   <option value="com.supercell.clashofclans">Clash of Clans</option>
   <option value="com.supercell.brawlstars">Brawl Stars</option>
   <option value="com.king.candycrushsaga">Candy Crush</option>
+  <option value="com.google.android.youtube">YouTube</option>
+  <option value="com.whatsapp">WhatsApp</option>
+  <option value="com.instagram.android">Instagram</option>
+  <option value="com.facebook.katana">Facebook</option>
+  <option value="com.discord">Discord</option>
+  <option value="com.twitter.android">Twitter</option>
+  <option value="com.snapchat.android">Snapchat</option>
+  <option value="com.tiktok.android">TikTok</option>
+  <option value="com.spotify.music">Spotify</option>
+  <option value="com.netflix.mediaclient">Netflix</option>
+  <option value="com.google.android.apps.maps">Google Mapy</option>
+  <option value="com.ubercab">Uber</option>
+  <option value="com.google.android.apps.translate">Google Prekladač</option>
+  <option value="sk.tatrabanka.tbapp">Tatra Banka</option>
+  <option value="com.vub.vubmobilbanking">VÚB Mobil Banking</option>
+  <option value="cz.mall.app">Mall.sk</option>
+  <option value="sk.zlava">ZľavaDňa</option>
+  <option value="com.vinted">Vinted</option>
+  <option value="com.aliexpress.mobile">AliExpress</option>
+  <option value="com.ebay.mobile">eBay</option>
     </select>
     <br>
     <button type="submit">Otvoriť aplikáciu</button>
@@ -137,6 +137,19 @@
       window.location.href = url;
       return false;
     }
+
+    // 🔠 Automatické zoradenie možností podľa názvu aplikácie
+    window.addEventListener('DOMContentLoaded', () => {
+      const select = document.getElementById("app");
+      const options = Array.from(select.options);
+
+      // zoradenie podľa textu (názvu aplikácie)
+      options.sort((a, b) => a.text.localeCompare(b.text, 'sk'));
+
+      // vymazanie a opätovné pridanie zoradených
+      select.innerHTML = "";
+      options.forEach(option => select.appendChild(option));
+    });
   </script>
 
 </body>
