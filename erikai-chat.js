@@ -1340,5 +1340,3 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const result = event.results[0][0].transcript;
     input.value = result;
     micBtn.disabled = false;
-
-    
