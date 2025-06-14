@@ -1341,36 +1341,4 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     input.value = result;
     micBtn.disabled = false;
 
-    function openMobileApp() {
-  const selectedApp = document.getElementById("mobileApp").value;
-  let url = "";
-
-  switch (selectedApp) {
-    case "youtube":
-      url = "intent://#Intent;package=com.google.android.youtube;scheme=android-app;end";
-      break;
-    case "whatsapp":
-      url = "intent://#Intent;package=com.whatsapp;scheme=android-app;end";
-      break;
-    case "instagram":
-      url = "intent://#Intent;package=com.instagram.android;scheme=android-app;end";
-      break;
-    default:
-      alert("Aplikácia nie je podporovaná.");
-      return;
-  }
-
-  window.location.href = url;
-    }
-    micBtn.textContent = "🎤";
-  });
-
-  recognition.addEventListener("end", () => {
-    micBtn.disabled = false;
-    micBtn.textContent = "🎤";
-  });
-} else {
-  micBtn.disabled = true;
-  micBtn.title = "Tvoj prehliadač nepodporuje mikrofón";
-}
-});
+    
