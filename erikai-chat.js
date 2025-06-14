@@ -1343,7 +1343,11 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     function openMobileApp() {
   const selectedApp = document.getElementById("mobileApp").value;
-  window.location.href = selectedApp;
+  if (selectedApp.startsWith("intent://")) {
+    window.location = selectedApp;
+  } else {
+    alert("Neplatná schéma!");
+  }
     }
     micBtn.textContent = "🎤";
   });
