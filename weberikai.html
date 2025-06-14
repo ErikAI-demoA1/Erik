@@ -6,38 +6,58 @@
   <title>📱 Otvoriť mobilnú aplikáciu</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #222;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f3f4f6;
       margin: 0;
       padding: 20px;
       text-align: center;
+      color: #111827;
     }
+
     h1 {
-      font-size: 24px;
-      color: #333;
+      font-size: 26px;
+      margin-bottom: 25px;
     }
-    select, button {
+
+    label {
+      font-size: 18px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    select {
       font-size: 16px;
       padding: 10px;
-      margin-top: 15px;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
     }
+
     button {
-      background-color: #007BFF;
+      font-size: 16px;
+      padding: 12px 25px;
+      background-color: #EF4444;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
+
     button:hover {
-      background-color: #0056b3;
+      background-color: #DC2626;
     }
+
     .spat {
-      margin-top: 30px;
       display: inline-block;
-      color: #007BFF;
+      margin-top: 30px;
+      color: #2563EB;
       text-decoration: none;
+      font-weight: 500;
     }
+
     .spat:hover {
       text-decoration: underline;
     }
@@ -46,9 +66,9 @@
 <body>
 
   <h1>📱 Otvoriť mobilnú aplikáciu</h1>
-  
+
   <form id="appForm" onsubmit="return openApp();">
-    <label for="app">Vyber aplikáciu:</label><br>
+    <label for="app">Vyber aplikáciu:</label>
     <select id="app">
       <option value="com.google.android.youtube">YouTube</option>
       <option value="com.whatsapp">WhatsApp</option>
@@ -64,7 +84,7 @@
   <script>
     function openApp() {
       const app = document.getElementById("app").value;
-      const url = `intent://#Intent;package=${app};end`;
+      const url = `intent://#Intent;package=${app};scheme=android-app;end`;
       window.location.href = url;
       return false;
     }
