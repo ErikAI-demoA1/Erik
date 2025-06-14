@@ -76,12 +76,14 @@ aktualizujCas();
   🤖 ErikAI aktuálne pozná viac ako <strong> 1210 odpovedí</strong> na známe otázky v slovenčine. Skús sa ho niečo opýtať!
   </p>
   <div id="chat-box"></div>
-  <form id="chat-form" style="display: flex; gap: 5px;">
-  <input id="user-input" placeholder="Napíš otázku..." style="flex: 1;">
-  <button type="submit">Odoslať</button>
-  <button id="mic-btn" type="button" title="Povedz niečo 🎤">🎤</button>
+  <form id="chat-form" style="display: flex; flex-direction: column; gap: 5px;">
+  <div style="display: flex; gap: 5px;">
+    <input id="user-input" placeholder="Napíš otázku..." style="flex: 1;">
+    <button type="submit">Odoslať</button>
+    <button id="mic-btn" type="button" title="Povedz niečo 🎤">🎤</button>
+  </div>
 
-    h3>📱 Otvoriť mobilnú aplikáciu</h3>
+  <h3>📱 Otvoriť mobilnú aplikáciu</h3>
   <div style="display: flex; gap: 5px;">
     <select id="mobileApp">
       <option value="youtube">YouTube</option>
