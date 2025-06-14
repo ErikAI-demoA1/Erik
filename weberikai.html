@@ -57,16 +57,27 @@
   </style>
 </head>
 <body>
-<div id="currentTime" style="font-size: 16px; margin-bottom: 20px; color: #555;"></div>
+<p id="cas" style="margin-top: 10px; font-size: 16px; color: #333;"></p>
 
 <script>
-  function updateTime() {
-    const now = new Date();
-    const cas = now.toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    document.getElementById('currentTime').textContent = 'Aktuálny čas: ' + cas;
+  function aktualizujCas() {
+    const teraz = new Date();
+    const dni = ['nedeľa','pondelok','utorok','streda','štvrtok','piatok','sobota'];
+    const mesiace = ['január','február','marec','apríl','máj','jún','júl','august','september','október','november','december'];
+    
+    const den = teraz.getDate();
+    const mesiac = mesiace[teraz.getMonth()];
+    const rok = teraz.getFullYear();
+    const hodiny = teraz.getHours().toString().padStart(2, '0');
+    const minuty = teraz.getMinutes().toString().padStart(2, '0');
+    const sekundy = teraz.getSeconds().toString().padStart(2, '0');
+    
+    const datumCas = `Dnes je: ${den}. ${mesiac} ${rok}, ${hodiny}:${minuty}:${sekundy}`;
+    document.getElementById("cas").textContent = datumCas;
   }
-  updateTime(); // prvé zobrazenie hneď
-  setInterval(updateTime, 1000); // aktualizuj každú sekundu
+
+  aktualizujCas();
+  setInterval(aktualizujCas, 1000);
 </script>
   <h1>📱 Webová verzia otváranie aplikácie pre Android(je to pre čisto mobili)</h1>
   <p style="color:#c00; font-weight:bold; font-size:16px;">
