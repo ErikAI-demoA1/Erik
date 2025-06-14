@@ -1310,7 +1310,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chat.scrollTop = chat.scrollHeight;
   }
 
-  form.addEventListener("submit", function (e) {
+   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const userText = input.value.trim();
     if (!userText) return;
@@ -1320,24 +1320,38 @@ document.addEventListener("DOMContentLoaded", function () {
     addMessage("ErikAI", response);
     input.value = "";
   });
-  
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
 
-  recognition.lang = "sk-SK";
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
+  // ✅ Opravené podmienky pre mikrofón
+  if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
 
-  micBtn.addEventListener("click", (e) => {
-  e.preventDefault(); // ⬅️ PRIDAJ TOTO
-  recognition.start();
-  micBtn.disabled = true;
-  micBtn.textContent = "🎙️ Počúvam...";
-});
+    recognition.lang = "sk-SK";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
 
-  recognition.addEventListener("result", (event) => {
-    const result = event.results[0][0].transcript;
-    input.value = result;
-    micBtn.disabled = false;
+    micBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      recognition.start();
+      micBtn.disabled = true;
+      micBtn.textContent = "🎙️ Počúvam...";
+    });
+
+    recognition.addEventListener("result", (event) => {
+      const result = event.results[0][0].transcript;
+      input.value = result;
+      micBtn.disabled = false;
+      micBtn.textContent = "🎤";
+    });
+
+    recognition.addEventListener("end", () => {
+      micBtn.disabled = false;
+      micBtn.textContent = "🎤";
+    });
+
+  } else {
+    micBtn.disabled = true;
+    micBtn.title = "Tvoj prehliadač nepodporuje mikrofón.";
   }
+
+});
