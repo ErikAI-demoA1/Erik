@@ -1340,6 +1340,11 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const result = event.results[0][0].transcript;
     input.value = result;
     micBtn.disabled = false;
+
+    function openMobileApp() {
+  const selectedApp = document.getElementById("mobileApp").value;
+  window.location.href = selectedApp;
+    }
     micBtn.textContent = "🎤";
   });
 
