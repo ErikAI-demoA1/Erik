@@ -1,93 +1,89 @@
-<!DOCTYPE html>
-<html lang="sk">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ErikAI Chat</title>
-  <style>
-    body { font-family: Arial; background: #f2f2f2; padding: 20px; }
-    #chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; background: white; }
-    .message { margin-bottom: 10px; }
-    input { padding: 10px; width: 80%; }
-    button { padding: 10px; }
-  </style>
-</head>
-<body>
-
-  <section style="max-width: 600px; margin: 20px auto; padding: 20px; background: #f0f0f0; border-radius: 10px;">
-    <h3>ℹ️ Ako používať ErikAI Chat</h3>
-    <p>ErikAI ti odpovie na jednoduché otázky, napríklad:</p>
-    <ul>
-      <li><strong>Pes</strong> – odpovie, čo je pes</li>
-      <li><strong>Mačka</strong> – odpovie, čo je mačka</li>
-    </ul>
-    <p>🧠 Môžeš použiť aj príkaz na vyhľadávanie:</p>
-    <ul>
-      <li><code>Vyhľadaj: Messi</code> – otvorí Google s výsledkami pre Messi</li>
-      <li><code>Vyhľadaj: DNA</code> – otvorí vyhľadávanie o DNA</li>
-    </ul>
-    <p>🛠️ Do budúcna plánujeme aj príkazy ako <code>Youtube:</code>, <code>Wikipedia:</code> a ďalšie.</p>
-  </section>
-  <p style="color: #d9534f; font-weight: bold; max-width: 600px; margin: 0 auto 10px auto; text-align: center;">
-⚠️ Pred odoslaním správy počkaj 1–2 sekundy, kým sa načíta ErikAI. Inak sa stránka môže obnoviť a správa sa stratí.
-  </p>
-
-  <section style="max-width: 600px; margin: 20px auto; padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 10px;">
-    <h3>⚠️ Jazyk a verzia</h3>
-    <p>
-      ErikAI Chat zatiaľ funguje iba v <strong>slovenskej verzii</strong>. Na ostatných jazykoch (angličtina, čeština, atď.) ešte pracujeme.
-    </p>
-    <p>
-      Ak nerozumieš, použi nástroj prekladač (napr. <a href="https://translate.google.com" target="_blank">Google Translate</a>) alebo sa spýtaj po slovensky.
-    </p>
-    <p style="font-style: italic; color: #777;">
-      🇬🇧 English version is under development. Please use Slovak for now.
-    </p>
-  </section>
-  
-<p id="cas" style="font-size: 16px; font-weight: bold;">🕒 Načítavam čas...</p>
-
-<script>
-function aktualizujCas() {
-  const teraz = new Date();
-  const formatter = new Intl.DateTimeFormat("sk-SK", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric",
-    hour: "2-digit", minute: "2-digit", second: "2-digit"
-  });
-  document.getElementById("cas").textContent =
-    "🕒 Aktuálny čas: " + formatter.format(teraz);
-}
-setInterval(aktualizujCas, 1000);
-aktualizujCas();
-</script>
-  <h2>💬 Chat s ErikAI</h2>
-  <div style="background: #e8f4fd; border-left: 5px solid #2196F3; padding: 15px; margin: 10px 0; border-radius: 8px;">
-  <strong>🔔 Upozornenie:</strong>
-  <p style="margin: 8px 0 4px 0;">
-    Ak ErikAI nepozná tvoju otázku (napr. <strong>„Vrútky“</strong>), skús:
-  </p>
-  <ul style="padding-left: 20px; margin: 0;">
-    <li>Pridať verziu: <em>„Vrútky1“</em>, <em>„Vrútky mesto“</em>, <em>„Vrútky železnica“</em></li>
-    <li>Zmeniť formuláciu: <em>„Informácie o Vrútkach“</em>, <em>„Kde sú Vrútky“</em></li>
-  </ul>
-  <p style="margin-top: 6px;">ErikAI zatiaľ pozná <strong>1210 odpovedí</strong> a stále sa zlepšuje 🧠</p>
-  </div>
-  <p style="color: #444; font-size: 14px; margin-bottom: 10px;">
-  🤖 ErikAI aktuálne pozná viac ako <strong> 1210 odpovedí</strong> na známe otázky v slovenčine. Skús sa ho niečo opýtať!
-  </p>
+<!DOCTYPE html>  <html lang="sk">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <title>ErikAI Chat</title>  
+  <style>  
+    body { font-family: Arial; background: #f2f2f2; padding: 20px; }  
+    #chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; background: white; }  
+    .message { margin-bottom: 10px; }  
+    input { padding: 10px; width: 80%; }  
+    button { padding: 10px; }  
+  </style>  
+</head>  
+<body>    <section style="max-width: 600px; margin: 20px auto; padding: 20px; background: #f0f0f0; border-radius: 10px;">  
+    <h3>ℹ️ Ako používať ErikAI Chat</h3>  
+    <p>ErikAI ti odpovie na jednoduché otázky, napríklad:</p>  
+    <ul>  
+      <li><strong>Pes</strong> – odpovie, čo je pes</li>  
+      <li><strong>Mačka</strong> – odpovie, čo je mačka</li>  
+    </ul>  
+    <p>🧠 Môžeš použiť aj príkaz na vyhľadávanie:</p>  
+    <ul>  
+      <li><code>Vyhľadaj: Messi</code> – otvorí Google s výsledkami pre Messi</li>  
+      <li><code>Vyhľadaj: DNA</code> – otvorí vyhľadávanie o DNA</li>  
+    </ul>  
+    <p>🛠️ Do budúcna plánujeme aj príkazy ako <code>Youtube:</code>, <code>Wikipedia:</code> a ďalšie.</p>  
+  </section>  
+  <p style="color: #d9534f; font-weight: bold; max-width: 600px; margin: 0 auto 10px auto; text-align: center;">  
+⚠️ Pred odoslaním správy počkaj 1–2 sekundy, kým sa načíta ErikAI. Inak sa stránka môže obnoviť a správa sa stratí.  
+  </p>    <section style="max-width: 600px; margin: 20px auto; padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 10px;">  
+    <h3>⚠️ Jazyk a verzia</h3>  
+    <p>  
+      ErikAI Chat zatiaľ funguje iba v <strong>slovenskej verzii</strong>. Na ostatných jazykoch (angličtina, čeština, atď.) ešte pracujeme.  
+    </p>  
+    <p>  
+      Ak nerozumieš, použi nástroj prekladač (napr. <a href="https://translate.google.com" target="_blank">Google Translate</a>) alebo sa spýtaj po slovensky.  
+    </p>  
+    <p style="font-style: italic; color: #777;">  
+      🇬🇧 English version is under development. Please use Slovak for now.  
+    </p>  
+  </section>  <p id="cas" style="font-size: 16px; font-weight: bold;">🕒 Načítavam čas...</p>  <script>  
+function aktualizujCas() {  
+  const teraz = new Date();  
+  const formatter = new Intl.DateTimeFormat("sk-SK", {  
+    weekday: "long", year: "numeric", month: "long", day: "numeric",  
+    hour: "2-digit", minute: "2-digit", second: "2-digit"  
+  });  
+  document.getElementById("cas").textContent =  
+    "🕒 Aktuálny čas: " + formatter.format(teraz);  
+}  
+setInterval(aktualizujCas, 1000);  
+aktualizujCas();  
+</script>    <h2>💬 Chat s ErikAI</h2>  
+  <div style="background: #e8f4fd; border-left: 5px solid #2196F3; padding: 15px; margin: 10px 0; border-radius: 8px;">  
+  <strong>🔔 Upozornenie:</strong>  
+  <p style="margin: 8px 0 4px 0;">  
+    Ak ErikAI nepozná tvoju otázku (napr. <strong>„Vrútky“</strong>), skús:  
+  </p>  
+  <ul style="padding-left: 20px; margin: 0;">  
+    <li>Pridať verziu: <em>„Vrútky1“</em>, <em>„Vrútky mesto“</em>, <em>„Vrútky železnica“</em></li>  
+    <li>Zmeniť formuláciu: <em>„Informácie o Vrútkach“</em>, <em>„Kde sú Vrútky“</em></li>  
+  </ul>  
+  <p style="margin-top: 6px;">ErikAI zatiaľ pozná <strong>1210 odpovedí</strong> a stále sa zlepšuje 🧠</p>  
+  </div>  
+  <p style="color: #444; font-size: 14px; margin-bottom: 10px;">  
+  🤖 ErikAI aktuálne pozná viac ako <strong> 1210 odpovedí</strong> na známe otázky v slovenčine. Skús sa ho niečo opýtať!  
+  </p>  
   <div id="chat-box"></div>  
   <form id="chat-form" style="display: flex; gap: 5px;">  
   <input id="user-input" placeholder="Napíš otázku..." style="flex: 1;">  
   <button type="submit">Odoslať</button>  
   <button id="mic-btn" type="button" title="Povedz niečo 🎤">🎤</button>  
-  </form>
-  <script src="erikai-chat.js?v=999"defer>
-  </script>
-    
-    <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
-  </p>
-</body>
-</html>
+  </form>  
+  <script src="erikai-chat.js?v=999">    </script>  
+  <h3>📱 Otvoriť mobilnú aplikáciu</h3>  
+<select id="mobileApp">  
+  <option value="youtube">YouTube</option>  
+<option value="whatsapp">WhatsApp</option>  
+<option value="instagram">Instagram</option>  
+</select>  
+<button onclick="openMobileApp()">Otvoriť aplikáciu</button>  
+  <p style="font-size: 14px; color: gray; margin-top: 20px;">  
+  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.    
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/    
+© 2025 Erik Mohylák – All rights reserved.  
+  </p>  
+</body>  
+</html>  Pozri sa túto či to je správne lebo stále nefunguje a málo to ísť na 100% už
+
