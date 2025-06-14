@@ -57,7 +57,17 @@
   </style>
 </head>
 <body>
+<div id="currentTime" style="font-size: 16px; margin-bottom: 20px; color: #555;"></div>
 
+<script>
+  function updateTime() {
+    const now = new Date();
+    const cas = now.toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    document.getElementById('currentTime').textContent = 'Aktuálny čas: ' + cas;
+  }
+  updateTime(); // prvé zobrazenie hneď
+  setInterval(updateTime, 1000); // aktualizuj každú sekundu
+</script>
   <h1>📱 Webová verzia otváranie aplikácie pre Android(je to pre čisto mobili)</h1>
   <p style="color:#c00; font-weight:bold; font-size:16px;">
   ⚠️ Táto funkcia je dostupná <u>iba pre mobilné zariadenia s Androidom</u>.<br>
