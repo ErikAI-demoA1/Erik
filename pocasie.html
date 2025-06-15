@@ -199,5 +199,27 @@ To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-
     <option value="zu">zuluština</option>
   </select><br><br>
 
+  <script>
+function sortSelectOptions(selectElement) {
+  const options = Array.from(selectElement.options);
+  options.sort((a, b) => a.text.localeCompare(b.text));
+  selectElement.innerHTML = "";
+  options.forEach(option => selectElement.add(option));
+}
+const engineSelect = document.getElementById("engine");
+sortSelectOptions(engineSelect);
+    </script>
+    <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const selectElement = document.getElementById("engine");
+    const options = Array.from(selectElement.options);
+
+    options.sort((a, b) => a.text.localeCompare(b.text));
+
+    selectElement.innerHTML = "";
+    options.forEach(option => selectElement.add(option));
+  });
+    </script>
+
 </body>
 </html>
