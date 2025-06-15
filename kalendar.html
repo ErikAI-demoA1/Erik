@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI Kalendár</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      color: #222;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .month {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 220px;
+    }
+    .month h3 {
+      text-align: center;
+      margin: 0 0 10px;
+    }
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .day {
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+    }
+    .today {
+      background: red;
+      color: white;
+      font-weight: bold;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 8px 16px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ErikAI Kalendár</h1>
+  <div class="controls">
+    <button onclick="changeYear(-1)">◀ Rok späť</button>
+    <span id="yearDisplay"></span>
+    <button onclick="changeYear(1)">Rok vpred ▶</button>
+  </div>
+  <div id="calendar"></div>
+
+  <script>
+    const calendar = document.getElementById('calendar');
+    const yearDisplay = document.getElementById('yearDisplay');
+    const monthNames = [
+      "Január", "Február", "Marec", "Apríl", "Máj", "Jún",
+      "Júl", "August", "September", "Október", "November", "December"
+    ];
+    const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
+
+    let currentYear = new Date().getFullYear();
+
+    function renderCalendar(year) {
+      calendar.innerHTML = '';
+      yearDisplay.textContent = year;
+
+      const today = new Date();
+
+      for (let m = 0; m < 12; m++) {
+        const monthDiv = document.createElement('div');
+        monthDiv.className = 'month';
+
+        const header = document.createElement('h3');
+        header.textContent = monthNames[m];
+        monthDiv.appendChild(header);
+
+        const daysDiv = document.createElement('div');
+        daysDiv.className = 'days';
+
+        const totalDays = daysInMonth(m, year);
+        for (let d = 1; d <= totalDays; d++) {
+          const dayDiv = document.createElement('div');
+          dayDiv.className = 'day';
+          dayDiv.textContent = d;
+
+          if (
+            d === today.getDate() &&
+            m === today.getMonth() &&
+            year === today.getFullYear()
+          ) {
+            dayDiv.classList.add('today');
+          }
+
+          daysDiv.appendChild(dayDiv);
+        }
+
+        monthDiv.appendChild(daysDiv);
+        calendar.appendChild(monthDiv);
+      }
+    }
+
+    function changeYear(offset) {
+      currentYear += offset;
+      renderCalendar(currentYear);
+    }
+
+    renderCalendar(currentYear);
+  </script>
+</body>
+</html>
