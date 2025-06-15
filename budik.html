@@ -4,58 +4,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>⏰ ErikAI Budík</title>
   <style>
-    body { text-align: center; font-family: Arial; background: #f9f9f9; }
-    h1 { color: red; }
-    .clock {
-      width: 200px;
-      height: 200px;
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: red;
+    }
+    #clock {
+      width: 300px;
+      height: 300px;
       border: 10px solid red;
       border-radius: 50%;
-      margin: auto;
+      margin: 0 auto;
       position: relative;
     }
-    .hand, .center {
+    .hand {
+      width: 2px;
+      height: 50%;
+      background: black;
       position: absolute;
       top: 50%;
       left: 50%;
-      transform-origin: bottom;
-      transform: translate(-50%, -100%) rotate(0deg);
-      background: black;
+      transform-origin: bottom center;
     }
-    .hour { width: 6px; height: 50px; z-index: 3; }
-    .minute { width: 4px; height: 70px; z-index: 2; }
-    .second { width: 2px; height: 90px; background: red; z-index: 1; }
-    .center { width: 8px; height: 8px; border-radius: 50%; background: black; transform: translate(-50%, -50%); }
-    select, button, label { margin-top: 10px; font-size: 16px; }
+    .number {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      font-weight: bold;
+      color: black;
+      font-size: 16px;
+      transform: translate(-50%, -50%);
+    }
+    label, select, button, input[type="checkbox"] {
+      font-size: 16px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1>⏰ ErikAI Budík</h1>
-  <div class="clock">
-    <div class="hand hour" id="hourHand"></div>
-    <div class="hand minute" id="minuteHand"></div>
-    <div class="hand second" id="secondHand"></div>
-    <div class="center"></div>
-  </div>  <p>
+  <h1>🕗 ErikAI Budík</h1>
+  <div id="clock">
+    <div id="hour" class="hand" style="height:35%; background:black;"></div>
+    <div id="minute" class="hand" style="height:45%; background:black;"></div>
+    <div id="second" class="hand" style="height:48%; background:red;"></div>
+    <!-- Čísla 1-12 -->
+    <script>
+      for (let i = 1; i <= 12; i++) {
+        const angle = (i - 3) * (Math.PI * 2) / 12;
+        const x = 150 + 120 * Math.cos(angle);
+        const y = 150 + 120 * Math.sin(angle);
+        const number = document.createElement('div');
+        number.className = 'number';
+        number.style.left = `${x}px`;
+        number.style.top = `${y}px`;
+        number.textContent = i;
+        document.getElementById('clock').appendChild(number);
+      }
+    </script>
+  </div>  <div style="margin-top: 20px;">
     <label for="alarmTime">Nastav budík:</label>
     <select id="alarmTime"></select>
-    <input type="checkbox" id="daily"> Každý deň
-  </p>
-  <p>
-    <button onclick="activateAlarm()">Aktivuj</button>
-    <button onclick="cancelAlarm()">Zrušiť</button>
-  </p><audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
+    <input type="checkbox" id="repeatAlarm"> Každý deň<br>
+    <button onclick="setAlarm()">Aktivuj</button>
+    <button onclick="clearAlarm()">Zrušiť</button>
+  </div><audio id="alarmSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
   <script>
-    const hourHand = document.getElementById('hourHand');
-    const minuteHand = document.getElementById('minuteHand');
-    const secondHand = document.getElementById('secondHand');
-    const alarmSelect = document.getElementById('alarmTime');
+    const hourHand = document.getElementById('hour');
+    const minuteHand = document.getElementById('minute');
+    const secondHand = document.getElementById('second');
     const alarmSound = document.getElementById('alarmSound');
-    const daily = document.getElementById('daily');
 
     let alarmTime = null;
-    let alarmActive = false;
+    let alarmSet = false;
+    let repeat = false;
 
     function updateClock() {
       const now = new Date();
@@ -63,45 +89,46 @@
       const m = now.getMinutes();
       const s = now.getSeconds();
 
-      hourHand.style.transform = `translate(-50%, -100%) rotate(${(h % 12 + m / 60) * 30}deg)`;
-      minuteHand.style.transform = `translate(-50%, -100%) rotate(${(m + s / 60) * 6}deg)`;
-      secondHand.style.transform = `translate(-50%, -100%) rotate(${s * 6}deg)`;
+      hourHand.style.transform = `rotate(${(h % 12 + m / 60) * 30}deg)`;
+      minuteHand.style.transform = `rotate(${(m + s / 60) * 6}deg)`;
+      secondHand.style.transform = `rotate(${s * 6}deg)`;
 
-      const current = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-      if (alarmActive && alarmTime === current) {
+      const currentTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+
+      if (alarmSet && currentTime === alarmTime) {
         alarmSound.play();
         alert(`🔔 Zvoní budík: ${alarmTime}`);
-        if (!daily.checked) cancelAlarm();
-      }
-    }
-
-    function fillTimes() {
-      for (let h = 0; h < 24; h++) {
-        for (let m = 0; m < 60; m += 5) {
-          const t = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-          const option = document.createElement('option');
-          option.value = t;
-          option.textContent = t;
-          alarmSelect.appendChild(option);
+        if (!repeat) {
+          alarmSet = false;
         }
       }
     }
 
-    function activateAlarm() {
+    setInterval(updateClock, 1000);
+
+    // Generovanie časov do selectu
+    const alarmSelect = document.getElementById('alarmTime');
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 5) {
+        const time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        const option = document.createElement('option');
+        option.value = time;
+        option.textContent = time;
+        alarmSelect.appendChild(option);
+      }
+    }
+
+    function setAlarm() {
       alarmTime = alarmSelect.value;
-      alarmActive = true;
+      alarmSet = true;
+      repeat = document.getElementById('repeatAlarm').checked;
       alert(`Budík nastavený na ${alarmTime}`);
     }
 
-    function cancelAlarm() {
+    function clearAlarm() {
+      alarmSet = false;
       alarmTime = null;
-      alarmActive = false;
-      alarmSound.pause();
-      alarmSound.currentTime = 0;
       alert("Budík zrušený");
     }
-
-    fillTimes();
-    setInterval(updateClock, 1000);
   </script></body>
 </html>
