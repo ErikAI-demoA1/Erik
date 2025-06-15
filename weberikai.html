@@ -84,6 +84,22 @@
   ⚠️ Táto funkcia je dostupná <u>iba pre mobilné zariadenia s Androidom</u>.<br>
   Na počítači alebo inom systéme nemusí fungovať.
   </p>
+
+<button onclick="toggleTheme()">🌓 Zmeniť režim</button>
+
+<script>
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+  }
+</script>
+
+<style>
+  body.dark-mode {
+    background-color: #121212;
+    color: white;
+  }
+</style>
+  
   <div id="google_translate_element"></div>
 <script type="text/javascript">
   function googleTranslateElementInit() {
