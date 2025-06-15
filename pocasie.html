@@ -1,50 +1,47 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>☁️ Počasie - ErikAI</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
+    body {
       font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-    }
-    main {
-      max-height: 100vh;
-      overflow-y: auto;
       padding: 20px;
-      box-sizing: border-box;
+      margin: 0;
+      background-color: #f9f9f9;
+      overflow-y: scroll;
     }
-    h1, h2, h3, p {
+    h1, h2, h3 {
       text-align: center;
       color: #333;
     }
     iframe {
-      border: none;
+      max-width: 600px;
       width: 100%;
-      height: 250px;
+      margin: 10px auto;
+      display: block;
+      border: none;
+    }
+    p, a {
+      text-align: center;
+      color: #333;
     }
     a {
-      display: inline-block;
-      margin-top: 20px;
-      text-decoration: none;
       color: #007BFF;
+      text-decoration: none;
     }
     a:hover {
       text-decoration: underline;
     }
     #google_translate_element {
       text-align: center;
-      margin: 20px auto;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-<main>
   <p id="cas" style="font-size: 18px;"></p>
 
   <script>
@@ -69,45 +66,41 @@
   <h1>☁️ Počasie v tvojej lokalite</h1>
   <p>Tu môžeš pridať aktuálne počasie, predpoveď alebo prepojenie na externú stránku.</p>
 
-  <!-- GOOGLE TRANSLATE -->
   <div id="google_translate_element"></div>
+
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'sk',
-        includedLanguages: 'af,am,ar,az,bg,be,bn,bs,ca,ceb,cs,da,de,el,en,eo,es,et,fa,fi,fr,ga,hi,hr,hu,id,is,it,ja,ko,lt,lv,ms,nl,no,pl,pt,ro,ru,sk,sl,sr,sv,th,tr,uk,vi,zh-CN,zh-TW',
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
     }
   </script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-  <!-- POČASIE -->
   <h2>🌤️ Aktuálne počasie</h2>
 
   <h3>📍 Bratislava</h3>
-  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/bratislava_slovakia_3060972?geoloc=fixed&days=3&tempunit=CELSIUS" scrolling="no"></iframe>
+  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/bratislava_slovakia_3060972?geoloc=fixed&days=3&tempunit=CELSIUS" height="250"></iframe>
 
   <h3>📍 Žilina</h3>
-  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/žilina_slovakia_3057607?geoloc=fixed&days=3&tempunit=CELSIUS" scrolling="no"></iframe>
+  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/žilina_slovakia_3057607?geoloc=fixed&days=3&tempunit=CELSIUS" height="250"></iframe>
 
   <h3>📍 Košice</h3>
-  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/košice_slovakia_724443?geoloc=fixed&days=3&tempunit=CELSIUS" scrolling="no"></iframe>
+  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/košice_slovakia_724443?geoloc=fixed&days=3&tempunit=CELSIUS" height="250"></iframe>
 
   <h3>📍 Nitra</h3>
-  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/nitra_slovakia_3058532?geoloc=fixed&days=3&tempunit=CELSIUS" scrolling="no"></iframe>
+  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/nitra_slovakia_3058532?geoloc=fixed&days=3&tempunit=CELSIUS" height="250"></iframe>
 
   <h3>📍 Prešov</h3>
-  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/prešov_slovakia_723846?geoloc=fixed&days=3&tempunit=CELSIUS" scrolling="no"></iframe>
+  <iframe src="https://www.meteoblue.com/en/weather/widget/daily/prešov_slovakia_723846?geoloc=fixed&days=3&tempunit=CELSIUS" height="250"></iframe>
 
-  <a href="index.html">← Späť na hlavnú stránku</a>
-
+  <br/>
+  <p><a href="index.html">← Späť na hlavnú stránku</a></p>
   <p style="font-size: 14px; color: gray; margin-top: 20px;">
-    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-    To view a copy of this license, visit <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">creative commons</a><br>
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br/>
     © 2025 Erik Mohylák – All rights reserved.
   </p>
-</main>
 
 </body>
 </html>
