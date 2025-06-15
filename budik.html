@@ -1,123 +1,148 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Budík</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       text-align: center;
-      background-color: #f0f0f0;
-      color: #222;
+      background-color: #f8f8f8;
     }
-    .clock {
-      margin: 40px auto;
-      width: 250px;
-      height: 250px;
-      border: 10px solid red;
-      border-radius: 50%;
-      position: relative;
+
+    h1 {
+      color: red;
     }
-    .number {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      font-weight: bold;
-      font-size: 20px;
-      color: #333;
-    }
-    .number span {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      transform: translate(-50%, 0);
-    }
-    .hand {
-      position: absolute;
-      width: 50%;
-      height: 2px;
-      background: black;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 50%;
-    }
-    .hand.hour {
-      width: 30%;
-      height: 4px;
-      background: #000;
-    }
-    .hand.minute {
-      background: #444;
-    }
-    .hand.second {
-      background: red;
-    }
-    .alarm-section {
+
+    canvas {
       margin-top: 20px;
+      background: white;
+      border-radius: 50%;
+      border: 10px solid red;
+    }
+
+    select, button {
+      font-size: 16px;
+      margin-top: 15px;
+      padding: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>⏰ ErikAI Budík</h1>  <div class="clock" id="clock">
-    <div class="hand hour" id="hour"></div>
-    <div class="hand minute" id="minute"></div>
-    <div class="hand second" id="second"></div>
-    <!-- čísla 1-12 -->
-    <script>
-      for (let i = 1; i <= 12; i++) {
-        const angle = (i * 30) * Math.PI / 180;
-        const x = 50 + 40 * Math.sin(angle);
-        const y = 50 - 40 * Math.cos(angle);
-        const div = document.createElement("div");
-        div.className = "number";
-        div.style.left = x + "%";
-        div.style.top = y + "%";
-        div.innerHTML = `<span>${i}</span>`;
-        document.getElementById("clock").appendChild(div);
-      }
-    </script>
-  </div>  <div class="alarm-section">
-    <label for="alarmTime">Nastav budík:</label>
-    <input type="time" id="alarmTime">
-    <button onclick="setAlarm()">Aktivuj</button>
-    <p id="alarmStatus"></p>
-  </div>  <audio id="alarmSound">
-    <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-  </audio>  <script>
-    function updateClock() {
-      const now = new Date();
-      const sec = now.getSeconds();
-      const min = now.getMinutes();
-      const hr = now.getHours();
+  <h1>⏰ ErikAI Budík</h1>
+  <canvas id="clock" width="300" height="300"></canvas>
+  <br>
+  <label for="alarmTime">Nastav budík:</label>
+  <input type="time" id="alarmTime">
+  <button onclick="setAlarm()">Aktivuj</button>
 
-      document.getElementById("second").style.transform = `rotate(${sec * 6}deg)`;
-      document.getElementById("minute").style.transform = `rotate(${min * 6}deg)`;
-      document.getElementById("hour").style.transform = `rotate(${(hr % 12) * 30 + min / 2}deg)`;
+  <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+
+  <script>
+    const canvas = document.getElementById('clock');
+    const ctx = canvas.getContext('2d');
+    const radius = canvas.height / 2;
+    ctx.translate(radius, radius);
+
+    function drawClock() {
+      drawFace(ctx, radius);
+      drawNumbers(ctx, radius);
+      drawTime(ctx, radius);
     }
 
-    setInterval(updateClock, 1000);
-    updateClock();
+    function drawFace(ctx, radius) {
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.95, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
 
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = radius * 0.05;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.05, 0, 2 * Math.PI);
+      ctx.fillStyle = '#333';
+      ctx.fill();
+    }
+
+    function drawNumbers(ctx, radius) {
+      ctx.font = radius * 0.15 + "px Arial";
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      for (let num = 1; num <= 12; num++) {
+        let ang = num * Math.PI / 6;
+        ctx.rotate(ang);
+        ctx.translate(0, -radius * 0.85);
+        ctx.rotate(-ang);
+        ctx.fillText(num.toString(), 0, 0);
+        ctx.rotate(ang);
+        ctx.translate(0, radius * 0.85);
+        ctx.rotate(-ang);
+      }
+    }
+
+    function drawTime(ctx, radius) {
+      const now = new Date();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+
+      // Hour
+      let hourPos = (hour % 12) * Math.PI / 6 +
+                    (minute * Math.PI / (6 * 60)) +
+                    (second * Math.PI / (360 * 60));
+      drawHand(ctx, hourPos, radius * 0.5, radius * 0.07);
+
+      // Minute
+      let minutePos = (minute * Math.PI / 30) +
+                      (second * Math.PI / (30 * 60));
+      drawHand(ctx, minutePos, radius * 0.8, radius * 0.07);
+
+      // Second
+      let secondPos = second * Math.PI / 30;
+      drawHand(ctx, secondPos, radius * 0.9, radius * 0.02, "red");
+    }
+
+    function drawHand(ctx, pos, length, width, color = "#333") {
+      ctx.beginPath();
+      ctx.lineWidth = width;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = color;
+      ctx.moveTo(0, 0);
+      ctx.rotate(pos);
+      ctx.lineTo(0, -length);
+      ctx.stroke();
+      ctx.rotate(-pos);
+    }
+
+    setInterval(drawClock, 1000);
+
+    // BUDÍK
     let alarmTime = null;
-    let triggered = false;
+    let alarmTriggered = false;
 
     function setAlarm() {
       const input = document.getElementById("alarmTime").value;
-      alarmTime = input;
-      triggered = false;
-      document.getElementById("alarmStatus").innerText = `Budík nastavený na ${input}`;
+      if (input) {
+        alarmTime = input;
+        alarmTriggered = false;
+        alert("Budík nastavený na " + alarmTime);
+      }
     }
 
-    setInterval(() => {
-      if (!alarmTime || triggered) return;
+    function checkAlarm() {
+      if (!alarmTime || alarmTriggered) return;
       const now = new Date();
-      const current = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      if (current === alarmTime) {
-        triggered = true;
+      const currentTime = now.toTimeString().slice(0,5); // HH:MM
+      if (currentTime === alarmTime) {
         document.getElementById("alarmSound").play();
-        alert("⏰ Budík! ");
+        alert("🔔 Zvoní budík: " + alarmTime);
+        alarmTriggered = true;
       }
-    }, 1000);
-  </script></body>
+    }
+
+    setInterval(checkAlarm, 1000);
+  </script>
+</body>
 </html>
