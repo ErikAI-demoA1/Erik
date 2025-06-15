@@ -51,6 +51,21 @@
   <h1>🛠️ Nástroje dostupné v ErikAI</h1>
   <p>Tu môžeš pridať zoznam 50 nástrojov, zoradených podľa abecedy, kategórií alebo funkcie.</p>
 
+  <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
+
+<script>
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+  }
+</script>
+
+<style>
+  body.dark-mode {
+    background-color: #121212;
+    color: white;
+  }
+</style>
+
   <div id="google_translate_element"></div>
 <script type="text/javascript">
   function googleTranslateElementInit() {
