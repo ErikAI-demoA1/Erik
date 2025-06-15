@@ -160,6 +160,27 @@
     }
   </script>
 
+  <p id="cas" style="font-size: 18px;"></p>
+
+  <script>
+    function aktualizujCas() {
+      const teraz = new Date();
+      const moznosti = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
+      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+    }
+    setInterval(aktualizujCas, 1000);
+    aktualizujCas();
+        </script>
+
 <p style="font-size: 14px; color: gray; margin-top: 20px;">
   This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
