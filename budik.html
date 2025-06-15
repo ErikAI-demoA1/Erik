@@ -1,186 +1,117 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ErikAI Budík</title>
   <style>
     body {
-      font-family: sans-serif;
       text-align: center;
-      background-color: #f8f8f8;
+      font-family: sans-serif;
+      background: #f7f7f7;
     }
-
     h1 {
       color: red;
     }
-
-    canvas {
-      margin-top: 20px;
-      background: white;
-      border-radius: 50%;
+    .clock {
+      width: 250px;
+      height: 250px;
       border: 10px solid red;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
     }
-
-    select, button {
-      font-size: 16px;
-      margin-top: 15px;
-      padding: 6px;
+    .hand {
+      width: 50%;
+      height: 2px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform-origin: 100%;
+      left: 50%;
+    }
+    .number {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>⏰ ErikAI Budík</h1>
-
-<button onclick="toggleTheme()">🌓 Zmeniť režim</button>
-
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-  }
-</script>
-
-<style>
-  body.dark-mode {
-    background-color: #121212;
-    color: white;
-  }
-</style>
-
-  <div id="google_translate_element"></div>
-<script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'sk',
-      includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  
-  
-  <canvas id="clock" width="300" height="300"></canvas>
-  <br>
-  <label for="alarmTime">Nastav budík:</label>
-  <input type="time" id="alarmTime">
-  <button onclick="setAlarm()">Aktivuj</button>
-
-  <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+  <h1>⏰ ErikAI Budík</h1>  <div class="clock">
+    <div class="hand" id="hour"></div>
+    <div class="hand" id="minute"></div>
+    <div class="hand" id="second"></div>
+    <!-- Zvýraznené čísla hodín -->
+    <script>
+      const clock = document.querySelector(".clock");
+      for (let i = 1; i <= 12; i++) {
+        const angle = (i * 30 - 90) * (Math.PI / 180);
+        const x = 125 + 100 * Math.cos(angle);
+        const y = 125 + 100 * Math.sin(angle);
+        const num = document.createElement("div");
+        num.className = "number";
+        num.style.left = `${x}px`;
+        num.style.top = `${y}px`;
+        num.textContent = i;
+        clock.appendChild(num);
+      }
+    </script>
+  </div>  <p>Nastav budík:
+    <input type="time" id="alarmTime" />
+    <label><input type="checkbox" id="repeatDaily" /> Každý deň</label>
+    <button onclick="setAlarm()">Aktivuj</button>
+    <button onclick="clearAlarm()">Zrušiť</button>
+  </p><audio id="alarmSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
 
   <script>
-    const canvas = document.getElementById('clock');
-    const ctx = canvas.getContext('2d');
-    const radius = canvas.height / 2;
-    ctx.translate(radius, radius);
+    const hourHand = document.getElementById("hour");
+    const minuteHand = document.getElementById("minute");
+    const secondHand = document.getElementById("second");
+    const alarmSound = document.getElementById("alarmSound");
 
-    function drawClock() {
-      drawFace(ctx, radius);
-      drawNumbers(ctx, radius);
-      drawTime(ctx, radius);
-    }
+    let alarmTime = localStorage.getItem("alarmTime") || null;
+    let repeatDaily = localStorage.getItem("repeatDaily") === "true";
+    if (alarmTime) document.getElementById("alarmTime").value = alarmTime;
+    document.getElementById("repeatDaily").checked = repeatDaily;
 
-    function drawFace(ctx, radius) {
-      ctx.beginPath();
-      ctx.arc(0, 0, radius * 0.95, 0, 2 * Math.PI);
-      ctx.fillStyle = 'white';
-      ctx.fill();
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours();
+      const m = now.getMinutes();
+      const s = now.getSeconds();
 
-      ctx.strokeStyle = '#333';
-      ctx.lineWidth = radius * 0.05;
-      ctx.stroke();
+      hourHand.style.transform = `rotate(${(h % 12 + m / 60) * 30}deg)`;
+      minuteHand.style.transform = `rotate(${m * 6}deg)`;
+      secondHand.style.transform = `rotate(${s * 6}deg)`;
 
-      ctx.beginPath();
-      ctx.arc(0, 0, radius * 0.05, 0, 2 * Math.PI);
-      ctx.fillStyle = '#333';
-      ctx.fill();
-    }
-
-    function drawNumbers(ctx, radius) {
-      ctx.font = radius * 0.15 + "px Arial";
-      ctx.textBaseline = "middle";
-      ctx.textAlign = "center";
-      for (let num = 1; num <= 12; num++) {
-        let ang = num * Math.PI / 6;
-        ctx.rotate(ang);
-        ctx.translate(0, -radius * 0.85);
-        ctx.rotate(-ang);
-        ctx.fillText(num.toString(), 0, 0);
-        ctx.rotate(ang);
-        ctx.translate(0, radius * 0.85);
-        ctx.rotate(-ang);
+      const current = now.toTimeString().slice(0, 5);
+      if (alarmTime === current) {
+        alarmSound.play();
+        alert(`🔔 Zvoní budík: ${alarmTime}`);
+        if (!repeatDaily) clearAlarm();
       }
     }
-
-    function drawTime(ctx, radius) {
-      const now = new Date();
-      const hour = now.getHours();
-      const minute = now.getMinutes();
-      const second = now.getSeconds();
-
-      // Hour
-      let hourPos = (hour % 12) * Math.PI / 6 +
-                    (minute * Math.PI / (6 * 60)) +
-                    (second * Math.PI / (360 * 60));
-      drawHand(ctx, hourPos, radius * 0.5, radius * 0.07);
-
-      // Minute
-      let minutePos = (minute * Math.PI / 30) +
-                      (second * Math.PI / (30 * 60));
-      drawHand(ctx, minutePos, radius * 0.8, radius * 0.07);
-
-      // Second
-      let secondPos = second * Math.PI / 30;
-      drawHand(ctx, secondPos, radius * 0.9, radius * 0.02, "red");
-    }
-
-    function drawHand(ctx, pos, length, width, color = "#333") {
-      ctx.beginPath();
-      ctx.lineWidth = width;
-      ctx.lineCap = "round";
-      ctx.strokeStyle = color;
-      ctx.moveTo(0, 0);
-      ctx.rotate(pos);
-      ctx.lineTo(0, -length);
-      ctx.stroke();
-      ctx.rotate(-pos);
-    }
-
-    setInterval(drawClock, 1000);
-
-    // BUDÍK
-    let alarmTime = null;
-    let alarmTriggered = false;
 
     function setAlarm() {
-      const input = document.getElementById("alarmTime").value;
-      if (input) {
-        alarmTime = input;
-        alarmTriggered = false;
-        alert("Budík nastavený na " + alarmTime);
-      }
+      alarmTime = document.getElementById("alarmTime").value;
+      repeatDaily = document.getElementById("repeatDaily").checked;
+      localStorage.setItem("alarmTime", alarmTime);
+      localStorage.setItem("repeatDaily", repeatDaily);
+      alert(`Budík nastavený na ${alarmTime}${repeatDaily ? " (každý deň)" : ""}`);
     }
 
-    function checkAlarm() {
-      if (!alarmTime || alarmTriggered) return;
-      const now = new Date();
-      const currentTime = now.toTimeString().slice(0,5); // HH:MM
-      if (currentTime === alarmTime) {
-        document.getElementById("alarmSound").play();
-        alert("🔔 Zvoní budík: " + alarmTime);
-        alarmTriggered = true;
-      }
+    function clearAlarm() {
+      alarmTime = null;
+      localStorage.removeItem("alarmTime");
+      localStorage.removeItem("repeatDaily");
+      document.getElementById("alarmTime").value = "";
+      document.getElementById("repeatDaily").checked = false;
+      alert("Budík zrušený");
     }
 
-    setInterval(checkAlarm, 1000);
-  </script>
-
-  <a href="index.html" class="spat">← Späť na hlavnú stránku 1</a>
-
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
-  </p>
-  
-</body>
+    setInterval(updateClock, 1000);
+  </script></body>
 </html>
