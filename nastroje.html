@@ -27,6 +27,27 @@
 </head>
 <body>
 
+  <p id="cas" style="text-align:center; font-size: 18px; color: #333;"></p>
+
+<script>
+  function aktualizujCas() {
+    const teraz = new Date();
+    const moznosti = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    };
+    const casText = teraz.toLocaleDateString('sk-SK', moznosti);
+    document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+  }
+
+  setInterval(aktualizujCas, 1000);
+  aktualizujCas(); // spusti hneď
+</script>
   <h1>🛠️ Nástroje dostupné v ErikAI</h1>
   <p>Tu môžeš pridať zoznam 50 nástrojov, zoradených podľa abecedy, kategórií alebo funkcie.</p>
 
