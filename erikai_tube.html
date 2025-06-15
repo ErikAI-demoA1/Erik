@@ -34,6 +34,27 @@
 </head>
 <body>
 
+<p id="cas" style="font-size: 18px;"></p>
+
+  <script>
+    function aktualizujCas() {
+      const teraz = new Date();
+      const moznosti = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
+      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+    }
+    setInterval(aktualizujCas, 1000);
+    aktualizujCas();
+  </script>
+  
   <h1>🎥 ErikAI Tube – Videá od ErikAItuberov</h1>
   <p>Vitaj v testovacej verzii ErikAI Tube. Videá sú od overených tvorcov.</p>
 
