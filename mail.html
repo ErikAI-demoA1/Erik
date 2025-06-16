@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ErikAI Mail</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #d90000;
+    }
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #d90000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #b30000;
+    }
+    .info {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #444;
+      background-color: #fff9e6;
+      padding: 15px;
+      border-left: 4px solid #ffa600;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📧 ErikAI Mail</h1>
+
+  <form id="emailForm">
+    <label for="to">📬 Komu (e-mail):</label>
+    <input type="email" id="to" required placeholder="napr. meno@gmail.com">
+
+    <label for="subject">📝 Predmet:</label>
+    <input type="text" id="subject" placeholder="Napr. Otázka ohľadom ErikAI">
+
+    <label for="body">💬 Správa:</label>
+    <textarea id="body" rows="6" placeholder="Sem napíš svoju správu..."></textarea>
+
+    <button type="submit">✉️ Odoslať e-mail</button>
+  </form>
+
+  <div class="info">
+    ⚠️ <strong>Upozornenie:</strong><br>
+    Táto funkcia neodosiela e-mail automaticky. Po kliknutí sa otvorí tvoja e-mailová aplikácia (napr. Gmail, Outlook), kde manuálne potvrdíš odoslanie.<br>
+    🔒 ErikAI neukladá žiadne údaje. Všetko prebieha <strong>lokálne a bezpečne</strong>.
+  </div>
+
+  <script>
+    document.getElementById("emailForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      let to = document.getElementById("to").value;
+      let subject = encodeURIComponent(document.getElementById("subject").value);
+      let body = encodeURIComponent(document.getElementById("body").value);
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    });
+  </script>
+
+</body>
+</html>
