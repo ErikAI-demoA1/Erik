@@ -38,35 +38,28 @@
 <body>
   <section>
     <h2>🔐 Generátor náhodných hesiel</h2>
-    <button onclick="generatePasswords()">Generovať 100 hesiel</button>
+    <button onclick="generatePassword()">Zobraziť náhodné heslo</button>
     <pre id="passwordOutput"></pre>
   </section>  <section>
     <h2>🧑‍💻 Generátor náhodných mien</h2>
-    <button onclick="generateNames()">Generovať 100 mien</button>
+    <button onclick="generateName()">Zobraziť náhodné meno</button>
     <pre id="nameOutput"></pre>
   </section>  <script>
-    function generatePasswords() {
-      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-      let passwords = [];
-      for (let i = 0; i < 100; i++) {
-        let pass = "";
-        for (let j = 0; j < 10; j++) {
-          pass += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        passwords.push(pass);
+    const passwordChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+    const nameList = ["Erik", "Martina", "Jakub", "Sofia", "Roman", "Petra", "Tomáš", "Natália", "Matej", "Lucia",
+                     "Daniel", "Simona", "Michal", "Veronika", "Adam", "Laura", "David", "Kristína", "Richard", "Lenka"];
+
+    function generatePassword() {
+      let pass = "";
+      for (let j = 0; j < 10; j++) {
+        pass += passwordChars.charAt(Math.floor(Math.random() * passwordChars.length));
       }
-      document.getElementById("passwordOutput").textContent = passwords.join("\n");
+      document.getElementById("passwordOutput").textContent = pass;
     }
 
-    function generateNames() {
-      const names = ["Erik", "Martina", "Jakub", "Sofia", "Roman", "Petra", "Tomáš", "Natália", "Matej", "Lucia",
-                     "Daniel", "Simona", "Michal", "Veronika", "Adam", "Laura", "David", "Kristína", "Richard", "Lenka"];
-      let generated = [];
-      for (let i = 0; i < 100; i++) {
-        let name = names[Math.floor(Math.random() * names.length)];
-        generated.push(name);
-      }
-      document.getElementById("nameOutput").textContent = generated.join(", ");
+    function generateName() {
+      let name = nameList[Math.floor(Math.random() * nameList.length)];
+      document.getElementById("nameOutput").textContent = name;
     }
   </script></body>
 </html>
