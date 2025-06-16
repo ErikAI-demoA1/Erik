@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>📲 ErikAI SMS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #fdfdfd;
+    }
+    input, textarea {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      margin: 10px auto;
+      font-size: 16px;
+    }
+    button {
+      background-color: #e60000;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #cc0000;
+    }
+    .warning {
+      background-color: #fff4cc;
+      padding: 15px;
+      margin-top: 20px;
+      border-left: 5px solid #ffa500;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📲 ErikAI SMS</h1>
+
+  <form onsubmit="sendSMS(); return false;">
+    <input type="text" id="cislo" placeholder="Telefónne číslo (napr. 0904123456)" required><br>
+    <textarea id="sprava" rows="4" placeholder="Sem napíš správu..." required></textarea><br>
+    <button type="submit">📤 Odoslať SMS</button>
+  </form>
+
+  <div class="warning">
+    ⚠️ <strong>Upozornenie:</strong><br>
+    Táto funkcia neodosiela SMS automaticky. Po kliknutí sa otvorí tvoja predvolená SMS aplikácia, kde manuálne potvrdíš odoslanie.<br><br>
+    🔒 ErikAI neukladá žiadne údaje. Všetko prebieha <strong>lokálne a bezpečne</strong>.
+  </div>
+
+  <script>
+    function sendSMS() {
+      var cislo = document.getElementById("cislo").value.trim();
+      var sprava = document.getElementById("sprava").value.trim();
+      if (cislo && sprava) {
+        var smsLink = "sms:" + encodeURIComponent(cislo) + "?body=" + encodeURIComponent(sprava);
+        window.location.href = smsLink;
+      }
+    }
+  </script>
+
+</body>
+</html>
