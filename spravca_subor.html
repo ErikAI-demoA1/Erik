@@ -1,105 +1,113 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🗂️ ErikAI Správca súborov</title>
+  <meta charset="UTF-8">
+  <title>📁 ErikAI Správca súborov</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 20px;
+      font-family: Arial;
       text-align: center;
+      background: #f9f9f9;
     }
     h1 {
-      color: #c40000;
-    }
-    #file-input {
-      margin: 10px 0;
-    }
-    .file-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
+      color: darkred;
     }
     .file-box {
       border: 1px solid #ccc;
+      margin: 20px auto;
       padding: 10px;
-      background: #fff;
-      width: 180px;
+      width: 90%;
+      max-width: 400px;
+      background: white;
     }
-    .file-box img, .file-box video {
-      width: 100%;
-      max-height: 150px;
-    }
-    .file-name {
-      font-size: 14px;
-      margin: 5px 0;
-      word-break: break-word;
-    }
-    .delete-btn {
+    button {
       background-color: red;
       color: white;
       border: none;
-      padding: 5px 10px;
-      margin-top: 5px;
+      padding: 6px 12px;
+      margin-top: 8px;
+      font-weight: bold;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>🗂️ ErikAI Správca súborov</h1>
+  <h1>📁 ErikAI Správca súborov</h1>
   <p>Vyber súbory (obrázky, videá, apk, pdf...):</p>
-  <input type="file" id="file-input" multiple />
-  <div id="file-list" class="file-list"></div>
+  <input type="file" id="fileInput" multiple>
+  <div id="fileContainer"></div>
 
   <script>
-    const fileInput = document.getElementById('file-input');
-    const fileList = document.getElementById('file-list');
+    // Načítanie zo storage pri otvorení
+    const ulozeneSubory = JSON.parse(localStorage.getItem("erikai_subory") || "[]");
+    const fileContainer = document.getElementById("fileContainer");
 
-    fileInput.addEventListener('change', () => {
-      fileList.innerHTML = ''; // Vymaže staré zobrazenia
+    function zobrazSubory() {
+      fileContainer.innerHTML = "";
+      ulozeneSubory.forEach((subor, index) => {
+        const box = document.createElement("div");
+        box.className = "file-box";
 
-      Array.from(fileInput.files).forEach((file, index) => {
-        const reader = new FileReader();
-        const box = document.createElement('div');
-        box.className = 'file-box';
+        const typ = subor.typ;
+        const obsah = subor.data;
+        let element;
 
-        reader.onload = function (e) {
-          if (file.type.startsWith('image/')) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            box.appendChild(img);
-          } else if (file.type.startsWith('video/')) {
-            const video = document.createElement('video');
-            video.src = e.target.result;
-            video.controls = true;
-            box.appendChild(video);
-          } else {
-            const icon = document.createElement('p');
-            icon.textContent = '📦 Súbor';
-            icon.style.fontSize = '40px';
-            box.appendChild(icon);
-          }
+        if (typ.startsWith("image/")) {
+          element = document.createElement("img");
+          element.src = obsah;
+          element.style.maxWidth = "100%";
+        } else if (typ.startsWith("video/")) {
+          element = document.createElement("video");
+          element.src = obsah;
+          element.controls = true;
+          element.style.maxWidth = "100%";
+        } else if (typ.startsWith("audio/")) {
+          element = document.createElement("audio");
+          element.src = obsah;
+          element.controls = true;
+        } else {
+          element = document.createElement("p");
+          element.textContent = "📦 Súbor: " + subor.meno;
+        }
 
-          const name = document.createElement('div');
-          name.className = 'file-name';
-          name.textContent = file.name;
-          box.appendChild(name);
+        box.appendChild(element);
 
-          const del = document.createElement('button');
-          del.className = 'delete-btn';
-          del.textContent = 'Zmazať';
-          del.onclick = () => box.remove();
-          box.appendChild(del);
+        const meno = document.createElement("p");
+        meno.textContent = subor.meno;
+        box.appendChild(meno);
 
-          fileList.appendChild(box);
+        const zmazat = document.createElement("button");
+        zmazat.textContent = "Zmazať";
+        zmazat.onclick = () => {
+          ulozeneSubory.splice(index, 1);
+          localStorage.setItem("erikai_subory", JSON.stringify(ulozeneSubory));
+          zobrazSubory();
         };
+        box.appendChild(zmazat);
 
-        reader.readAsDataURL(file);
+        fileContainer.appendChild(box);
       });
+    }
+
+    zobrazSubory();
+
+    document.getElementById("fileInput").addEventListener("change", (e) => {
+      const files = Array.from(e.target.files);
+      const nacitajSubor = (file) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          ulozeneSubory.push({
+            meno: file.name,
+            typ: file.type,
+            data: event.target.result
+          });
+          localStorage.setItem("erikai_subory", JSON.stringify(ulozeneSubory));
+          zobrazSubory();
+        };
+        reader.readAsDataURL(file);
+      };
+      files.forEach(nacitajSubor);
+      e.target.value = ""; // reset input
     });
   </script>
 </body>
