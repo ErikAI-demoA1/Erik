@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ErikAI Kompas</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #fefefe; margin: 0; padding: 20px; }
+    h2 { color: #d10000; margin-top: 10px; }
+    .kompas-wrapper { margin: 20px auto; width: 200px; height: 200px; border: 4px solid red; border-radius: 50%; position: relative; }
+    .ručička {
+      width: 2px;
+      height: 90px;
+      background-color: red;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform-origin: bottom center;
+      transition: transform 0.2s ease-out;
+    }
+    .uhol { margin-top: 15px; font-size: 20px; font-weight: bold; }
+    .upozornenie {
+      background-color: #fff3cd;
+      border-left: 6px solid #ffcc00;
+      padding: 10px;
+      margin: 25px auto;
+      max-width: 500px;
+      font-size: 14px;
+      text-align: left;
+    }
+    .button { margin: 10px; padding: 10px 20px; background-color: #d10000; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .button:hover { background-color: #b30000; }
+  </style>
+</head>
+<body>
+  <h2>🧭 ErikAI Kompas</h2>
+
+  <div class="kompas-wrapper">
+    <div class="ručička" id="rucicka"></div>
+  </div>
+
+  <div class="uhol" id="uholText">Smer: 0° (Sever)</div>
+
+  <div class="upozornenie">
+    <strong>ℹ️ Informácia o súkromí a podpore:</strong><br>
+    ErikAI Kompas <strong>nesleduje ani neposiela žiadne dáta</strong> na server. Funguje <strong>lokálne</strong> na vašom zariadení.<br><br>
+    ✅ Podporované: Android (Chrome), iOS (Safari od verzie 13.4)<br>
+    ❗ Nepodporované na: starších zariadeniach, niektorých desktopových prehliadačoch, PC bez senzora.
+  </div>
+
+  <a href="index.html">← Zoznam Strániek</a>
+
+  <script>
+    function getSmer(angle) {
+      const smery = ["Sever", "Severovýchod", "Východ", "Juhovýchod", "Juh", "Juhozápad", "Západ", "Severozápad"];
+      const index = Math.round(angle / 45) % 8;
+      return smery[index];
+    }
+
+    function aktualizujKompas(uhol) {
+      const rucicka = document.getElementById("rucicka");
+      const uholText = document.getElementById("uholText");
+      rucicka.style.transform = `rotate(${uhol}deg)`;
+      uholText.textContent = `Smer: ${Math.round(uhol)}° (${getSmer(uhol)})`;
+    }
+
+    function inicializujKompas() {
+      if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+        // iOS
+        DeviceOrientationEvent.requestPermission()
+          .then(permissionState => {
+            if (permissionState === "granted") {
+              window.addEventListener("deviceorientationabsolute", handler);
+            } else {
+              alert("Prístup k senzoru zamietnutý.");
+            }
+          })
+          .catch(console.error);
+      } else {
+        // Android a iné
+        window.addEventListener("deviceorientationabsolute", handler);
+      }
+    }
+
+    function handler(event) {
+      if (event.alpha !== null) {
+        const uhol = 360 - event.alpha; // Sever = 0°
+        aktualizujKompas(uhol);
+      }
+    }
+
+    inicializujKompas();
+  </script>
+</body>
+</html>
