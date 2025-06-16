@@ -2,44 +2,48 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Galéria</title>
+  <title>📸 ErikAI Galéria</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
-    h1 { color: #e60000; }
-    input { margin: 15px 0; }
-    .preview { display: flex; flex-wrap: wrap; gap: 10px; }
-    img, video { width: 120px; height: auto; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    body { font-family: sans-serif; background: #f0f0f0; text-align: center; }
+    h1 { color: red; }
+    .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+    .gallery img { max-width: 150px; cursor: pointer; border: 2px solid #ccc; border-radius: 5px; }
+    #preview { max-width: 90%; max-height: 90vh; display: none; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>📸 ErikAI Galéria</h1>
-  <p>Vyber obrázky alebo videá zo zariadenia:</p>
-  <input type="file" id="upload" multiple accept="image/*,video/*">
-  <div id="gallery" class="preview"></div>
 
-  <script>
-    const input = document.getElementById("upload");
-    const gallery = document.getElementById("gallery");
+<h1>📸 ErikAI Galéria</h1>
+<p>Vyber obrázky alebo videá zo zariadenia:</p>
+<input type="file" id="fileInput" accept="image/*,video/*" multiple>
 
-    input.addEventListener("change", () => {
-      gallery.innerHTML = "";
-      Array.from(input.files).forEach(file => {
+<div class="gallery" id="gallery"></div>
+<img id="preview" onclick="this.style.display='none'">
+
+<script>
+  const input = document.getElementById('fileInput');
+  const gallery = document.getElementById('gallery');
+  const preview = document.getElementById('preview');
+
+  input.addEventListener('change', () => {
+    gallery.innerHTML = '';
+    Array.from(input.files).forEach(file => {
+      if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = () => {
-          if (file.type.startsWith("image/")) {
-            const img = document.createElement("img");
-            img.src = reader.result;
-            gallery.appendChild(img);
-          } else if (file.type.startsWith("video/")) {
-            const video = document.createElement("video");
-            video.src = reader.result;
-            video.controls = true;
-            gallery.appendChild(video);
-          }
+          const img = document.createElement('img');
+          img.src = reader.result;
+          img.onclick = () => {
+            preview.src = reader.result;
+            preview.style.display = 'block';
+          };
+          gallery.appendChild(img);
         };
         reader.readAsDataURL(file);
-      });
+      }
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
