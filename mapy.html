@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI Mapy</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #eef7ff; }
+    h1 { color: #0066cc; }
+    button { padding: 10px 20px; background: #0077ff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #005fcc; }
+    #info { margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <h1>🗺️ ErikAI Mapy</h1>
+  <p>Zisti svoju aktuálnu polohu a otvor ju v Google Maps:</p>
+  <button onclick="getLocation()">📍 Zobraziť polohu</button>
+  <div id="info"></div>
+
+  <script>
+    function getLocation() {
+      const info = document.getElementById("info");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lon = pos.coords.longitude.toFixed(6);
+          info.innerHTML = `
+            <p><strong>Súradnice:</strong> ${lat}, ${lon}</p>
+            <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">🌍 Otvoriť v Google Maps</a>
+          `;
+        }, () => {
+          info.innerText = "❌ Nepodarilo sa získať polohu.";
+        });
+      } else {
+        info.innerText = "❌ Tvoje zariadenie nepodporuje GPS.";
+      }
+    }
+  </script>
+</body>
+</html>
