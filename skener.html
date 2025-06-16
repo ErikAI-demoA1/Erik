@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ErikAI QR Skener</title>
+  <script src="https://unpkg.com/@zxing/library@latest"></script>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 20px; }
+    video { width: 100%; max-width: 400px; border: 2px solid red; border-radius: 10px; }
+    #output { margin-top: 15px; font-weight: bold; }
+    button { margin: 10px; padding: 10px 15px; font-size: 16px; border: none; background: red; color: white; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>🌍 ErikAI QR Skener</h2>
+  <video id="video" autoplay></video>
+  <div id="output"></div>
+  <div id="actionButtons" style="display:none;">
+    <button onclick="goToLink()">Prejsť na stránku</button>
+    <button onclick="copyCode()">Skopírovať</button>
+  </div>  <script>
+    const codeReader = new ZXing.BrowserQRCodeReader();
+    const videoElement = document.getElementById('video');
+    const output = document.getElementById('output');
+    const actionButtons = document.getElementById('actionButtons');
+    let lastResult = '';
+
+    codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
+      if (result) {
+        if (result.text !== lastResult) {
+          lastResult = result.text;
+          output.textContent = `✅ QR kód: ${result.text}`;
+          actionButtons.style.display = 'block';
+        }
+      }
+    });
+
+    function goToLink() {
+      if (lastResult.startsWith('http')) {
+        window.open(lastResult, '_blank');
+      } else {
+        alert('Toto nie je odkaz na stránku.');
+      }
+    }
+
+    function copyCode() {
+      navigator.clipboard.writeText(lastResult).then(() => {
+        alert('Skopírované do schránky!');
+      });
+    }
+  </script></body>
+</html>
