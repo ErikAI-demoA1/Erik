@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Poznámky</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 2rem;
+      color: #222;
+      text-align: center;
+    }
+    h1 {
+      color: #d62828;
+    }
+    textarea {
+      width: 100%;
+      max-width: 700px;
+      height: 300px;
+      font-size: 1.1rem;
+      padding: 1rem;
+      margin: 1rem auto;
+      display: block;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+    button {
+      background-color: #d62828;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #b71d1d;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 ErikAI Poznámky</h1>
+  <textarea id="noteInput" placeholder="Napíš si sem svoje poznámky..."></textarea>
+  <div>
+    <button onclick="skopirujPoznamky()">📋 Skopírovať</button>
+    <button onclick="stiahniPoznamky()">💾 Stiahnuť ako TXT</button>
+  </div>  <script>
+    function skopirujPoznamky() {
+      const textarea = document.getElementById("noteInput");
+      textarea.select();
+      textarea.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(textarea.value)
+        .then(() => alert("Poznámky boli skopírované."));
+    }
+
+    function stiahniPoznamky() {
+      const text = document.getElementById("noteInput").value;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'moje_poznamky.txt';
+      link.click();
+    }
+  </script></body>
+</html>
