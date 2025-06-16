@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <title>ErikAI Mapy</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌍 ErikAI Mapy</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #eef7ff; }
-    h1 { color: #0066cc; }
-    button { padding: 10px 20px; background: #0077ff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #005fcc; }
-    #info { margin-top: 15px; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f0fa;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      color: #0077cc;
+    }
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+    }
   </style>
 </head>
 <body>
-  <h1>🗺️ ErikAI Mapy</h1>
-  <p>Zisti svoju aktuálnu polohu a otvor ju v Google Maps:</p>
-  <button onclick="getLocation()">📍 Zobraziť polohu</button>
-  <div id="info"></div>
 
-  <script>
-    function getLocation() {
-      const info = document.getElementById("info");
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          const lat = pos.coords.latitude.toFixed(6);
-          const lon = pos.coords.longitude.toFixed(6);
-          info.innerHTML = `
-            <p><strong>Súradnice:</strong> ${lat}, ${lon}</p>
-            <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">🌍 Otvoriť v Google Maps</a>
-          `;
-        }, () => {
-          info.innerText = "❌ Nepodarilo sa získať polohu.";
-        });
-      } else {
-        info.innerText = "❌ Tvoje zariadenie nepodporuje GPS.";
-      }
-    }
-  </script>
+  <h2>🌍 ErikAI Mapy</h2>
+  <p>Mapa tvojej aktuálnej polohy:</p>
+
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2577.582977363296!2d18.579231376814304!3d49.2854520713941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDnCsDE3JzA3LjYiTiAxOMKwMzQnNTMuNSJF!5e0!3m2!1ssk!2ssk!4v1718569123456!5m2!1ssk!2ssk"
+    loading="lazy"
+    allowfullscreen
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+
+  <p style="margin-top: 20px; font-size: 14px; color: gray;">
+    Zdroj: Google Maps • Neodosiela žiadne údaje ErikAI
+  </p>
+
 </body>
 </html>
