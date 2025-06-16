@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Jednoduchá Kalkulačka</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 2rem;
+      color: #222;
+      text-align: center;
+    }
+    h1 {
+      color: #d62828;
+    }
+    #calcDisplay {
+      width: 100%;
+      font-size: 2rem;
+      text-align: right;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .buttons button {
+      padding: 1rem;
+      font-size: 1.2rem;
+      background-color: #d62828;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .buttons button:hover {
+      background-color: #b71d1d;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧮 ErikAI Jednoduchá Kalkulačka</h1>
+  <input type="text" id="calcDisplay" readonly>
+  <div class="buttons">
+    <button onclick="appendCalc('7')">7</button>
+    <button onclick="appendCalc('8')">8</button>
+    <button onclick="appendCalc('9')">9</button>
+    <button onclick="appendCalc('/')">÷</button><button onclick="appendCalc('4')">4</button>
+<button onclick="appendCalc('5')">5</button>
+<button onclick="appendCalc('6')">6</button>
+<button onclick="appendCalc('*')">×</button>
+
+<button onclick="appendCalc('1')">1</button>
+<button onclick="appendCalc('2')">2</button>
+<button onclick="appendCalc('3')">3</button>
+<button onclick="appendCalc('-')">−</button>
+
+<button onclick="appendCalc('0')">0</button>
+<button onclick="clearCalc()">C</button>
+<button onclick="calculate()">=</button>
+<button onclick="appendCalc('+')">+</button>
+
+  </div>  <script>
+    let calcDisplay = document.getElementById("calcDisplay");
+
+    function appendCalc(value) {
+      calcDisplay.value += value;
+    }
+
+    function clearCalc() {
+      calcDisplay.value = "";
+    }
+
+    function calculate() {
+      try {
+        calcDisplay.value = eval(calcDisplay.value);
+      } catch (e) {
+        calcDisplay.value = "Error";
+      }
+    }
+  </script></body>
+</html>
