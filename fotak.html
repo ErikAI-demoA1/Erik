@@ -2,23 +2,23 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>📷 ErikAI Kamera & Selfie</title>
+  <title>🎥 ErikAI Kamera & Video</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background-color: #f4f4f4;
+      background-color: #f2f2f2;
       padding: 20px;
     }
-    video, canvas {
+    video {
       width: 90%;
       max-width: 360px;
-      margin-top: 10px;
       border-radius: 12px;
       border: 2px solid #d40000;
+      margin: 10px 0;
     }
     button {
-      margin: 10px;
+      margin: 8px;
       padding: 12px 20px;
       font-size: 16px;
       border: none;
@@ -33,57 +33,51 @@
   </style>
 </head>
 <body>
-  <h2>📷 ErikAI Kamera & Selfie</h2>
+  <h2>🎥 ErikAI Kamera & Video</h2>
+  <video id="preview" autoplay playsinline muted></video><br>
 
-  <video id="video" autoplay playsinline></video><br>
-  <canvas id="canvas" style="display: none;"></canvas><br>
-
-  <button onclick="takePhoto()">📸 Odfotiť</button>
-  <button onclick="downloadPhoto()">💾 Stiahnuť</button>
-  <button onclick="switchCamera()">🔄 Prepnúť kameru</button>
+  <button onclick="startRecording()">🎬 Spustiť nahrávanie</button>
+  <button onclick="stopRecording()">🛑 Zastaviť</button>
+  <button onclick="downloadVideo()">💾 Stiahnuť video</button>
 
   <script>
-    let video = document.getElementById('video');
-    let canvas = document.getElementById('canvas');
-    let currentStream;
-    let useFrontCamera = true;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let stream;
 
     async function startCamera() {
-      if (currentStream) {
-        currentStream.getTracks().forEach(track => track.stop());
-      }
+      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      document.getElementById('preview').srcObject = stream;
+    }
 
-      const constraints = {
-        video: {
-          facingMode: useFrontCamera ? 'user' : 'environment'
-        }
+    function startRecording() {
+      recordedChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => {
+        if (e.data.size > 0) recordedChunks.push(e.data);
       };
+      mediaRecorder.start();
+    }
 
-      try {
-        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = currentStream;
-      } catch (err) {
-        alert('⚠️ Kamera nie je dostupná: ' + err.message);
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
       }
     }
 
-    function takePhoto() {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
-      canvas.style.display = 'block';
-    }
+    function downloadVideo() {
+      if (recordedChunks.length === 0) {
+        alert("⚠️ Najprv nahraj video.");
+        return;
+      }
 
-    function downloadPhoto() {
-      let link = document.createElement('a');
-      link.download = 'erikai-fotka.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-
-    function switchCamera() {
-      useFrontCamera = !useFrontCamera;
-      startCamera();
+      const blob = new Blob(recordedChunks, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'erikai-video.webm';
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
     startCamera();
