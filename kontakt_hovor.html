@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>📞 ErikAI Kontakty</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    .kontakt { border: 1px solid #ddd; margin: 10px; padding: 10px; border-radius: 8px; }
+    .btn-call { background-color: red; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+    .info { font-size: 13px; color: gray; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h2>📞 ErikAI Kontakty</h2>
+
+<div id="zoznamKontaktov"></div>
+
+<input type="text" id="meno" placeholder="Meno"><br><br>
+<input type="tel" id="cislo" placeholder="Telefónne číslo"><br><br>
+<button onclick="pridajKontakt()">➕ Pridať kontakt</button>
+
+<p class="info">Všetky kontakty sú uložené iba vo vašom zariadení. Neodosielajú sa na server.</p>
+
+<script>
+let kontakty = [];
+
+function zobrazKontakty() {
+  const zoznam = document.getElementById("zoznamKontaktov");
+  zoznam.innerHTML = "";
+  kontakty.forEach((k, i) => {
+    zoznam.innerHTML += `
+      <div class="kontakt">
+        <strong>${k.meno}</strong><br>
+        ${k.cislo}<br><br>
+        <a href="tel:${k.cislo}"><button class="btn-call">Zavolať</button></a>
+      </div>
+    `;
+  });
+}
+
+function pridajKontakt() {
+  const meno = document.getElementById("meno").value;
+  const cislo = document.getElementById("cislo").value;
+  if (meno && cislo) {
+    kontakty.push({ meno, cislo });
+    zobrazKontakty();
+    document.getElementById("meno").value = "";
+    document.getElementById("cislo").value = "";
+  }
+}
+</script>
+
+</body>
+</html>
