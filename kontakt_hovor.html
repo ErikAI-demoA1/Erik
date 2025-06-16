@@ -1,55 +1,64 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>📞 ErikAI Kontakty</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Kontakty</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 20px; }
-    .kontakt { border: 1px solid #ddd; margin: 10px; padding: 10px; border-radius: 8px; }
-    .btn-call { background-color: red; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-    .info { font-size: 13px; color: gray; margin-top: 10px; }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    input { margin: 5px; padding: 5px; }
+    button { margin: 5px; padding: 5px 10px; background-color: red; color: white; border: none; border-radius: 5px; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
   </style>
 </head>
 <body>
+  <h2>☎️ ErikAI Kontakty</h2>  <form id="contactForm">
+    <input id="name" placeholder="Meno" required>
+    <input id="phone" placeholder="Telefónne číslo" required>
+    <button type="submit">+ Pridať kontakt</button>
+  </form>  <ul id="contactList"></ul>  <p style="font-size: 13px; color: gray;">
+    Všetky kontakty sú uložené iba vo vašom zariadení. Neodosielajú sa na server.
+  </p>  <script>
+    const contactForm = document.getElementById('contactForm');
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const contactList = document.getElementById('contactList');
 
-<h2>📞 ErikAI Kontakty</h2>
+    function loadContacts() {
+      const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+      contactList.innerHTML = '';
+      contacts.forEach((contact, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${contact.name}</strong><br>
+          ${contact.phone}<br>
+          <a href="tel:${contact.phone}">📞 Zavolať</a>
+          <button onclick="deleteContact(${index})">❌ Zmazať</button>
+        `;
+        contactList.appendChild(li);
+      });
+    }
 
-<div id="zoznamKontaktov"></div>
+    function deleteContact(index) {
+      const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+      contacts.splice(index, 1);
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+      loadContacts();
+    }
 
-<input type="text" id="meno" placeholder="Meno"><br><br>
-<input type="tel" id="cislo" placeholder="Telefónne číslo"><br><br>
-<button onclick="pridajKontakt()">➕ Pridať kontakt</button>
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+      if (!name || !phone) return;
 
-<p class="info">Všetky kontakty sú uložené iba vo vašom zariadení. Neodosielajú sa na server.</p>
+      const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+      contacts.push({ name, phone });
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+      contactForm.reset();
+      loadContacts();
+    });
 
-<script>
-let kontakty = [];
-
-function zobrazKontakty() {
-  const zoznam = document.getElementById("zoznamKontaktov");
-  zoznam.innerHTML = "";
-  kontakty.forEach((k, i) => {
-    zoznam.innerHTML += `
-      <div class="kontakt">
-        <strong>${k.meno}</strong><br>
-        ${k.cislo}<br><br>
-        <a href="tel:${k.cislo}"><button class="btn-call">Zavolať</button></a>
-      </div>
-    `;
-  });
-}
-
-function pridajKontakt() {
-  const meno = document.getElementById("meno").value;
-  const cislo = document.getElementById("cislo").value;
-  if (meno && cislo) {
-    kontakty.push({ meno, cislo });
-    zobrazKontakty();
-    document.getElementById("meno").value = "";
-    document.getElementById("cislo").value = "";
-  }
-}
-</script>
-
-</body>
+    window.onload = loadContacts;
+  </script></body>
 </html>
