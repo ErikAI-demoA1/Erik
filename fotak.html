@@ -2,60 +2,90 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>🎥 ErikAI Kamera & Video</title>
+  <title>📷 ErikAI Kamera – Fotka & Video</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background-color: #f2f2f2;
-      padding: 20px;
+      background-color: #f4f4f4;
     }
-    video {
+    video, canvas, img {
       width: 90%;
-      max-width: 360px;
+      max-width: 320px;
       border-radius: 12px;
       border: 2px solid #d40000;
       margin: 10px 0;
     }
     button {
       margin: 8px;
-      padding: 12px 20px;
+      padding: 10px 18px;
       font-size: 16px;
-      border: none;
-      border-radius: 8px;
       background-color: #d40000;
       color: white;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
     }
     button:hover {
-      background-color: #b00000;
+      background-color: #a80000;
     }
   </style>
 </head>
 <body>
-  <h2>🎥 ErikAI Kamera & Video</h2>
-  <video id="preview" autoplay playsinline muted></video><br>
+  <h2>📸 ErikAI Kamera – Fotka & Video</h2>
 
-  <button onclick="startRecording()">🎬 Spustiť nahrávanie</button>
-  <button onclick="stopRecording()">🛑 Zastaviť</button>
-  <button onclick="downloadVideo()">💾 Stiahnuť video</button>
+  <video id="video" autoplay playsinline muted></video><br>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <img id="photo" src=""><br>
+
+  <button onclick="takePhoto()">📸 Odfotiť</button>
+  <button onclick="downloadPhoto()">💾 Stiahnuť fotku</button>
+  <br><br>
+  <button onclick="startRecording()">🎬 Nahrať video</button>
+  <button onclick="stopRecording()">🛑 Zastaviť video</button>
+  <button onclick="downloadVideo()">📥 Stiahnuť video</button>
+  <br><br>
+  <button onclick="switchCamera()">🔄 Prepnúť kameru</button>
 
   <script>
+    let video = document.getElementById("video");
+    let canvas = document.getElementById("canvas");
+    let photo = document.getElementById("photo");
     let mediaRecorder;
     let recordedChunks = [];
-    let stream;
+    let currentStream;
+    let useFront = true;
 
     async function startCamera() {
-      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      document.getElementById('preview').srcObject = stream;
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+      currentStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: useFront ? "user" : "environment" },
+        audio: true
+      });
+      video.srcObject = currentStream;
+    }
+
+    function takePhoto() {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
+      photo.src = canvas.toDataURL("image/png");
+    }
+
+    function downloadPhoto() {
+      if (!photo.src) return alert("Najprv odfoť!");
+      const link = document.createElement("a");
+      link.href = photo.src;
+      link.download = "erikai-fotka.png";
+      link.click();
     }
 
     function startRecording() {
       recordedChunks = [];
-      mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.ondataavailable = e => {
-        if (e.data.size > 0) recordedChunks.push(e.data);
-      };
+      mediaRecorder = new MediaRecorder(currentStream);
+      mediaRecorder.ondataavailable = e => recordedChunks.push(e.data);
       mediaRecorder.start();
     }
 
@@ -66,18 +96,19 @@
     }
 
     function downloadVideo() {
-      if (recordedChunks.length === 0) {
-        alert("⚠️ Najprv nahraj video.");
-        return;
-      }
-
+      if (!recordedChunks.length) return alert("Najprv nahraj video!");
       const blob = new Blob(recordedChunks, { type: 'video/webm' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'erikai-video.webm';
+      a.download = "erikai-video.webm";
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    function switchCamera() {
+      useFront = !useFront;
+      startCamera();
     }
 
     startCamera();
