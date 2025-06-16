@@ -83,6 +83,19 @@
   }
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <section>
+  <h2>🎲 Generátor náhodného čísla (1–100)</h2>
+  <button onclick="generateNumber()">Zobraziť náhodné číslo</button>
+  <pre id="numberOutput"></pre>
+</section>
+
+<script>
+  function generateNumber() {
+    const number = Math.floor(Math.random() * 100) + 1;
+    document.getElementById("numberOutput").textContent = number;
+  }
+</script>
   
   <section>
     <h2>🔐 Generátor náhodných hesiel</h2>
