@@ -1,49 +1,106 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>📸 ErikAI Galéria</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✨ ErikAI Galéria</title>
   <style>
-    body { font-family: sans-serif; background: #f0f0f0; text-align: center; }
-    h1 { color: red; }
-    .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
-    .gallery img { max-width: 150px; cursor: pointer; border: 2px solid #ccc; border-radius: 5px; }
-    #preview { max-width: 90%; max-height: 90vh; display: none; margin-top: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 20px;
+      text-align: center;
+    }
+    h2 {
+      color: red;
+    }
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+    #gallery div {
+      margin: 10px;
+      display: inline-block;
+    }
+    img, video {
+      max-width: 150px;
+      border: 1px solid gray;
+      display: block;
+      margin: auto;
+    }
+    button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkred;
+    }
   </style>
 </head>
-<body>
+<body>  <h2>📸 ErikAI Galéria</h2>
+  <p>Vyber obrázky alebo videá zo zariadenia:</p>
+  <input type="file" id="fileInput" accept="image/*,video/*" multiple><br><br>
+  <div id="gallery"></div>  <script>
+    const input = document.getElementById('fileInput');
+    const gallery = document.getElementById('gallery');
 
-<h1>📸 ErikAI Galéria</h1>
-<p>Vyber obrázky alebo videá zo zariadenia:</p>
-<input type="file" id="fileInput" accept="image/*,video/*" multiple>
+    // Načítaj z localStorage pri štarte
+    window.onload = () => {
+      const saved = JSON.parse(localStorage.getItem('erikai_gallery')) || [];
+      saved.forEach(data => addToGallery(data));
+    };
 
-<div class="gallery" id="gallery"></div>
-<img id="preview" onclick="this.style.display='none'">
-
-<script>
-  const input = document.getElementById('fileInput');
-  const gallery = document.getElementById('gallery');
-  const preview = document.getElementById('preview');
-
-  input.addEventListener('change', () => {
-    gallery.innerHTML = '';
-    Array.from(input.files).forEach(file => {
-      if (file.type.startsWith('image/')) {
+    // Pri nahratí súborov
+    input.addEventListener('change', () => {
+      const files = Array.from(input.files);
+      for (const file of files) {
         const reader = new FileReader();
         reader.onload = () => {
-          const img = document.createElement('img');
-          img.src = reader.result;
-          img.onclick = () => {
-            preview.src = reader.result;
-            preview.style.display = 'block';
-          };
-          gallery.appendChild(img);
+          const dataUrl = reader.result;
+          addToGallery(dataUrl);
+          saveToLocal(dataUrl);
         };
         reader.readAsDataURL(file);
       }
     });
-  });
-</script>
 
-</body>
+    function saveToLocal(data) {
+      const saved = JSON.parse(localStorage.getItem('erikai_gallery')) || [];
+      saved.push(data);
+      localStorage.setItem('erikai_gallery', JSON.stringify(saved));
+    }
+
+    function deleteFromLocal(data) {
+      const saved = JSON.parse(localStorage.getItem('erikai_gallery')) || [];
+      const updated = saved.filter(item => item !== data);
+      localStorage.setItem('erikai_gallery', JSON.stringify(updated));
+    }
+
+    function addToGallery(dataUrl) {
+      const container = document.createElement('div');
+
+      let media;
+      if (dataUrl.startsWith('data:video')) {
+        media = document.createElement('video');
+        media.src = dataUrl;
+        media.controls = true;
+      } else {
+        media = document.createElement('img');
+        media.src = dataUrl;
+      }
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'Zmazať';
+      delBtn.onclick = () => {
+        deleteFromLocal(dataUrl);
+        gallery.removeChild(container);
+      };
+
+      container.appendChild(media);
+      container.appendChild(delBtn);
+      gallery.appendChild(container);
+    }
+  </script></body>
 </html>
