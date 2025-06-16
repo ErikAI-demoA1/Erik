@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🗂️ ErikAI Správca súborov</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #c40000;
+    }
+    #file-input {
+      margin: 10px 0;
+    }
+    .file-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .file-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      background: #fff;
+      width: 180px;
+    }
+    .file-box img, .file-box video {
+      width: 100%;
+      max-height: 150px;
+    }
+    .file-name {
+      font-size: 14px;
+      margin: 5px 0;
+      word-break: break-word;
+    }
+    .delete-btn {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🗂️ ErikAI Správca súborov</h1>
+  <p>Vyber súbory (obrázky, videá, apk, pdf...):</p>
+  <input type="file" id="file-input" multiple />
+  <div id="file-list" class="file-list"></div>
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const fileList = document.getElementById('file-list');
+
+    fileInput.addEventListener('change', () => {
+      fileList.innerHTML = ''; // Vymaže staré zobrazenia
+
+      Array.from(fileInput.files).forEach((file, index) => {
+        const reader = new FileReader();
+        const box = document.createElement('div');
+        box.className = 'file-box';
+
+        reader.onload = function (e) {
+          if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            box.appendChild(img);
+          } else if (file.type.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.src = e.target.result;
+            video.controls = true;
+            box.appendChild(video);
+          } else {
+            const icon = document.createElement('p');
+            icon.textContent = '📦 Súbor';
+            icon.style.fontSize = '40px';
+            box.appendChild(icon);
+          }
+
+          const name = document.createElement('div');
+          name.className = 'file-name';
+          name.textContent = file.name;
+          box.appendChild(name);
+
+          const del = document.createElement('button');
+          del.className = 'delete-btn';
+          del.textContent = 'Zmazať';
+          del.onclick = () => box.remove();
+          box.appendChild(del);
+
+          fileList.appendChild(box);
+        };
+
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+</body>
+</html>
