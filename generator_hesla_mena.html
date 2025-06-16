@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generátor hesiel a mien</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #222;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    h2 {
+      color: #d62828;
+    }
+    button {
+      margin: 1rem 0;
+      padding: 10px 20px;
+      background: #d62828;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    pre {
+      background: #e9ecef;
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+    section {
+      margin-bottom: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h2>🔐 Generátor náhodných hesiel</h2>
+    <button onclick="generatePasswords()">Generovať 100 hesiel</button>
+    <pre id="passwordOutput"></pre>
+  </section>  <section>
+    <h2>🧑‍💻 Generátor náhodných mien</h2>
+    <button onclick="generateNames()">Generovať 100 mien</button>
+    <pre id="nameOutput"></pre>
+  </section>  <script>
+    function generatePasswords() {
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+      let passwords = [];
+      for (let i = 0; i < 100; i++) {
+        let pass = "";
+        for (let j = 0; j < 10; j++) {
+          pass += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        passwords.push(pass);
+      }
+      document.getElementById("passwordOutput").textContent = passwords.join("\n");
+    }
+
+    function generateNames() {
+      const names = ["Erik", "Martina", "Jakub", "Sofia", "Roman", "Petra", "Tomáš", "Natália", "Matej", "Lucia",
+                     "Daniel", "Simona", "Michal", "Veronika", "Adam", "Laura", "David", "Kristína", "Richard", "Lenka"];
+      let generated = [];
+      for (let i = 0; i < 100; i++) {
+        let name = names[Math.floor(Math.random() * names.length)];
+        generated.push(name);
+      }
+      document.getElementById("nameOutput").textContent = generated.join(", ");
+    }
+  </script></body>
+</html>
