@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI Galéria</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+    h1 { color: #e60000; }
+    input { margin: 15px 0; }
+    .preview { display: flex; flex-wrap: wrap; gap: 10px; }
+    img, video { width: 120px; height: auto; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+  </style>
+</head>
+<body>
+  <h1>📸 ErikAI Galéria</h1>
+  <p>Vyber obrázky alebo videá zo zariadenia:</p>
+  <input type="file" id="upload" multiple accept="image/*,video/*">
+  <div id="gallery" class="preview"></div>
+
+  <script>
+    const input = document.getElementById("upload");
+    const gallery = document.getElementById("gallery");
+
+    input.addEventListener("change", () => {
+      gallery.innerHTML = "";
+      Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (file.type.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = reader.result;
+            gallery.appendChild(img);
+          } else if (file.type.startsWith("video/")) {
+            const video = document.createElement("video");
+            video.src = reader.result;
+            video.controls = true;
+            gallery.appendChild(video);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+</body>
+</html>
