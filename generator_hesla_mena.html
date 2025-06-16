@@ -85,6 +85,104 @@
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <section>
+  <h2>🧑‍💻 Generátor používateľských mien</h2>
+  <button onclick="generateUsername()">Zobraziť náhodný nick</button>
+  <pre id="usernameOutput"></pre>
+</section><section>
+  <h2>✉️ Generátor e-mailových adries</h2>
+  <button onclick="generateEmail()">Zobraziť náhodný e-mail</button>
+  <pre id="emailOutput"></pre>
+</section><section>
+  <h2>📍 Generátor náhodného miesta</h2>
+  <button onclick="generatePlace()">Zobraziť náhodné miesto</button>
+  <pre id="placeOutput"></pre>
+</section><section>
+  <h2>🎨 Generátor náhodnej farby</h2>
+  <button onclick="generateColor()">Zobraziť náhodnú farbu</button>
+  <pre id="colorOutput"></pre>
+</section><section>
+  <h2>📅 Generátor náhodného dátumu</h2>
+  <button onclick="generateDate()">Zobraziť náhodný dátum</button>
+  <pre id="dateOutput"></pre>
+</section><section>
+  <h2>🎧 Generátor hudobného žánru</h2>
+  <button onclick="generateGenre()">Zobraziť náhodný žáner</button>
+  <pre id="genreOutput"></pre>
+</section><section>
+  <h2>📖 Generátor náhodných slov</h2>
+  <button onclick="generateWord()">Zobraziť náhodné slovo</button>
+  <pre id="wordOutput"></pre>
+</section><section>
+  <h2>💬 Generátor motivačných viet</h2>
+  <button onclick="generateQuote()">Zobraziť náhodný citát</button>
+  <pre id="quoteOutput"></pre>
+</section><section>
+  <h2>⚔️ Generátor prezývok (herné nicky)</h2>
+  <button onclick="generateGamerTag()">Zobraziť náhodný nick</button>
+  <pre id="gamertagOutput"></pre>
+</section><section>
+  <h2>🎮 Generátor náhodnej aktivity</h2>
+  <button onclick="generateActivity()">Zobraziť náhodnú aktivitu</button>
+  <pre id="activityOutput"></pre>
+</section><script>
+function generateUsername() {
+  const names = ["Erik", "Shadow", "Fire", "Ice", "Wolf", "Code", "Neo", "Sky"];
+  const suffix = Math.floor(Math.random() * 1000);
+  const name = names[Math.floor(Math.random() * names.length)] + suffix;
+  document.getElementById("usernameOutput").textContent = name;
+}
+
+function generateEmail() {
+  const prefixes = ["random", "test", "user", "bot", "name"];
+  const domains = ["gmail.com", "yahoo.com", "outlook.com"];
+  const email = prefixes[Math.floor(Math.random() * prefixes.length)] + Math.floor(Math.random() * 9999) + "@" + domains[Math.floor(Math.random() * domains.length)];
+  document.getElementById("emailOutput").textContent = email;
+}
+
+function generatePlace() {
+  const places = ["Tokio", "Paríž", "New York", "Sydney", "Praha", "Londýn", "Bratislava", "Barcelona"];
+  document.getElementById("placeOutput").textContent = places[Math.floor(Math.random() * places.length)];
+}
+
+function generateColor() {
+  const colors = ["#FF5733", "#33C3FF", "#28A745", "#FFC300", "#DAF7A6", "#900C3F"];
+  document.getElementById("colorOutput").textContent = colors[Math.floor(Math.random() * colors.length)];
+}
+
+function generateDate() {
+  const year = Math.floor(Math.random() * (2035 - 2000 + 1)) + 2000;
+  const month = Math.floor(Math.random() * 12) + 1;
+  const day = Math.floor(Math.random() * 28) + 1;
+  document.getElementById("dateOutput").textContent = `${day}.${month}.${year}`;
+}
+
+function generateGenre() {
+  const genres = ["Pop", "Rock", "Trap", "Jazz", "Techno", "Lofi", "Metalcore"];
+  document.getElementById("genreOutput").textContent = genres[Math.floor(Math.random() * genres.length)];
+}
+
+function generateWord() {
+  const words = ["mrak", "hviezda", "kód", "storm", "hope", "chaos"];
+  document.getElementById("wordOutput").textContent = words[Math.floor(Math.random() * words.length)];
+}
+
+function generateQuote() {
+  const quotes = ["Nikdy sa nevzdávaj.", "Aj malý krok je krok vpred.", "Ticho je sila.", "Zmena začína tebou."];
+  document.getElementById("quoteOutput").textContent = quotes[Math.floor(Math.random() * quotes.length)];
+}
+
+function generateGamerTag() {
+  const tags = ["DarkWolf", "SlayerX", "ErikAI_Killer", "SilentShot", "NoScope", "ZeroFear"];
+  document.getElementById("gamertagOutput").textContent = tags[Math.floor(Math.random() * tags.length)];
+}
+
+function generateActivity() {
+  const activities = ["Prečítaj knihu", "Daj si pauzu", "Choď von", "Vytvor nový nápad", "Nakresli obrázok"];
+  document.getElementById("activityOutput").textContent = activities[Math.floor(Math.random() * activities.length)];
+}
+</script>
+
+  <section>
   <h2>🎲 Generátor náhodného čísla (1–100)</h2>
   <button onclick="generateNumber()">Zobraziť náhodné číslo</button>
   <pre id="numberOutput"></pre>
