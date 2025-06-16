@@ -4,111 +4,88 @@
   <meta charset="UTF-8">
   <title>📁 ErikAI Správca súborov</title>
   <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      background: #f9f9f9;
-    }
-    h1 {
-      color: darkred;
-    }
-    .file-box {
-      border: 1px solid #ccc;
-      margin: 20px auto;
-      padding: 10px;
-      width: 90%;
-      max-width: 400px;
-      background: white;
-    }
-    button {
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      margin-top: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    body { font-family: Arial; text-align: center; background: #f9f9f9; }
+    h1 { color: darkred; }
+    .súbor { border: 1px solid #ccc; margin: 15px auto; padding: 10px; width: 90%; max-width: 500px; background: white; }
+    .súbor img, .súbor video, .súbor iframe { max-width: 100%; margin-top: 10px; }
+    .zmazat { background: red; color: white; border: none; padding: 5px 10px; margin-top: 8px; cursor: pointer; }
   </style>
 </head>
 <body>
+
   <h1>📁 ErikAI Správca súborov</h1>
-  <p>Vyber súbory (obrázky, videá, apk, pdf...):</p>
-  <input type="file" id="fileInput" multiple>
-  <div id="fileContainer"></div>
+  <p>Vyber súbory (obrázky, videá, apk, pdf, Word, Excel...):</p>
+  <input type="file" id="súbory" multiple>
+
+  <div id="výstup"></div>
 
   <script>
-    // Načítanie zo storage pri otvorení
-    const ulozeneSubory = JSON.parse(localStorage.getItem("erikai_subory") || "[]");
-    const fileContainer = document.getElementById("fileContainer");
+    const vstup = document.getElementById('súbory');
+    const výstup = document.getElementById('výstup');
 
-    function zobrazSubory() {
-      fileContainer.innerHTML = "";
-      ulozeneSubory.forEach((subor, index) => {
-        const box = document.createElement("div");
-        box.className = "file-box";
+    vstup.addEventListener('change', () => {
+      for (const súbor of vstup.files) {
+        const čítač = new FileReader();
+        čítač.onload = (e) => {
+          const obsah = e.target.result;
+          const typ = súbor.type;
+          const kontajner = document.createElement("div");
+          kontajner.className = "súbor";
+          let element;
 
-        const typ = subor.typ;
-        const obsah = subor.data;
-        let element;
+          if (typ.startsWith("image/")) {
+            element = document.createElement("img");
+            element.src = obsah;
+          } else if (typ.startsWith("video/")) {
+            element = document.createElement("video");
+            element.src = obsah;
+            element.controls = true;
+          } else if (typ.startsWith("audio/")) {
+            element = document.createElement("audio");
+            element.src = obsah;
+            element.controls = true;
+          } else if (typ === "application/pdf") {
+            element = document.createElement("iframe");
+            element.src = obsah;
+            element.width = "100%";
+            element.height = "400";
+            element.style.border = "1px solid #999";
+          } else if (
+            typ.includes("msword") ||
+            typ.includes("officedocument.word") ||
+            typ.includes("excel") ||
+            typ.includes("spreadsheetml")
+          ) {
+            element = document.createElement("a");
+            element.href = obsah;
+            element.target = "_blank";
+            element.textContent = "📄 Otvoriť dokument";
+            element.style.fontWeight = "bold";
+          } else if (typ === "application/vnd.android.package-archive" || súbor.name.endsWith(".apk")) {
+            element = document.createElement("div");
+            element.innerHTML = "<p>📦 Súbor APK: " + súbor.name + "</p>";
+          } else {
+            element = document.createElement("div");
+            element.innerHTML = "<p>📦 Súbor: " + súbor.name + "</p>";
+          }
 
-        if (typ.startsWith("image/")) {
-          element = document.createElement("img");
-          element.src = obsah;
-          element.style.maxWidth = "100%";
-        } else if (typ.startsWith("video/")) {
-          element = document.createElement("video");
-          element.src = obsah;
-          element.controls = true;
-          element.style.maxWidth = "100%";
-        } else if (typ.startsWith("audio/")) {
-          element = document.createElement("audio");
-          element.src = obsah;
-          element.controls = true;
-        } else {
-          element = document.createElement("p");
-          element.textContent = "📦 Súbor: " + subor.meno;
-        }
+          const názov = document.createElement("p");
+          názov.textContent = súbor.name;
 
-        box.appendChild(element);
+          const tlačidlo = document.createElement("button");
+          tlačidlo.textContent = "Zmazať";
+          tlačidlo.className = "zmazat";
+          tlačidlo.onclick = () => kontajner.remove();
 
-        const meno = document.createElement("p");
-        meno.textContent = subor.meno;
-        box.appendChild(meno);
-
-        const zmazat = document.createElement("button");
-        zmazat.textContent = "Zmazať";
-        zmazat.onclick = () => {
-          ulozeneSubory.splice(index, 1);
-          localStorage.setItem("erikai_subory", JSON.stringify(ulozeneSubory));
-          zobrazSubory();
+          kontajner.appendChild(element);
+          kontajner.appendChild(názov);
+          kontajner.appendChild(tlačidlo);
+          výstup.appendChild(kontajner);
         };
-        box.appendChild(zmazat);
-
-        fileContainer.appendChild(box);
-      });
-    }
-
-    zobrazSubory();
-
-    document.getElementById("fileInput").addEventListener("change", (e) => {
-      const files = Array.from(e.target.files);
-      const nacitajSubor = (file) => {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          ulozeneSubory.push({
-            meno: file.name,
-            typ: file.type,
-            data: event.target.result
-          });
-          localStorage.setItem("erikai_subory", JSON.stringify(ulozeneSubory));
-          zobrazSubory();
-        };
-        reader.readAsDataURL(file);
-      };
-      files.forEach(nacitajSubor);
-      e.target.value = ""; // reset input
+        čítač.readAsDataURL(súbor);
+      }
     });
   </script>
+
 </body>
 </html>
