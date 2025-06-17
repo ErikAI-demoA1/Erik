@@ -4,109 +4,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI PDFsk</title>
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 1rem; text-align: center; }
-    h1 { color: #0074d9; }
-    .section { margin-top: 1rem; }
-    button { margin: 0.5rem; padding: 0.6rem 1.2rem; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
-    .green { background-color: #2ecc40; color: white; }
-    .yellow { background-color: #f39c12; color: white; }
-    .blue { background-color: #0074d9; color: white; }
-    .red { background-color: #e74c3c; color: white; }
-    .file-item { background-color: #ffeaa7; margin: 5px; padding: 6px 12px; border-radius: 6px; display: inline-block; cursor: pointer; }
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 2rem; color: #222; text-align: center; }
+    h1 { color: #0077ff; }
+    button, input[type="file"] {
+      font-size: 1rem; margin: 0.5rem; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer;
+    }
+    .green { background-color: #28a745; color: white; }
+    .orange { background-color: #fcbf49; color: black; }
+    .yellowish { background-color: #ffeaa7; padding: 0.4rem; border-radius: 4px; margin-top: 10px; display: inline-block; }
+    .gray { background-color: #eee; margin: 0.5rem; padding: 0.5rem; border-radius: 5px; display: inline-block; }
   </style>
 </head>
 <body>
-  <h1>📄 ErikAI PDFsk</h1>  <div class="section">
-    <h3>Vyber PDF s obrázkami:</h3>
-    <input type="file" id="pdfInput" accept="application/pdf">
-    <p id="pdfName">❌ Nie je vybraný žiadny súbor.</p>
-  </div>  <div class="section">
-    <h3>💾 Možnosti konverzie:</h3>
-    <button class="green" onclick="stiahnutAkoText()">📝 Stiahnuť ako Text</button>
-    <button class="green" onclick="stiahnutAkoWord()">📄 Stiahnuť ako Word</button>
-    <button class="green" onclick="stiahnutAkoExcel()">📊 Stiahnuť ako Excel</button>
-  </div>  <div class="section">
-    <h3>📁 Lokálna práca:</h3>
-    <button class="yellow" onclick="ulozitPDF()">💾 Uložiť PDF lokálne</button>
-    <button class="yellow" onclick="nacitatPDF()">📂 Načítať PDF</button>
-  </div>  <div class="section">
-    <h3>📚 Uložené PDF dokumenty:</h3>
-    <div id="pdfList"></div>
-  </div>  <script>
+  <h1>📄 ErikAI PDFsk</h1>  <h3>Vyber PDF s obrázkami:</h3>
+  <input type="file" id="pdfInput" accept="application/pdf">
+  <p id="fileStatus" style="color: green; font-weight: bold;"></p>  <h3>📁 Možnosti konverzie:</h3>
+  <button class="green" onclick="stiahnutAko('text')">📃 Stiahnuť ako Text</button>
+  <button class="green" onclick="stiahnutAko('word')">📄 Stiahnuť ako Word</button>
+  <button class="green" onclick="stiahnutAko('excel')">📊 Stiahnuť ako Excel</button>  <h3>📂 Lokálna práca:</h3>
+  <button class="orange" onclick="ulozitLokalne()">💾 Uložiť PDF lokálne</button>
+  <button class="orange" onclick="nacitatPDF()">📁 Načítať PDF</button>  <h3>📖 Uložené PDF dokumenty:</h3>
+  <div id="ulozenePDF"></div>  <script>
     let currentPDF = null;
     let currentPDFName = "";
 
-    document.getElementById("pdfInput").addEventListener("change", function(event) {
+    document.getElementById('pdfInput').addEventListener('change', function(event) {
       const file = event.target.files[0];
-      if (file && file.type === "application/pdf") {
+      if (file && file.type === 'application/pdf') {
         currentPDF = file;
         currentPDFName = file.name;
-        document.getElementById("pdfName").innerText = "✅ Súbor: " + currentPDFName;
+        document.getElementById('fileStatus').innerText = `✅ Súbor: ${file.name}`;
       } else {
-        alert("Vyberte platný PDF súbor.");
+        currentPDF = null;
+        document.getElementById('fileStatus').innerText = "❌ Nie je vybraný platný PDF súbor.";
       }
     });
 
-    function stiahnutAkoText() {
-      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
-      const blob = new Blob(["PDF: " + currentPDFName + "\n(Tu by bol text z PDF OCR alebo konverzia)."], { type: 'text/plain' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = currentPDFName.replace(".pdf", ".txt");
-      link.click();
+    function stiahnutAko(format) {
+      if (!currentPDF) {
+        alert("Najprv vyber PDF súbor.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function() {
+        const blob = new Blob([reader.result], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = currentPDFName.replace('.pdf', `.${format === 'text' ? 'txt' : format === 'word' ? 'docx' : 'xlsx'}`);
+        link.click();
+      };
+      reader.readAsText(currentPDF);
     }
 
-    function stiahnutAkoWord() {
-      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
-      const blob = new Blob(["PDF: " + currentPDFName + "\n(Dummy Word export obsah)."], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = currentPDFName.replace(".pdf", ".docx");
-      link.click();
-    }
-
-    function stiahnutAkoExcel() {
-      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
-      const blob = new Blob(["PDF: " + currentPDFName + "\n(Dummy Excel export obsah)."], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = currentPDFName.replace(".pdf", ".xlsx");
-      link.click();
-    }
-
-    function ulozitPDF() {
-      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
-      localStorage.setItem("pdf_" + currentPDFName, currentPDFName);
-      nacitajZoznam();
+    function ulozitLokalne() {
+      if (!currentPDF) {
+        alert("Najprv vyber PDF súbor.");
+        return;
+      }
+      localStorage.setItem(currentPDF.name, "saved");
+      zobrazUlozenePDF();
+      alert(`PDF \"${currentPDF.name}\" bol uložený.`);
     }
 
     function nacitatPDF() {
-      const meno = currentPDFName;
-      if (localStorage.getItem("pdf_" + meno)) {
-        alert("PDF \"" + meno + "\" je načítaný z lokálneho úložiska.");
+      const meno = prompt("Zadaj názov PDF zo zoznamu:");
+      if (localStorage.getItem(meno)) {
+        currentPDF = new File([""], meno, { type: 'application/pdf' });
+        currentPDFName = meno;
+        document.getElementById('fileStatus').innerText = `✅ Súbor: ${meno}`;
+        alert(`PDF \"${meno}\" je načítaný z lokálneho úložiska.`);
       } else {
-        alert("Tento PDF súbor nie je uložený.");
+        alert("PDF nebolo nájdené.");
       }
     }
 
-    function nacitajZoznam() {
-      const zoznam = document.getElementById("pdfList");
-      zoznam.innerHTML = "";
-      for (let k in localStorage) {
-        if (k.startsWith("pdf_")) {
-          const meno = localStorage.getItem(k);
-          const div = document.createElement("div");
-          div.className = "file-item";
-          div.innerText = meno;
-          div.onclick = function() {
-            currentPDFName = meno;
-            document.getElementById("pdfName").innerText = "✅ Súbor: " + meno;
-          };
-          zoznam.appendChild(div);
-        }
+    function zobrazUlozenePDF() {
+      const container = document.getElementById('ulozenePDF');
+      container.innerHTML = "";
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const btn = document.createElement('div');
+        btn.className = 'yellowish';
+        btn.innerText = key;
+        btn.onclick = () => {
+          currentPDF = new File([""], key, { type: 'application/pdf' });
+          currentPDFName = key;
+          document.getElementById('fileStatus').innerText = `✅ Súbor: ${key}`;
+        };
+        container.appendChild(btn);
       }
     }
 
-    nacitajZoznam();
+    window.onload = zobrazUlozenePDF;
   </script></body>
 </html>
