@@ -1,138 +1,112 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI PDFsk</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      color: #222;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 {
-      color: #007BFF;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 6px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .green { background-color: #28a745; color: white; }
-    .yellow { background-color: #ffc107; color: black; }
-    .red { background-color: #dc3545; color: white; }
-    .blue { background-color: #007bff; color: white; }
-    .pdf-list button {
-      margin: 4px;
-      background-color: #ffc107;
-      color: black;
-    }
+    body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 1rem; text-align: center; }
+    h1 { color: #0074d9; }
+    .section { margin-top: 1rem; }
+    button { margin: 0.5rem; padding: 0.6rem 1.2rem; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
+    .green { background-color: #2ecc40; color: white; }
+    .yellow { background-color: #f39c12; color: white; }
+    .blue { background-color: #0074d9; color: white; }
+    .red { background-color: #e74c3c; color: white; }
+    .file-item { background-color: #ffeaa7; margin: 5px; padding: 6px 12px; border-radius: 6px; display: inline-block; cursor: pointer; }
   </style>
 </head>
 <body>
+  <h1>📄 ErikAI PDFsk</h1>  <div class="section">
+    <h3>Vyber PDF s obrázkami:</h3>
+    <input type="file" id="pdfInput" accept="application/pdf">
+    <p id="pdfName">❌ Nie je vybraný žiadny súbor.</p>
+  </div>  <div class="section">
+    <h3>💾 Možnosti konverzie:</h3>
+    <button class="green" onclick="stiahnutAkoText()">📝 Stiahnuť ako Text</button>
+    <button class="green" onclick="stiahnutAkoWord()">📄 Stiahnuť ako Word</button>
+    <button class="green" onclick="stiahnutAkoExcel()">📊 Stiahnuť ako Excel</button>
+  </div>  <div class="section">
+    <h3>📁 Lokálna práca:</h3>
+    <button class="yellow" onclick="ulozitPDF()">💾 Uložiť PDF lokálne</button>
+    <button class="yellow" onclick="nacitatPDF()">📂 Načítať PDF</button>
+  </div>  <div class="section">
+    <h3>📚 Uložené PDF dokumenty:</h3>
+    <div id="pdfList"></div>
+  </div>  <script>
+    let currentPDF = null;
+    let currentPDFName = "";
 
-  <h1>📄 ErikAI PDFsk</h1>
-
-  <p><strong>Vyber PDF s obrázkami:</strong></p>
-  <input type="file" id="pdfInput" accept=".pdf"><br>
-  <p id="fileInfo" style="color: red;">❌ Nie je vybraný žiadny súbor.</p>
-
-  <h3>💾 Možnosti konverzie:</h3>
-  <button class="green" onclick="downloadSimulation('text')">📝 Stiahnuť ako Text</button>
-  <button class="green" onclick="downloadSimulation('word')">📄 Stiahnuť ako Word</button>
-  <button class="green" onclick="downloadSimulation('excel')">📊 Stiahnuť ako Excel</button>
-
-  <h3>📂 Lokálna práca:</h3>
-  <button class="yellow" onclick="savePDFLocally()">💾 Uložiť PDF lokálne</button>
-  <button class="yellow" onclick="loadPDF()">📂 Načítať PDF</button>
-
-  <h3>📖 Uložené PDF dokumenty:</h3>
-  <div class="pdf-list" id="savedList"></div>
-
-  <script>
-    let selectedFile = null;
-
-    document.getElementById('pdfInput').addEventListener('change', function () {
-      const file = this.files[0];
-      if (file) {
-        selectedFile = file;
-        document.getElementById("fileInfo").innerText = `✅ Súbor: ${file.name}`;
+    document.getElementById("pdfInput").addEventListener("change", function(event) {
+      const file = event.target.files[0];
+      if (file && file.type === "application/pdf") {
+        currentPDF = file;
+        currentPDFName = file.name;
+        document.getElementById("pdfName").innerText = "✅ Súbor: " + currentPDFName;
       } else {
-        selectedFile = null;
-        document.getElementById("fileInfo").innerText = "❌ Nie je vybraný žiadny súbor.";
+        alert("Vyberte platný PDF súbor.");
       }
     });
 
-    function downloadSimulation(type) {
-      if (!selectedFile) {
-        alert("Najprv vyber PDF súbor.");
-        return;
-      }
-      alert(`Funkcia "Stiahnuť ako ${type}" sa pripravuje... (budúci export do .${type})`);
+    function stiahnutAkoText() {
+      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
+      const blob = new Blob(["PDF: " + currentPDFName + "\n(Tu by bol text z PDF OCR alebo konverzia)."], { type: 'text/plain' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = currentPDFName.replace(".pdf", ".txt");
+      link.click();
     }
 
-    function savePDFLocally() {
-      if (!selectedFile) {
-        alert("Najprv vyber PDF súbor.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function () {
-        localStorage.setItem("pdf_" + selectedFile.name, reader.result);
-        updateSavedList();
-        alert(`PDF "${selectedFile.name}" bol uložený lokálne.`);
-      };
-      reader.readAsDataURL(selectedFile);
+    function stiahnutAkoWord() {
+      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
+      const blob = new Blob(["PDF: " + currentPDFName + "\n(Dummy Word export obsah)."], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = currentPDFName.replace(".pdf", ".docx");
+      link.click();
     }
 
-    function loadPDF() {
-      const list = document.querySelectorAll(".pdf-list button[data-name]");
-      if (list.length === 0) {
-        alert("Nie je dostupný žiadny PDF na načítanie.");
-        return;
-      }
-      alert("Klikni na názov PDF dokumentu zo zoznamu nižšie na jeho načítanie.");
+    function stiahnutAkoExcel() {
+      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
+      const blob = new Blob(["PDF: " + currentPDFName + "\n(Dummy Excel export obsah)."], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = currentPDFName.replace(".pdf", ".xlsx");
+      link.click();
     }
 
-    function updateSavedList() {
-      const savedDiv = document.getElementById("savedList");
-      savedDiv.innerHTML = "";
+    function ulozitPDF() {
+      if (!currentPDF) return alert("Najprv vyber PDF súbor.");
+      localStorage.setItem("pdf_" + currentPDFName, currentPDFName);
+      nacitajZoznam();
+    }
 
-      for (let key in localStorage) {
-        if (key.startsWith("pdf_")) {
-          const fileName = key.replace("pdf_", "");
+    function nacitatPDF() {
+      const meno = currentPDFName;
+      if (localStorage.getItem("pdf_" + meno)) {
+        alert("PDF \"" + meno + "\" je načítaný z lokálneho úložiska.");
+      } else {
+        alert("Tento PDF súbor nie je uložený.");
+      }
+    }
 
-          const btn = document.createElement("button");
-          btn.innerText = fileName;
-          btn.setAttribute("data-name", fileName);
-          btn.onclick = () => {
-            alert(`PDF "${fileName}" je načítaný z lokálneho úložiska.`);
+    function nacitajZoznam() {
+      const zoznam = document.getElementById("pdfList");
+      zoznam.innerHTML = "";
+      for (let k in localStorage) {
+        if (k.startsWith("pdf_")) {
+          const meno = localStorage.getItem(k);
+          const div = document.createElement("div");
+          div.className = "file-item";
+          div.innerText = meno;
+          div.onclick = function() {
+            currentPDFName = meno;
+            document.getElementById("pdfName").innerText = "✅ Súbor: " + meno;
           };
-
-          const del = document.createElement("button");
-          del.innerText = "🗑️";
-          del.className = "red";
-          del.onclick = () => {
-            localStorage.removeItem("pdf_" + fileName);
-            updateSavedList();
-          };
-
-          const wrapper = document.createElement("div");
-          wrapper.appendChild(btn);
-          wrapper.appendChild(del);
-          savedDiv.appendChild(wrapper);
+          zoznam.appendChild(div);
         }
       }
     }
 
-    updateSavedList(); // Načítaj pri štarte
-  </script>
-
-</body>
+    nacitajZoznam();
+  </script></body>
 </html>
