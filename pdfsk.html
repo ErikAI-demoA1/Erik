@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI PDFsk</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 2rem;
+      color: #222;
+      text-align: center;
+    }
+    h1 {
+      color: #007bff;
+    }
+    button, input[type="file"] {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .convert {
+      background-color: #28a745;
+      color: white;
+    }
+    .download {
+      background-color: #007bff;
+      color: white;
+    }
+    .local {
+      background-color: #ffc107;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <h1>📑 ErikAI PDFsk</h1>
+  <p><strong>Vyber PDF s obrázkami:</strong></p>
+  <input type="file" id="pdfInput" accept=".pdf">
+  <p id="pdfStatus">❌ Nie je vybraný žiadny súbor.</p>  <h3>💾 Možnosti konverzie:</h3>
+  <button class="convert" onclick="convertToText()">📝 Stiahnuť ako Text</button>
+  <button class="convert" onclick="convertToWord()">📄 Stiahnuť ako Word</button>
+  <button class="convert" onclick="convertToExcel()">📊 Stiahnuť ako Excel</button>  <h3>📁 Lokálna práca:</h3>
+  <button class="local" onclick="savePDFLocal()">💾 Uložiť PDF lokálne</button>
+  <button class="local" onclick="loadPDFLocal()">📂 Načítať PDF</button>  <h3 id="savedListTitle" style="display:none">📖 Uložené PDF dokumenty:</h3>
+  <div id="savedDocs"></div>  <script>
+    const status = document.getElementById('pdfStatus');
+    const input = document.getElementById('pdfInput');
+    const savedDocs = document.getElementById('savedDocs');
+
+    input.addEventListener('change', () => {
+      if (input.files.length > 0) {
+        status.textContent = `✅ Súbor načítaný: ${input.files[0].name}`;
+      } else {
+        status.textContent = '❌ Nie je vybraný žiadny súbor.';
+      }
+    });
+
+    function convertToText() {
+      alert('Funkcia na prevod do textu sa pripravuje...');
+    }
+
+    function convertToWord() {
+      alert('Funkcia na prevod do Wordu sa pripravuje...');
+    }
+
+    function convertToExcel() {
+      alert('Funkcia na prevod do Excelu sa pripravuje...');
+    }
+
+    function savePDFLocal() {
+      const file = input.files[0];
+      if (!file) return alert('Najprv vyber PDF súbor.');
+      const reader = new FileReader();
+      reader.onload = () => {
+        localStorage.setItem(`pdf_${file.name}`, reader.result);
+        refreshSavedList();
+        alert(`✅ PDF "${file.name}" bolo uložené.`);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadPDFLocal() {
+      alert('Načítanie PDF zo zariadenia je zatiaľ základné, ďalšie funkcie sa dopracujú.');
+    }
+
+    function refreshSavedList() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('pdf_'));
+      const container = document.getElementById('savedDocs');
+      const title = document.getElementById('savedListTitle');
+      container.innerHTML = '';
+      if (keys.length > 0) {
+        title.style.display = 'block';
+        keys.forEach(key => {
+          const name = key.replace('pdf_', '');
+          const btn = document.createElement('button');
+          btn.className = 'local';
+          btn.textContent = name;
+          btn.onclick = () => alert(`Toto bude neskôr načítavať obsah PDF: ${name}`);
+          container.appendChild(btn);
+        });
+      } else {
+        title.style.display = 'none';
+      }
+    }
+
+    refreshSavedList();
+  </script></body>
+</html>
