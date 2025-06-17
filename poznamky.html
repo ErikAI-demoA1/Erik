@@ -7,79 +7,170 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      padding: 2rem;
+      background-color: #f9f9f9;
+      padding: 1rem;
       color: #222;
       text-align: center;
     }
     h1 {
       color: #d62828;
     }
-    textarea {
-      width: 100%;
+    input, textarea {
+      width: 90%;
       max-width: 700px;
-      height: 300px;
-      font-size: 1.1rem;
-      padding: 1rem;
-      margin: 1rem auto;
-      display: block;
-      border-radius: 8px;
+      padding: 10px;
+      margin: 10px auto;
       border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    textarea {
+      height: 250px;
       resize: vertical;
     }
     button {
       background-color: #d62828;
       color: white;
-      padding: 0.7rem 1.5rem;
-      margin: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      margin: 5px;
       border: none;
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
     }
     button:hover {
-      background-color: #b71d1d;
+      background-color: #b71c1c;
+    }
+    .info {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
     }
   </style>
 </head>
 <body>
-  <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
 
-  <script>
-    function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
+<h1>📝 ErikAI Poznámky</h1>
+<p id="cas"></p>
+<div id="google_translate_element"></div>
+
+<input type="text" id="nazov" placeholder="Zadaj názov poznámky">
+<textarea id="obsah" placeholder="Napíš si sem svoje poznámky..."></textarea>
+
+<div>
+  <button onclick="skopiruj()">📋 Skopírovať</button>
+  <button onclick="stiahnut()">💾 Stiahnuť ako TXT</button>
+  <button onclick="ulozit()">💾 Uložiť</button>
+  <button onclick="nacitat()">📂 Načítať</button>
+  <button onclick="zmazat()">🗑️ Vymazať poznámku</button>
+  <button onclick="zmazatVsetky()">🗑️ Vymazať všetky poznámky</button>
+</div>
+
+<h3>🗂️ Uložené poznámky:</h3>
+<ul id="zoznamPoznamok"></ul>
+
+<div class="info">
+  <strong>Upozornenie:</strong> Poznámky sa ukladajú každé 2 sekundy lokálne (offline). Funguje len na tomto zariadení a v tomto prehliadači.
+</div>
+
+<a href="zoznam_straniek.html">← Zoznam Strániek</a>
+
+<script>
+function aktualizujCas() {
+  const teraz = new Date();
+  document.getElementById("cas").innerText =
+    `🕓 Aktuálny čas: ${teraz.toLocaleString('sk-SK')}`;
+}
+setInterval(aktualizujCas, 1000);
+aktualizujCas();
+
+function ulozit() {
+  const nazov = document.getElementById('nazov').value.trim();
+  const obsah = document.getElementById('obsah').value;
+  if (!nazov) {
+    alert("Zadaj názov poznámky!");
+    return;
+  }
+  localStorage.setItem("erikai_" + nazov, obsah);
+  alert("Poznámka bola uložená.");
+  zobrazZoznam();
+}
+
+function nacitat() {
+  const nazov = document.getElementById('nazov').value.trim();
+  const obsah = localStorage.getItem("erikai_" + nazov);
+  if (obsah !== null) {
+    document.getElementById('obsah').value = obsah;
+  } else {
+    alert("Poznámka sa nenašla. Skontroluj názov.");
+  }
+}
+
+function zmazat() {
+  const nazov = document.getElementById('nazov').value.trim();
+  localStorage.removeItem("erikai_" + nazov);
+  alert("Poznámka bola vymazaná.");
+  zobrazZoznam();
+}
+
+function zmazatVsetky() {
+  if (confirm("Naozaj chceš vymazať všetky ErikAI poznámky?")) {
+    for (let k in localStorage) {
+      if (k.startsWith("erikai_")) localStorage.removeItem(k);
     }
-  </script>
+    alert("Všetky poznámky boli vymazané.");
+    zobrazZoznam();
+  }
+}
 
-  <style>
-    body.dark-mode {
-      background-color: #121212;
-      color: white;
+function skopiruj() {
+  const obsah = document.getElementById('obsah');
+  obsah.select();
+  document.execCommand("copy");
+  alert("Poznámka skopírovaná do schránky.");
+}
+
+function stiahnut() {
+  const nazov = document.getElementById('nazov').value.trim() || "poznamka";
+  const obsah = document.getElementById('obsah').value;
+  const blob = new Blob([obsah], { type: "text/plain;charset=utf-8" });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = nazov + ".txt";
+  link.click();
+}
+
+function zobrazZoznam() {
+  const ul = document.getElementById('zoznamPoznamok');
+  ul.innerHTML = '';
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith("erikai_")) {
+      const meno = key.replace("erikai_", "");
+      const li = document.createElement("li");
+      li.innerText = meno;
+      ul.appendChild(li);
     }
-  </style>
+  }
+}
 
-  <p id="cas" style="font-size: 18px;"></p>
+// Automatické ukladanie každé 2 sekundy
+setInterval(() => {
+  const nazov = document.getElementById('nazov').value.trim();
+  const obsah = document.getElementById('obsah').value;
+  if (nazov) {
+    localStorage.setItem("erikai_" + nazov, obsah);
+  }
+}, 2000);
 
-  <script>
-    function aktualizujCas() {
-      const teraz = new Date();
-      const moznosti = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
-      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
-      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
-    }
-    setInterval(aktualizujCas, 1000);
-    aktualizujCas();
-  </script>
+zobrazZoznam();
+</script>
 
-  <div id="google_translate_element"></div>
+<!-- Prekladač -->
 <script type="text/javascript">
   function googleTranslateElementInit() {
     new google.translate.TranslateElement({
@@ -90,94 +181,6 @@
   }
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-  <h1>📝 ErikAI Poznámky</h1>
-  
-  <label for="noteName">Názov poznámky:</label>
-  <input type="text" id="noteName" placeholder="Zadaj názov poznámky" style="width: 80%; padding: 8px; margin-top: 10px;">
-
-  <textarea id="noteInput" placeholder="Napíš si sem svoje poznámky..."></textarea>
-
-  <div>
-    <button onclick="skopirujPoznamky()">📋 Skopírovať</button>
-    <button onclick="stiahniPoznamky()">💾 Stiahnuť ako TXT</button>
-    <button onclick="ulozPoznamku()">💾 Uložiť</button>
-    <button onclick="nacistPoznamku()">📂 Načítať</button>
-    <button onclick="vymazPoznamku()">🗑️ Vymazať poznámku</button>
-    <button onclick="vymazVsetko()">🗑️ Vymazať všetky poznámky</button>
-  </div>
-
-  <script>
-    // Funkcia na uloženie poznámky do LocalStorage
-    function ulozPoznamku() {
-      const name = document.getElementById("noteName").value;
-      const note = document.getElementById("noteInput").value;
-      if(name && note) {
-        localStorage.setItem(name, note);
-        alert("Poznámka bola uložená.");
-      } else {
-        alert("Prosím, zadajte názov aj obsah poznámky.");
-      }
-    }
-
-    // Funkcia na načítanie poznámky z LocalStorage
-    function nacistPoznamku() {
-      const name = document.getElementById("noteName").value;
-      const note = localStorage.getItem(name);
-      if(note) {
-        document.getElementById("noteInput").value = note;
-        alert("Poznámka bola načítaná.");
-      } else {
-        alert("Poznámka s týmto názvom sa nenašla.");
-      }
-    }
-
-    // Funkcia na skopírovanie poznámky
-    function skopirujPoznamky() {
-      const textarea = document.getElementById("noteInput");
-      textarea.select();
-      textarea.setSelectionRange(0, 99999); 
-      navigator.clipboard.writeText(textarea.value)
-        .then(() => alert("Poznámky boli skopírované."));
-    }
-
-    // Funkcia na stiahnutie poznámky ako TXT súbor
-    function stiahniPoznamky() {
-      const text = document.getElementById("noteInput").value;
-      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'moje_poznamky.txt';
-      link.click();
-    }
-
-    // Funkcia na vymazanie konkrétnej poznámky
-    function vymazPoznamku() {
-      const name = document.getElementById("noteName").value;
-      localStorage.removeItem(name);
-      alert("Poznámka bola vymazaná.");
-      document.getElementById("noteInput").value = "";
-    }
-
-    // Funkcia na vymazanie všetkých poznámok
-    function vymazVsetko() {
-      localStorage.clear();
-      alert("Všetky poznámky boli vymazané.");
-      document.getElementById("noteInput").value = "";
-    }
-  </script>
-
-  <div style="background-color: #fff3cd; border-left: 6px solid #ffecb5; padding: 12px; margin-top: 16px; font-size: 14px; color: #664d03;">
-    <strong>Informačné upozornenie:</strong> Poznámky sa automaticky ukladajú lokálne každé 2 sekundy. Funguje aj bez pripojenia na internet, ale len na tomto zariadení a pre tento prehliadač.
-  </div>
-
-  <a href="zoznam_straniek.html" class="spat">← Zoznam Straniek</a>
-
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
-  </p>
 
 </body>
 </html>
