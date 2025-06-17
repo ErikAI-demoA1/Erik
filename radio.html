@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Rádio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #e60000;
+    }
+    select, audio {
+      margin: 20px auto;
+      font-size: 16px;
+    }
+    .logo {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://erikai-demoa1.github.io/Erik/logo.png" alt="ErikAI logo" class="logo">
+  <h1>🎵 ErikAI Rádio</h1>
+  <p>Vyber si stanicu a zapni si ErikAI internetové rádio</p>  <select id="stanica" onchange="zmenRadio()">
+    <option value="https://stream.radioparadise.com/rock-128">Rock Radio (Paradise)</option>
+    <option value="https://icecast.funradio.sk/fun128.mp3">Fun Rádio</option>
+    <option value="https://live.slovakradio.sk:8000/RSR_128.mp3">Rádio Slovensko</option>
+    <option value="https://icecast4.play.cz/evropa2-128.mp3">Evropa 2 CZ</option>
+    <option value="https://icecast4.play.cz/kiss-128.mp3">Kiss Rádio CZ</option>
+  </select>  <br>
+  <audio id="radioPlayer" controls autoplay>
+    Tvoj prehliadač nepodporuje prehrávanie audia.
+  </audio>  <script>
+    function zmenRadio() {
+      const player = document.getElementById("radioPlayer");
+      const stanica = document.getElementById("stanica").value;
+      player.src = stanica;
+      player.play();
+    }
+    // Spusti prvú stanicu automaticky
+    window.onload = () => {
+      zmenRadio();
+    };
+  </script></body>
+</html>
