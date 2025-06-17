@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Speedmeter</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px; }
+    h1 { color: #c00; }
+    .result { font-size: 20px; margin-top: 20px; }
+    .good { color: green; }
+    .average { color: orange; }
+    .bad { color: red; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 20px; }
+    #chart { margin-top: 30px; height: 200px; background: #eee; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <h1>📶 ErikAI Speedmeter</h1>
+  <p>Zmeraj si rýchlosť svojho internetu priamo cez prehliadač</p><button onclick="startSpeedTest()">▶️ Spustiť meranie</button>
+
+  <div class="result" id="results"></div>  <div id="chart"></div>  <script>
+    async function startSpeedTest() {
+      const fileSizeBytes = 2000000; // 2 MB
+      const testUrl = "https://speed.hetzner.de/2MB.bin";
+
+      const start = new Date().getTime();
+      await fetch(testUrl, { cache: "no-store" });
+      const end = new Date().getTime();
+
+      const durationSeconds = (end - start) / 1000;
+      const speedMbps = ((fileSizeBytes * 8) / (durationSeconds * 1000000)).toFixed(2);
+
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const type = connection ? connection.effectiveType : "Neznáme";
+
+      let rating = "average";
+      if (speedMbps >= 30) rating = "good";
+      else if (speedMbps < 10) rating = "bad";
+
+      document.getElementById("results").innerHTML = `
+        <p>🔻 <strong>Download:</strong> <span class="${rating}">${speedMbps} Mbps</span></p>
+        <p>🌐 <strong>Typ siete:</strong> ${type}</p>
+        <p>📊 <em>(Porovnanie: 20 Mbps je priemer pre Slovensko)</em></p>
+      `;
+
+      drawChart(speedMbps);
+    }
+
+    function drawChart(speed) {
+      const chart = document.getElementById("chart");
+      chart.innerHTML = "";
+      const bar = document.createElement("div");
+      bar.style.height = "100%";
+      bar.style.width = Math.min(speed * 5, 100) + "%";
+      bar.style.background = speed >= 30 ? "green" : speed >= 10 ? "orange" : "red";
+      bar.style.borderRadius = "10px";
+      chart.appendChild(bar);
+    }
+  </script></body>
+</html>
