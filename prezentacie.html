@@ -1,105 +1,136 @@
 <!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ὄ4 ErikAI Prezentácie</title>
+  <title>ErikAI Prezentácie</title>
   <style>
-    body { font-family: sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
-    h1 { text-align: center; color: #2361b8; }
-    .controls, .status, .slides-nav { text-align: center; margin: 10px 0; }
-    .slide {
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f9f9f9;
+    }
+    textarea {
       width: 90%;
-      height: 400px;
-      margin: 0 auto;
-      background: white;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      overflow-y: auto;
+      height: 200px;
+      font-size: 18px;
+      margin-top: 10px;
     }
-    .slide textarea {
-      width: 100%;
-      height: 300px;
-      font-size: 16px;
-    }
-    button {
+    .button-group button {
       margin: 5px;
-      padding: 8px 16px;
-      font-size: 15px;
-      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
       border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
-    .save { background: #4CAF50; color: white; }
-    .new { background: #2196F3; color: white; }
-    .prev, .next { background: #ffc107; }
-    .delete { background: #f44336; color: white; }
+    .yellow { background: gold; }
+    .blue { background: #2196f3; color: white; }
+    .green { background: #4caf50; color: white; }
+    .red { background: #f44336; color: white; }
+    .gray { background: #ddd; padding: 4px; margin: 2px; display: inline-block; border-radius: 4px; }
+    input[type="file"] { margin-top: 10px; }
   </style>
 </head>
-<body>  <h1>📄 ErikAI Prezentácie</h1>  <div class="status">Snimka: <span id="slide-num">1</span> / <span id="slide-total">1</span></div>  <div class="slide">
-    <textarea id="slide-content" placeholder="Napíš niečo na prezentáciu..."></textarea>
-  </div>  <div class="controls">
-    <button class="prev" onclick="prevSlide()">◀ Predchádzajúce</button>
-    <button class="next" onclick="nextSlide()"> ▶ Ďalší</button>
-    <button class="new" onclick="addSlide()">➕ Nový slide</button>
-    <button class="save" onclick="saveSlides()">🖾 Uložiť</button>
-    <button class="delete" onclick="deleteSlide()">🗑 Vymazať</button>
-  </div>  <script>
+<body>
+  <h2>📄 ErikAI Prezentácie</h2>
+  <div>
+    <label for="file">Vybrať Excel alebo CSV:</label>
+    <input type="file" id="file" accept=".json" />
+    <br>
+    <label for="name">📁 Názov prezentácie:</label>
+    <input id="name" placeholder="názov" />
+  </div>  <div id="slide-info">Snímka: 1 / 1</div>
+  <textarea id="content"></textarea>  <div class="button-group">
+    <button class="yellow" onclick="prevSlide()">◀ Predchádzajúce</button>
+    <button class="yellow" onclick="nextSlide()">▶ Ďalší</button>
+    <br>
+    <button class="blue" onclick="addSlide()">➕ Nový slide</button>
+    <button class="green" onclick="saveSlides()">📄 Uložiť</button>
+    <button class="red" onclick="deleteSlide()">🗑️ Vymazať</button>
+  </div>  <h3>📂 Uložené prezentácie:</h3>
+  <div id="savedList"></div>  <script>
     let slides = [""];
-    let currentSlide = 0;
+    let current = 0;
 
     function updateView() {
-      document.getElementById("slide-content").value = slides[currentSlide];
-      document.getElementById("slide-num").textContent = currentSlide + 1;
-      document.getElementById("slide-total").textContent = slides.length;
-    }
-
-    function addSlide() {
-      saveCurrent();
-      slides.push("");
-      currentSlide = slides.length - 1;
-      updateView();
-    }
-
-    function saveCurrent() {
-      slides[currentSlide] = document.getElementById("slide-content").value;
-    }
-
-    function nextSlide() {
-      saveCurrent();
-      if (currentSlide < slides.length - 1) {
-        currentSlide++;
-        updateView();
-      }
+      document.getElementById("slide-info").innerText = `Snímka: ${current + 1} / ${slides.length}`;
+      document.getElementById("content").value = slides[current] || "";
     }
 
     function prevSlide() {
-      saveCurrent();
-      if (currentSlide > 0) {
-        currentSlide--;
-        updateView();
-      }
+      if (current > 0) current--;
+      updateView();
+    }
+
+    function nextSlide() {
+      if (current < slides.length - 1) current++;
+      updateView();
+    }
+
+    function addSlide() {
+      slides.push("");
+      current = slides.length - 1;
+      updateView();
     }
 
     function deleteSlide() {
       if (slides.length > 1) {
-        slides.splice(currentSlide, 1);
-        if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+        slides.splice(current, 1);
+        current = Math.min(current, slides.length - 1);
         updateView();
       }
     }
 
     function saveSlides() {
-      saveCurrent();
-      const blob = new Blob([JSON.stringify(slides)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "moje_prezentacie.json";
-      a.click();
+      slides[current] = document.getElementById("content").value;
+      const name = document.getElementById("name").value.trim();
+      if (!name) return alert("Zadaj názov prezentácie.");
+      localStorage.setItem("pres_" + name, JSON.stringify(slides));
+      listSaved();
     }
 
+    function loadSlides(name) {
+      const data = localStorage.getItem("pres_" + name);
+      if (data) {
+        slides = JSON.parse(data);
+        current = 0;
+        document.getElementById("name").value = name;
+        updateView();
+      }
+    }
+
+    function listSaved() {
+      let out = "";
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k.startsWith("pres_")) {
+          const n = k.replace("pres_", "");
+          out += `<span class='gray' onclick='loadSlides("${n}")'>${n} ❌</span> `;
+        }
+      }
+      document.getElementById("savedList").innerHTML = out;
+    }
+
+    document.getElementById("file").addEventListener("change", e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          slides = JSON.parse(e.target.result);
+          current = 0;
+          updateView();
+        } catch {
+          alert("Neplatný formát súboru.");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById("content").addEventListener("input", () => {
+      slides[current] = document.getElementById("content").value;
+    });
+
+    listSaved();
     updateView();
   </script></body>
 </html>
