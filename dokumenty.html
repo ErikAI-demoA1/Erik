@@ -1,39 +1,36 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ErikAI Dokumenty</title>
+  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background-color: #f8f9fa;
       color: #222;
-      padding: 2rem;
       text-align: center;
+      padding: 2rem;
     }
-
     h1 {
       color: #0d6efd;
     }
-
     textarea {
       width: 100%;
       max-width: 800px;
       height: 400px;
-      font-size: 1rem;
+      margin: 1rem auto;
       padding: 1rem;
-      border: 1px solid #ccc;
+      font-size: 1rem;
       border-radius: 8px;
+      border: 1px solid #ccc;
       resize: vertical;
       display: block;
-      margin: 1rem auto;
     }
-
     input[type="file"] {
       margin: 1rem;
     }
-
     button {
       background-color: #0d6efd;
       color: white;
@@ -44,12 +41,10 @@
       font-size: 1rem;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #0b5ed7;
     }
-
-    .note {
+    .info {
       font-size: 0.9rem;
       color: gray;
       margin-top: 1rem;
@@ -60,8 +55,8 @@
 
   <h1>📄 ErikAI Dokumenty</h1>
 
-  <input type="file" id="fileInput" accept=".txt" />
-  <textarea id="textArea" placeholder="Tu sa zobrazí tvoj dokument alebo napíš nový..."></textarea>
+  <input type="file" id="fileInput" accept=".txt,.docx" />
+  <textarea id="textArea" placeholder="Tu bude tvoj dokument alebo si napíš vlastný..."></textarea>
 
   <div>
     <button onclick="ulozDokument()">💾 Uložiť</button>
@@ -70,17 +65,18 @@
     <button onclick="vymazDokument()">🗑️ Vymazať</button>
   </div>
 
-  <p class="note">Text sa automaticky ukladá každé 3 sekundy. Po opätovnom otvorení sa načíta posledná verzia.</p>
+  <div class="info" id="statusInfo">Automatické ukladanie prebieha každé 3 sekundy.</div>
 
   <script>
     const textarea = document.getElementById("textArea");
+    const statusInfo = document.getElementById("statusInfo");
 
-    // Automatické ukladanie každé 3 sekundy
+    // Automatické ukladanie
     setInterval(() => {
       localStorage.setItem("erikai_dokument", textarea.value);
     }, 3000);
 
-    // Načítanie pri otvorení
+    // Načítať pri otvorení
     window.onload = () => {
       const data = localStorage.getItem("erikai_dokument");
       if (data) textarea.value = data;
@@ -89,21 +85,23 @@
     // Manuálne uloženie
     function ulozDokument() {
       localStorage.setItem("erikai_dokument", textarea.value);
-      alert("Dokument uložený.");
+      statusInfo.innerText = "✅ Dokument bol uložený.";
+      setTimeout(() => statusInfo.innerText = "Automatické ukladanie prebieha každé 3 sekundy.", 3000);
     }
 
-    // Načítať dokument
+    // Načítať
     function nacitajDokument() {
       const data = localStorage.getItem("erikai_dokument");
       if (data) {
         textarea.value = data;
-        alert("Dokument načítaný.");
+        statusInfo.innerText = "✅ Dokument načítaný.";
+        setTimeout(() => statusInfo.innerText = "Automatické ukladanie prebieha každé 3 sekundy.", 3000);
       } else {
         alert("Žiadny uložený dokument neexistuje.");
       }
     }
 
-    // Stiahnuť ako TXT
+    // Stiahnuť ako .txt
     function stiahniDokument() {
       const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
       const link = document.createElement('a');
@@ -117,21 +115,33 @@
       if (confirm("Naozaj chceš vymazať dokument?")) {
         localStorage.removeItem("erikai_dokument");
         textarea.value = "";
-        alert("Dokument vymazaný.");
+        statusInfo.innerText = "🗑️ Dokument vymazaný.";
+        setTimeout(() => statusInfo.innerText = "Automatické ukladanie prebieha každé 3 sekundy.", 3000);
       }
     }
 
-    // Načítať obsah z nahratého TXT súboru
+    // Načítať z txt alebo docx
     document.getElementById("fileInput").addEventListener("change", function () {
       const file = this.files[0];
       if (!file) return;
+
       const reader = new FileReader();
-      reader.onload = function (e) {
-        textarea.value = e.target.result;
-      };
-      reader.readAsText(file, "UTF-8");
+
+      if (file.name.endsWith(".docx")) {
+        reader.onload = function (event) {
+          const arrayBuffer = event.target.result;
+          mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+            .then(result => textarea.value = result.value)
+            .catch(err => alert("Chyba pri načítaní .docx súboru"));
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        reader.onload = function (event) {
+          textarea.value = event.target.result;
+        };
+        reader.readAsText(file, "UTF-8");
+      }
     });
   </script>
-
 </body>
 </html>
