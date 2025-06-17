@@ -2,29 +2,28 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Speedmeter</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       text-align: center;
-      padding: 40px;
+      padding: 30px;
     }
     h1 {
-      color: #d60000;
-    }
-    #result {
-      margin-top: 30px;
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 28px;
+      color: #d00;
     }
     button {
       font-size: 18px;
       padding: 10px 20px;
       background-color: orange;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 22px;
     }
   </style>
 </head>
@@ -32,30 +31,28 @@
   <h1>📶 ErikAI Speedmeter</h1>
   <p>Zmeraj si rýchlosť svojho internetu</p>
   <button onclick="startTest()">▶ Spustiť meranie</button>
-  <div id="result">Čakám na meranie...</div>
+  <div id="result">🕓 Čakám na meranie...</div>
 
   <script>
     function startTest() {
-      const result = document.getElementById("result");
-      result.textContent = "⏳ Meriam rýchlosť...";
-
-      const image = new Image();
+      const result = document.getElementById('result');
+      result.innerHTML = "🕓 Meriam...";
+      const imageSizeBytes = 1000000; // veľkosť 1MB v bajtoch
       const startTime = new Date().getTime();
+      const image = new Image();
 
-      image.onload = () => {
+      image.onload = function () {
         const endTime = new Date().getTime();
         const duration = (endTime - startTime) / 1000; // sekundy
-        const imageSizeKB = 500; // obrázok má cca 500 KB
-        const bitsLoaded = imageSizeKB * 1024 * 8;
-        const speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
-        result.textContent = `📶 Tvoja rýchlosť je približne: ${speedMbps} Mbps`;
+        const speedMbps = ((imageSizeBytes * 8) / duration / 1024 / 1024).toFixed(2);
+        result.innerHTML = `✅ Rýchlosť internetu: <b>${speedMbps} Mbps</b>`;
       };
 
-      image.onerror = () => {
-        result.textContent = "❌ Nepodarilo sa zmerať rýchlosť.";
+      image.onerror = function () {
+        result.innerHTML = "❌ Nepodarilo sa zmerať rýchlosť.";
       };
 
-      image.src = "https://via.placeholder.com/1500x1500.jpg?rand=" + Math.random();
+      image.src = "test.jpg?rand=" + Math.random(); // obrázok 1MB
     }
   </script>
 </body>
