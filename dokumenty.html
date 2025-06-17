@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Dokumenty</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      color: #222;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: #0d6efd;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 800px;
+      height: 400px;
+      font-size: 1rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: vertical;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    input[type="file"] {
+      margin: 1rem;
+    }
+
+    button {
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      margin: 0.4rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0b5ed7;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: gray;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📄 ErikAI Dokumenty</h1>
+
+  <input type="file" id="fileInput" accept=".txt" />
+  <textarea id="textArea" placeholder="Tu sa zobrazí tvoj dokument alebo napíš nový..."></textarea>
+
+  <div>
+    <button onclick="ulozDokument()">💾 Uložiť</button>
+    <button onclick="nacitajDokument()">📂 Načítať</button>
+    <button onclick="stiahniDokument()">⬇️ Stiahnuť ako TXT</button>
+    <button onclick="vymazDokument()">🗑️ Vymazať</button>
+  </div>
+
+  <p class="note">Text sa automaticky ukladá každé 3 sekundy. Po opätovnom otvorení sa načíta posledná verzia.</p>
+
+  <script>
+    const textarea = document.getElementById("textArea");
+
+    // Automatické ukladanie každé 3 sekundy
+    setInterval(() => {
+      localStorage.setItem("erikai_dokument", textarea.value);
+    }, 3000);
+
+    // Načítanie pri otvorení
+    window.onload = () => {
+      const data = localStorage.getItem("erikai_dokument");
+      if (data) textarea.value = data;
+    };
+
+    // Manuálne uloženie
+    function ulozDokument() {
+      localStorage.setItem("erikai_dokument", textarea.value);
+      alert("Dokument uložený.");
+    }
+
+    // Načítať dokument
+    function nacitajDokument() {
+      const data = localStorage.getItem("erikai_dokument");
+      if (data) {
+        textarea.value = data;
+        alert("Dokument načítaný.");
+      } else {
+        alert("Žiadny uložený dokument neexistuje.");
+      }
+    }
+
+    // Stiahnuť ako TXT
+    function stiahniDokument() {
+      const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'erikai_dokument.txt';
+      link.click();
+    }
+
+    // Vymazať
+    function vymazDokument() {
+      if (confirm("Naozaj chceš vymazať dokument?")) {
+        localStorage.removeItem("erikai_dokument");
+        textarea.value = "";
+        alert("Dokument vymazaný.");
+      }
+    }
+
+    // Načítať obsah z nahratého TXT súboru
+    document.getElementById("fileInput").addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        textarea.value = e.target.result;
+      };
+      reader.readAsText(file, "UTF-8");
+    });
+  </script>
+
+</body>
+</html>
