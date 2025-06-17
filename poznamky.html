@@ -14,10 +14,9 @@
     h1 {
       color: #d62828;
     }
-    textarea {
+    textarea, input[type="text"] {
       width: 100%;
       max-width: 700px;
-      height: 300px;
       font-size: 1.1rem;
       padding: 1rem;
       margin: 1rem auto;
@@ -44,21 +43,20 @@
 <body>
   <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
 
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-  }
-</script>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
 
-<style>
-  body.dark-mode {
-    background-color: #121212;
-    color: white;
-  }
-</style>
+  <style>
+    body.dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+  </style>
 
-<p id="cas" style="font-size: 18px;"></p>
-
+  <p id="cas" style="font-size: 18px;"></p>
   <script>
     function aktualizujCas() {
       const teraz = new Date();
@@ -79,23 +77,35 @@
   </script>
 
   <div id="google_translate_element"></div>
-<script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'sk',
-      includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'sk',
+        includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
   <h1>📝 ErikAI Poznámky</h1>
+  
+  <input type="text" id="noteName" placeholder="Zadaj názov poznámky (napr. škola, nápady)">
   <textarea id="noteInput" placeholder="Napíš si sem svoje poznámky..."></textarea>
+  
   <div>
     <button onclick="skopirujPoznamky()">📋 Skopírovať</button>
     <button onclick="stiahniPoznamky()">💾 Stiahnuť ako TXT</button>
-  </div>  <script>
+    <button onclick="ulozPoznamkuManualne()">💾 Uložiť manuálne</button>
+    <button onclick="nacitajPoznamku()">📂 Načítať</button>
+  </div>
+
+  <script>
+    function getNoteKey() {
+      const name = document.getElementById("noteName").value.trim();
+      return name ? `poznamka_${name}` : null;
+    }
+
     function skopirujPoznamky() {
       const textarea = document.getElementById("noteInput");
       textarea.select();
@@ -112,17 +122,46 @@
       link.download = 'moje_poznamky.txt';
       link.click();
     }
-  </script> 
-<div style="background-color: #fff3cd; border-left: 6px solid #ffecb5; padding: 12px; margin-top: 16px; font-size: 14px; color: #664d03;">
-  <strong>Informačné upozornenie:</strong> Pri sťahovaní poznámky sa môžu niektoré špeciálne znaky (napr. š, č, ž, ľ, ť) zobraziť nesprávne v závislosti od zariadenia alebo prehliadača. Odporúčame po stiahnutí súbor skontrolovať.
-</div>
 
-  <a href="zoznam_straniek.html" class="spat">← Zoznam Straniek</a>
+    function ulozPoznamkuManualne() {
+      const key = getNoteKey();
+      if (key) {
+        localStorage.setItem(key, document.getElementById("noteInput").value);
+        alert("Poznámka bola uložená.");
+      } else {
+        alert("Zadaj najprv názov poznámky.");
+      }
+    }
+
+    function nacitajPoznamku() {
+      const key = getNoteKey();
+      if (key && localStorage.getItem(key)) {
+        document.getElementById("noteInput").value = localStorage.getItem(key);
+        alert("Poznámka bola načítaná.");
+      } else {
+        alert("Poznámka sa nenašla. Skontroluj názov.");
+      }
+    }
+
+    // Automatické ukladanie každé 2 sekundy
+    setInterval(() => {
+      const key = getNoteKey();
+      if (key) {
+        localStorage.setItem(key, document.getElementById("noteInput").value);
+      }
+    }, 2000);
+  </script>
+
+  <div style="background-color: #fff3cd; border-left: 6px solid #ffecb5; padding: 12px; margin-top: 16px; font-size: 14px; color: #664d03;">
+    <strong>Informačné upozornenie:</strong> Poznámky sa automaticky ukladajú lokálne každé 2 sekundy. Funguje aj bez internetu, ale len na tomto zariadení a pre tento prehliadač.
+  </div>
+
+  <a href="zoznam_straniek.html" class="spat">← Zoznam Strániek</a>
 
   <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
+    To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
+    © 2025 Erik Mohylák – All rights reserved.
   </p>
 
 </body>
