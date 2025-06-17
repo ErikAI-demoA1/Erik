@@ -9,16 +9,16 @@
       font-family: sans-serif;
       text-align: center;
       padding: 30px;
-      background-color: #f9f9f9;
+      background-color: #f7f7f7;
     }
     h1 {
-      color: #d70000;
+      color: #d10000;
       font-size: 32px;
     }
     select, button {
       font-size: 16px;
       margin: 10px;
-      padding: 5px 10px;
+      padding: 6px 12px;
     }
     audio {
       margin-top: 20px;
@@ -31,10 +31,16 @@
   <p>Vyber si stanicu a zapni si ErikAI internetové rádio</p>
 
   <select id="radioStation">
-    <option value="https://stream.rockradio.com/rock">Rock Radio (US)</option>
-    <option value="https://jazz-wr03.ice.infomaniak.ch/jazz-wr03-128.mp3">Jazz Radio (Swiss)</option>
-    <option value="https://ice1.somafm.com/groovesalad-128-mp3">Chill (Groove Salad)</option>
-    <option value="https://stream.radioparty.pl:8000/dance.mp3">Dance (RadioParty)</option>
+    <option value="https://ice1.somafm.com/groovesalad-128-mp3">1. Chill – Groove Salad</option>
+    <option value="http://live.slovakradio.sk:8000/Slovensko_128.mp3">2. Rádio Slovensko</option>
+    <option value="http://stream.funradio.sk:8000/fun128.mp3">3. Fun Rádio</option>
+    <option value="http://stream.europa2.sk:8000/e2-128.mp3">4. Europa 2</option>
+    <option value="http://85.248.7.162:8000/expres128.mp3">5. Rádio Expres</option>
+    <option value="http://live.slovakradio.sk:8000/FM_128.mp3">6. Rádio FM</option>
+    <option value="http://icecast8.play.cz/radiobeat128.mp3">7. Rádio Beat (CZ)</option>
+    <option value="http://icecast5.play.cz/evropa2-128.mp3">8. Evropa 2 (CZ)</option>
+    <option value="http://streamingv2.shoutcast.com/rtl-1025">9. RTL 102.5 (IT)</option>
+    <option value="https://ndr-ndr2-niedersachsen.cast.addradio.de/ndr/ndr2/niedersachsen/mp3/128/stream.mp3">10. NDR 2 (DE)</option>
   </select>
 
   <br />
@@ -46,8 +52,8 @@
 
     function playStation() {
       audio.src = station.value;
-      audio.play().catch(err => {
-        alert("Nepodarilo sa spustiť rádio. Skús inú stanicu.");
+      audio.play().catch(() => {
+        alert("Nepodarilo sa spustiť stanicu. Skús inú.");
       });
     }
 
