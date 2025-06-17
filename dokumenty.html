@@ -28,8 +28,13 @@
       resize: vertical;
       display: block;
     }
-    input[type="file"] {
-      margin: 1rem;
+    input[type="file"],
+    input[type="text"] {
+      margin: 0.5rem;
+      padding: 0.5rem;
+      width: 80%;
+      max-width: 500px;
+      font-size: 1rem;
     }
     button {
       background-color: #0d6efd;
@@ -49,6 +54,20 @@
       color: gray;
       margin-top: 1rem;
     }
+    .doc-list {
+      margin-top: 1.5rem;
+    }
+    .doc-item {
+      display: inline-block;
+      margin: 4px;
+      background-color: #e9ecef;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .doc-item:hover {
+      background-color: #ced4da;
+    }
   </style>
 </head>
 <body>
@@ -56,68 +75,98 @@
   <h1>📄 ErikAI Dokumenty</h1>
 
   <input type="file" id="fileInput" accept=".txt,.docx" />
+  <input type="text" id="docName" placeholder="Zadaj názov dokumentu..." />
+
   <textarea id="textArea" placeholder="Tu bude tvoj dokument alebo si napíš vlastný..."></textarea>
 
   <div>
     <button onclick="ulozDokument()">💾 Uložiť</button>
     <button onclick="nacitajDokument()">📂 Načítať</button>
-    <button onclick="stiahniDokument()">⬇️ Stiahnuť ako TXT</button>
+    <button onclick="stiahniTXT()">⬇️ TXT</button>
+    <button onclick="stiahniDOCX()">⬇️ DOCX</button>
     <button onclick="vymazDokument()">🗑️ Vymazať</button>
   </div>
 
   <div class="info" id="statusInfo">Automatické ukladanie prebieha každé 3 sekundy.</div>
 
+  <div class="doc-list" id="docList"></div>
+
   <script>
     const textarea = document.getElementById("textArea");
+    const docNameInput = document.getElementById("docName");
     const statusInfo = document.getElementById("statusInfo");
 
-    // Automatické ukladanie
-    setInterval(() => {
-      localStorage.setItem("erikai_dokument", textarea.value);
-    }, 3000);
-
-    // Načítať pri otvorení
-    window.onload = () => {
-      const data = localStorage.getItem("erikai_dokument");
-      if (data) textarea.value = data;
-    };
-
-    // Manuálne uloženie
-    function ulozDokument() {
-      localStorage.setItem("erikai_dokument", textarea.value);
-      statusInfo.innerText = "✅ Dokument bol uložený.";
-      setTimeout(() => statusInfo.innerText = "Automatické ukladanie prebieha každé 3 sekundy.", 3000);
+    function refreshZoznam() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("erikai_doc_"));
+      const listDiv = document.getElementById("docList");
+      listDiv.innerHTML = "<h3>📚 Uložené dokumenty:</h3>";
+      keys.forEach(k => {
+        const name = k.replace("erikai_doc_", "");
+        const el = document.createElement("div");
+        el.className = "doc-item";
+        el.innerText = name;
+        el.onclick = () => {
+          textarea.value = localStorage.getItem(k);
+          docNameInput.value = name;
+          statusInfo.innerText = `✅ Dokument "${name}" načítaný.`;
+        };
+        listDiv.appendChild(el);
+      });
     }
 
-    // Načítať
+    // Uložiť dokument
+    function ulozDokument() {
+      const name = docNameInput.value.trim();
+      if (!name) return alert("Zadaj názov dokumentu.");
+      localStorage.setItem("erikai_doc_" + name, textarea.value);
+      statusInfo.innerText = `✅ Dokument "${name}" uložený.`;
+      refreshZoznam();
+    }
+
+    // Načítať dokument podľa mena
     function nacitajDokument() {
-      const data = localStorage.getItem("erikai_dokument");
+      const name = docNameInput.value.trim();
+      const data = localStorage.getItem("erikai_doc_" + name);
       if (data) {
         textarea.value = data;
-        statusInfo.innerText = "✅ Dokument načítaný.";
-        setTimeout(() => statusInfo.innerText = "Automatické ukladanie prebieha každé 3 sekundy.", 3000);
+        statusInfo.innerText = `✅ Dokument "${name}" načítaný.`;
       } else {
-        alert("Žiadny uložený dokument neexistuje.");
+        alert("Dokument s týmto názvom neexistuje.");
       }
-    }
-
-    // Stiahnuť ako .txt
-    function stiahniDokument() {
-      const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'erikai_dokument.txt';
-      link.click();
     }
 
     // Vymazať
     function vymazDokument() {
-      if (confirm("Naozaj chceš vymazať dokument?")) {
-        localStorage.removeItem("erikai_dokument");
-        textarea.value = "";
-        statusInfo.innerText = "🗑️ Dokument vymazaný.";
-        setTimeout(() => statusInfo.innerText = "Automatické ukladanie prebieha každé 3 sekundy.", 3000);
-      }
+      const name = docNameInput.value.trim();
+      if (!name) return;
+      localStorage.removeItem("erikai_doc_" + name);
+      textarea.value = "";
+      statusInfo.innerText = `🗑️ Dokument "${name}" vymazaný.`;
+      refreshZoznam();
+    }
+
+    // Stiahnuť ako TXT
+    function stiahniTXT() {
+      const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = (docNameInput.value || "erikai_dokument") + ".txt";
+      link.click();
+    }
+
+    // Stiahnuť ako DOCX
+    function stiahniDOCX() {
+      const content = textarea.value;
+      const doc =
+        `PK���������������word/document.xml<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+        <w:body><w:p><w:r><w:t>${content}</w:t></w:r></w:p></w:body></w:document>`;
+
+      const blob = new Blob([content], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = (docNameInput.value || "erikai_dokument") + ".docx";
+      link.click();
     }
 
     // Načítať z txt alebo docx
@@ -142,6 +191,9 @@
         reader.readAsText(file, "UTF-8");
       }
     });
+
+    // Načítanie uložených dokumentov
+    refreshZoznam();
   </script>
 </body>
 </html>
