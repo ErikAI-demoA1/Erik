@@ -1,65 +1,111 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎵 ErikAI Music</title>
+  <meta charset="UTF-8" />
+  <title>ErikAI Music</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      font-family: Arial;
       text-align: center;
       padding: 20px;
+      background: #fafafa;
     }
     h1 {
-      color: #d90000;
-      font-size: 2em;
+      color: #d10000;
     }
-    .player {
-      margin-top: 30px;
-      background-color: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .music-container {
+      margin: 20px auto;
+      padding: 15px;
       max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
     }
-    select, button {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 8px;
-      font-size: 1em;
+    select, input[type="text"] {
+      width: 80%;
+      margin: 10px 0;
+      padding: 8px;
     }
-    audio {
-      width: 100%;
-      margin-top: 20px;
+    button {
+      margin: 5px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
+    .save-btn { background: #4CAF50; color: white; }
+    .delete-btn { background: #f44336; color: white; }
+    .upload-btn { background: #2196F3; color: white; }
   </style>
 </head>
 <body>
   <h1>🎵 ErikAI Music</h1>
   <p>Vyber si svoju obľúbenú skladbu a prehrávaj ju offline alebo online</p>
-  <div class="player">
-    <label for="songSelect">Vyber skladbu:</label>
-    <select id="songSelect">
-      <option value="songs/song1.mp3">1. Letný hit</option>
-      <option value="songs/song2.mp3">2. Chill vibe</option>
-      <option value="songs/song3.mp3">3. Rýchly beat</option>
-      <option value="songs/song4.mp3">4. Relax melódia</option>
-      <option value="songs/song5.mp3">5. ErikAI intro</option>
-    </select>
-    <br>
-    <audio id="audioPlayer" controls>
-      <source src="songs/song1.mp3" type="audio/mpeg">
-      Tvoj prehliadač nepodporuje prehrávanie audio súborov.
-    </audio>
-  </div>  <script>
-    const select = document.getElementById("songSelect");
-    const player = document.getElementById("audioPlayer");
 
-    select.addEventListener("change", () => {
-      player.src = select.value;
-      player.play();
-    });
-  </script></body>
+  <div class="music-container">
+    <input type="file" id="fileInput" accept="audio/*" />
+    <br />
+    <input type="text" id="songName" placeholder="Zadaj názov skladby..." />
+    <br />
+    <button class="save-btn" onclick="saveSong()">Uložiť</button>
+    <button class="delete-btn" onclick="deleteSong()">Vymazať</button>
+    <br />
+    <label for="songList">Vyber skladbu:</label>
+    <select id="songList" onchange="playSelected()">
+      <option disabled selected>Žiadna uložená skladba</option>
+    </select>
+    <br />
+    <audio id="audioPlayer" controls style="width:100%; margin-top:10px;"></audio>
+  </div>
+
+  <script>
+    let savedSongs = [];
+
+    function saveSong() {
+      const fileInput = document.getElementById("fileInput");
+      const nameInput = document.getElementById("songName");
+      const songList = document.getElementById("songList");
+
+      if (fileInput.files.length === 0 || nameInput.value.trim() === "") {
+        alert("Vyber skladbu a zadaj názov.");
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const name = nameInput.value;
+
+      const url = URL.createObjectURL(file);
+      savedSongs.push({ name, url });
+
+      const option = document.createElement("option");
+      option.text = name;
+      option.value = url;
+      songList.appendChild(option);
+
+      nameInput.value = "";
+      fileInput.value = "";
+      songList.selectedIndex = songList.options.length - 1;
+      playSelected();
+    }
+
+    function deleteSong() {
+      const songList = document.getElementById("songList");
+      const index = songList.selectedIndex;
+
+      if (index > 0) {
+        savedSongs.splice(index - 1, 1);
+        songList.remove(index);
+        document.getElementById("audioPlayer").pause();
+        document.getElementById("audioPlayer").src = "";
+      }
+    }
+
+    function playSelected() {
+      const songList = document.getElementById("songList");
+      const audio = document.getElementById("audioPlayer");
+      audio.src = songList.value;
+      audio.play();
+    }
+  </script>
+</body>
 </html>
