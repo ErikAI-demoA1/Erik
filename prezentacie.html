@@ -3,134 +3,110 @@
   <meta charset="UTF-8">
   <title>ErikAI Prezentácie</title>
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      background: #f9f9f9;
-    }
-    textarea {
-      width: 90%;
-      height: 200px;
-      font-size: 18px;
-      margin-top: 10px;
-    }
-    .button-group button {
-      margin: 5px;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .yellow { background: gold; }
-    .blue { background: #2196f3; color: white; }
-    .green { background: #4caf50; color: white; }
-    .red { background: #f44336; color: white; }
-    .gray { background: #ddd; padding: 4px; margin: 2px; display: inline-block; border-radius: 4px; }
-    input[type="file"] { margin-top: 10px; }
+    body { font-family: sans-serif; padding: 20px; background: #fefefe; }
+    textarea { width: 100%; height: 200px; font-size: 22px; }
+    button { margin: 4px; padding: 8px 16px; font-size: 16px; }
+    .controls, .storage { margin-top: 10px; }
+    .saved-name { margin: 4px 0; }
   </style>
 </head>
 <body>
-  <h2>📄 ErikAI Prezentácie</h2>
-  <div>
-    <label for="file">Vybrať Excel alebo CSV:</label>
-    <input type="file" id="file" accept=".json" />
-    <br>
-    <label for="name">📁 Názov prezentácie:</label>
-    <input id="name" placeholder="názov" />
-  </div>  <div id="slide-info">Snímka: 1 / 1</div>
-  <textarea id="content"></textarea>  <div class="button-group">
-    <button class="yellow" onclick="prevSlide()">◀ Predchádzajúce</button>
-    <button class="yellow" onclick="nextSlide()">▶ Ďalší</button>
-    <br>
-    <button class="blue" onclick="addSlide()">➕ Nový slide</button>
-    <button class="green" onclick="saveSlides()">📄 Uložiť</button>
-    <button class="red" onclick="deleteSlide()">🗑️ Vymazať</button>
-  </div>  <h3>📂 Uložené prezentácie:</h3>
-  <div id="savedList"></div>  <script>
-    let slides = [""];
-    let current = 0;
+  <h2>📄 ErikAI Prezentácie</h2><label>Vybrať Excel alebo CSV: <input type="file" id="csvImport"></label><br> <label>📁 Názov prezentácie: <input id="presentationName" value="Moja prezentácia"></label>
 
-    function updateView() {
-      document.getElementById("slide-info").innerText = `Snímka: ${current + 1} / ${slides.length}`;
-      document.getElementById("content").value = slides[current] || "";
+  <p id="slideCount">Snimka: 1 / 1</p>
+  <textarea id="slideText"></textarea>  <div class="controls">
+    <button onclick="prevSlide()">◄ Predchádzajúce</button>
+    <button onclick="nextSlide()">► Ďalší</button>
+    <button onclick="newSlide()">➕ Nový slide</button>
+    <button onclick="savePresentation()">✅ Uložiť</button>
+    <button onclick="deleteCurrentSlide()">🗑 Vymazať</button>
+    <button onclick="downloadPPTX()">⬇ Stiahnuť ako PowerPoint</button>
+  </div>  <div class="storage">
+    <p>📁 Uložené prezentácie:</p>
+    <div id="savedList"></div>
+  </div>  <script>
+    let slides = [""], current = 0;
+
+    function updateSlide() {
+      document.getElementById('slideText').value = slides[current];
+      document.getElementById('slideCount').innerText = `Snimka: ${current + 1} / ${slides.length}`;
     }
 
-    function prevSlide() {
-      if (current > 0) current--;
-      updateView();
+    function saveCurrent() {
+      slides[current] = document.getElementById('slideText').value;
     }
 
     function nextSlide() {
+      saveCurrent();
       if (current < slides.length - 1) current++;
-      updateView();
+      updateSlide();
     }
 
-    function addSlide() {
+    function prevSlide() {
+      saveCurrent();
+      if (current > 0) current--;
+      updateSlide();
+    }
+
+    function newSlide() {
+      saveCurrent();
       slides.push("");
       current = slides.length - 1;
-      updateView();
+      updateSlide();
     }
 
-    function deleteSlide() {
-      if (slides.length > 1) {
-        slides.splice(current, 1);
-        current = Math.min(current, slides.length - 1);
-        updateView();
-      }
+    function deleteCurrentSlide() {
+      if (slides.length <= 1) return;
+      slides.splice(current, 1);
+      if (current >= slides.length) current = slides.length - 1;
+      updateSlide();
     }
 
-    function saveSlides() {
-      slides[current] = document.getElementById("content").value;
-      const name = document.getElementById("name").value.trim();
-      if (!name) return alert("Zadaj názov prezentácie.");
-      localStorage.setItem("pres_" + name, JSON.stringify(slides));
-      listSaved();
+    function savePresentation() {
+      saveCurrent();
+      const name = document.getElementById("presentationName").value;
+      localStorage.setItem("presentation_" + name, JSON.stringify(slides));
+      renderSaved();
+      alert("Prezentácia bola uložená.");
     }
 
-    function loadSlides(name) {
-      const data = localStorage.getItem("pres_" + name);
-      if (data) {
-        slides = JSON.parse(data);
-        current = 0;
-        document.getElementById("name").value = name;
-        updateView();
-      }
+    function renderSaved() {
+      const container = document.getElementById("savedList");
+      container.innerHTML = "";
+      Object.keys(localStorage).filter(k => k.startsWith("presentation_")).forEach(key => {
+        const name = key.replace("presentation_", "");
+        const div = document.createElement("div");
+        div.className = "saved-name";
+        div.innerHTML = `${name} <button onclick="loadPresentation('${name}')">Načítať</button>` +
+                        ` <button onclick="deletePresentation('${name}')">X</button>`;
+        container.appendChild(div);
+      });
     }
 
-    function listSaved() {
-      let out = "";
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k.startsWith("pres_")) {
-          const n = k.replace("pres_", "");
-          out += `<span class='gray' onclick='loadSlides("${n}")'>${n} ❌</span> `;
-        }
-      }
-      document.getElementById("savedList").innerHTML = out;
+    function loadPresentation(name) {
+      const raw = localStorage.getItem("presentation_" + name);
+      if (!raw) return;
+      slides = JSON.parse(raw);
+      current = 0;
+      document.getElementById("presentationName").value = name;
+      updateSlide();
     }
 
-    document.getElementById("file").addEventListener("change", e => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        try {
-          slides = JSON.parse(e.target.result);
-          current = 0;
-          updateView();
-        } catch {
-          alert("Neplatný formát súboru.");
-        }
-      };
-      reader.readAsText(file);
-    });
+    function deletePresentation(name) {
+      localStorage.removeItem("presentation_" + name);
+      renderSaved();
+    }
 
-    document.getElementById("content").addEventListener("input", () => {
-      slides[current] = document.getElementById("content").value;
-    });
+    function downloadPPTX() {
+      let content = slides.map((txt, i) => `Slide ${i+1}\n====\n${txt}\n`).join("\n\n");
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = document.getElementById("presentationName").value + ".ppt.txt";
+      link.click();
+    }
 
-    listSaved();
-    updateView();
+    updateSlide();
+    renderSaved();
   </script></body>
 </html>
