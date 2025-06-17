@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎵 ErikAI Music</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #d90000;
+      font-size: 2em;
+    }
+    .player {
+      margin-top: 30px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    select, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+    audio {
+      width: 100%;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎵 ErikAI Music</h1>
+  <p>Vyber si svoju obľúbenú skladbu a prehrávaj ju offline alebo online</p>
+  <div class="player">
+    <label for="songSelect">Vyber skladbu:</label>
+    <select id="songSelect">
+      <option value="songs/song1.mp3">1. Letný hit</option>
+      <option value="songs/song2.mp3">2. Chill vibe</option>
+      <option value="songs/song3.mp3">3. Rýchly beat</option>
+      <option value="songs/song4.mp3">4. Relax melódia</option>
+      <option value="songs/song5.mp3">5. ErikAI intro</option>
+    </select>
+    <br>
+    <audio id="audioPlayer" controls>
+      <source src="songs/song1.mp3" type="audio/mpeg">
+      Tvoj prehliadač nepodporuje prehrávanie audio súborov.
+    </audio>
+  </div>  <script>
+    const select = document.getElementById("songSelect");
+    const player = document.getElementById("audioPlayer");
+
+    select.addEventListener("change", () => {
+      player.src = select.value;
+      player.play();
+    });
+  </script></body>
+</html>
