@@ -1,101 +1,110 @@
 <!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI PDFsk</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 2rem; color: #222; text-align: center; }
-    h1 { color: #0077ff; }
-    button, input[type="file"] {
-      font-size: 1rem; margin: 0.5rem; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer;
-    }
-    .green { background-color: #28a745; color: white; }
-    .orange { background-color: #fcbf49; color: black; }
-    .yellowish { background-color: #ffeaa7; padding: 0.4rem; border-radius: 4px; margin-top: 10px; display: inline-block; }
-    .gray { background-color: #eee; margin: 0.5rem; padding: 0.5rem; border-radius: 5px; display: inline-block; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f2f2f2; }
+    h1 { color: #1976d2; }
+    .button { padding: 10px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .green { background-color: #4CAF50; color: white; }
+    .yellow { background-color: #ffc107; }
+    .red { background-color: #f44336; color: white; }
+    .gray { background-color: #e0e0e0; }
+    .file-list span { margin: 5px; padding: 5px 10px; background: #fff176; display: inline-block; border-radius: 4px; cursor: pointer; }
+    .file-list span:hover { background: #ffee58; }
   </style>
 </head>
-<body>
-  <h1>📄 ErikAI PDFsk</h1>  <h3>Vyber PDF s obrázkami:</h3>
+<body>  <h1>📄 ErikAI PDFsk</h1>  <h3>Vyber PDF s obrázkami:</h3>
   <input type="file" id="pdfInput" accept="application/pdf">
-  <p id="fileStatus" style="color: green; font-weight: bold;"></p>  <h3>📁 Možnosti konverzie:</h3>
-  <button class="green" onclick="stiahnutAko('text')">📃 Stiahnuť ako Text</button>
-  <button class="green" onclick="stiahnutAko('word')">📄 Stiahnuť ako Word</button>
-  <button class="green" onclick="stiahnutAko('excel')">📊 Stiahnuť ako Excel</button>  <h3>📂 Lokálna práca:</h3>
-  <button class="orange" onclick="ulozitLokalne()">💾 Uložiť PDF lokálne</button>
-  <button class="orange" onclick="nacitatPDF()">📁 Načítať PDF</button>  <h3>📖 Uložené PDF dokumenty:</h3>
-  <div id="ulozenePDF"></div>  <script>
+  <p id="selectedFileName" style="color: green"></p>  <h3>📂 Možnosti konverzie:</h3>
+  <button class="button green" onclick="exportAs('text')">Stiahnuť ako Text</button>
+  <button class="button green" onclick="exportAs('word')">Stiahnuť ako Word</button>
+  <button class="button green" onclick="exportAs('excel')">Stiahnuť ako Excel</button>  <h3>📁 Lokálna práca:</h3>
+  <button class="button yellow" onclick="savePDFLocal()">💾 Uložiť PDF lokálne</button>
+  <button class="button yellow" onclick="loadPDFLocal()">📂 Načítať PDF</button>  <h3>📖 Uložené PDF dokumenty:</h3>
+  <div class="file-list" id="savedFiles"></div>  <script>
     let currentPDF = null;
-    let currentPDFName = "";
 
-    document.getElementById('pdfInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file && file.type === 'application/pdf') {
+    document.getElementById('pdfInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file && file.type === "application/pdf") {
         currentPDF = file;
-        currentPDFName = file.name;
-        document.getElementById('fileStatus').innerText = `✅ Súbor: ${file.name}`;
-      } else {
-        currentPDF = null;
-        document.getElementById('fileStatus').innerText = "❌ Nie je vybraný platný PDF súbor.";
+        document.getElementById("selectedFileName").innerText = "✅ Súbor: " + file.name;
       }
     });
 
-    function stiahnutAko(format) {
+    function exportAs(type) {
       if (!currentPDF) {
         alert("Najprv vyber PDF súbor.");
         return;
       }
 
+      // Simulácia exportu (skutočný OCR/konverzný engine by bol cez server/API)
+      const blob = new Blob(["Simulácia extrakcie obsahu z " + currentPDF.name], {type: 'text/plain'});
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = currentPDF.name.replace(".pdf", "." + type);
+      link.click();
+    }
+
+    function savePDFLocal() {
+      if (!currentPDF) {
+        alert("Najprv vyber PDF na uloženie.");
+        return;
+      }
       const reader = new FileReader();
-      reader.onload = function() {
-        const blob = new Blob([reader.result], { type: 'text/plain;charset=utf-8' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = currentPDFName.replace('.pdf', `.${format === 'text' ? 'txt' : format === 'word' ? 'docx' : 'xlsx'}`);
-        link.click();
-      };
-      reader.readAsText(currentPDF);
+      reader.onload = function(e) {
+        localStorage.setItem("pdf_" + currentPDF.name, e.target.result);
+        updateSavedList();
+        alert("PDF uložené lokálne ako: " + currentPDF.name);
+      }
+      reader.readAsDataURL(currentPDF);
     }
 
-    function ulozitLokalne() {
-      if (!currentPDF) {
-        alert("Najprv vyber PDF súbor.");
+    function loadPDFLocal() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("pdf_"));
+      if (keys.length === 0) {
+        alert("Nie sú uložené PDF dokumenty.");
         return;
       }
-      localStorage.setItem(currentPDF.name, "saved");
-      zobrazUlozenePDF();
-      alert(`PDF \"${currentPDF.name}\" bol uložený.`);
-    }
-
-    function nacitatPDF() {
-      const meno = prompt("Zadaj názov PDF zo zoznamu:");
-      if (localStorage.getItem(meno)) {
-        currentPDF = new File([""], meno, { type: 'application/pdf' });
-        currentPDFName = meno;
-        document.getElementById('fileStatus').innerText = `✅ Súbor: ${meno}`;
-        alert(`PDF \"${meno}\" je načítaný z lokálneho úložiska.`);
-      } else {
-        alert("PDF nebolo nájdené.");
+      const name = prompt("Zadaj názov PDF na načítanie:", keys[0].replace("pdf_", ""));
+      const fileData = localStorage.getItem("pdf_" + name);
+      if (!fileData) {
+        alert("PDF súbor sa nenašiel.");
+        return;
       }
+      currentPDF = new File([fileData], name, { type: "application/pdf" });
+      document.getElementById("selectedFileName").innerText = "✅ Súbor: " + name;
     }
 
-    function zobrazUlozenePDF() {
-      const container = document.getElementById('ulozenePDF');
+    function updateSavedList() {
+      const container = document.getElementById("savedFiles");
       container.innerHTML = "";
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const btn = document.createElement('div');
-        btn.className = 'yellowish';
-        btn.innerText = key;
-        btn.onclick = () => {
-          currentPDF = new File([""], key, { type: 'application/pdf' });
-          currentPDFName = key;
-          document.getElementById('fileStatus').innerText = `✅ Súbor: ${key}`;
-        };
-        container.appendChild(btn);
-      }
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("pdf_"));
+      keys.forEach(k => {
+        const span = document.createElement("span");
+        const name = k.replace("pdf_", "");
+        span.innerText = name;
+        span.onclick = () => {
+          const data = localStorage.getItem(k);
+          currentPDF = new File([data], name, { type: "application/pdf" });
+          document.getElementById("selectedFileName").innerText = "✅ Súbor: " + name;
+        }
+        const del = document.createElement("button");
+        del.innerText = "❌";
+        del.className = "button red";
+        del.onclick = (e) => {
+          e.stopPropagation();
+          if (confirm("Naozaj vymazať " + name + "?")) {
+            localStorage.removeItem(k);
+            updateSavedList();
+          }
+        }
+        span.appendChild(del);
+        container.appendChild(span);
+      });
     }
 
-    window.onload = zobrazUlozenePDF;
+    updateSavedList();
   </script></body>
 </html>
