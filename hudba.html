@@ -7,105 +7,118 @@
     body {
       font-family: Arial;
       text-align: center;
+      background: #f9f9f9;
       padding: 20px;
-      background: #fafafa;
     }
     h1 {
       color: #d10000;
     }
-    .music-container {
-      margin: 20px auto;
-      padding: 15px;
-      max-width: 400px;
+    .music-box {
       background: white;
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px #ccc;
+      display: inline-block;
+      box-shadow: 0 0 8px #ccc;
     }
-    select, input[type="text"] {
-      width: 80%;
-      margin: 10px 0;
-      padding: 8px;
+    input, select, button {
+      margin: 8px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
-    button {
-      margin: 5px;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .save-btn { background: #4CAF50; color: white; }
-    .delete-btn { background: #f44336; color: white; }
-    .upload-btn { background: #2196F3; color: white; }
+    .green { background: #4CAF50; color: white; }
+    .red { background: #f44336; color: white; }
+    .blue { background: #2196F3; color: white; }
   </style>
 </head>
 <body>
+
   <h1>🎵 ErikAI Music</h1>
   <p>Vyber si svoju obľúbenú skladbu a prehrávaj ju offline alebo online</p>
 
-  <div class="music-container">
+  <div class="music-box">
     <input type="file" id="fileInput" accept="audio/*" />
     <br />
     <input type="text" id="songName" placeholder="Zadaj názov skladby..." />
     <br />
-    <button class="save-btn" onclick="saveSong()">Uložiť</button>
-    <button class="delete-btn" onclick="deleteSong()">Vymazať</button>
+    <button class="green" onclick="saveSong()">Uložiť</button>
+    <button class="red" onclick="deleteSong()">Vymazať</button>
     <br />
-    <label for="songList">Vyber skladbu:</label>
+    <label>Vyber skladbu:</label>
     <select id="songList" onchange="playSelected()">
       <option disabled selected>Žiadna uložená skladba</option>
     </select>
     <br />
-    <audio id="audioPlayer" controls style="width:100%; margin-top:10px;"></audio>
+    <audio id="audioPlayer" controls style="width: 100%; margin-top: 10px;"></audio>
+    <br />
+    <a id="downloadLink" class="blue" href="#" download style="display: none;">⬇️ Stiahnuť skladbu</a>
   </div>
 
   <script>
-    let savedSongs = [];
+    let savedSongs = JSON.parse(localStorage.getItem("erikai_songs")) || [];
+
+    function updateSongList() {
+      const list = document.getElementById("songList");
+      list.innerHTML = '<option disabled selected>Žiadna uložená skladba</option>';
+      savedSongs.forEach((song, i) => {
+        const option = document.createElement("option");
+        option.value = i;
+        option.text = song.name;
+        list.appendChild(option);
+      });
+    }
 
     function saveSong() {
       const fileInput = document.getElementById("fileInput");
-      const nameInput = document.getElementById("songName");
-      const songList = document.getElementById("songList");
+      const songName = document.getElementById("songName").value.trim();
 
-      if (fileInput.files.length === 0 || nameInput.value.trim() === "") {
-        alert("Vyber skladbu a zadaj názov.");
+      if (fileInput.files.length === 0 || songName === "") {
+        alert("Vyber súbor a zadaj názov skladby.");
         return;
       }
 
-      const file = fileInput.files[0];
-      const name = nameInput.value;
-
-      const url = URL.createObjectURL(file);
-      savedSongs.push({ name, url });
-
-      const option = document.createElement("option");
-      option.text = name;
-      option.value = url;
-      songList.appendChild(option);
-
-      nameInput.value = "";
-      fileInput.value = "";
-      songList.selectedIndex = songList.options.length - 1;
-      playSelected();
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        savedSongs.push({ name: songName, data: e.target.result });
+        localStorage.setItem("erikai_songs", JSON.stringify(savedSongs));
+        updateSongList();
+        document.getElementById("fileInput").value = "";
+        document.getElementById("songName").value = "";
+      };
+      reader.readAsDataURL(fileInput.files[0]);
     }
 
     function deleteSong() {
-      const songList = document.getElementById("songList");
-      const index = songList.selectedIndex;
-
-      if (index > 0) {
-        savedSongs.splice(index - 1, 1);
-        songList.remove(index);
+      const index = document.getElementById("songList").value;
+      if (index >= 0) {
+        savedSongs.splice(index, 1);
+        localStorage.setItem("erikai_songs", JSON.stringify(savedSongs));
+        updateSongList();
         document.getElementById("audioPlayer").pause();
         document.getElementById("audioPlayer").src = "";
+        document.getElementById("downloadLink").style.display = "none";
       }
     }
 
     function playSelected() {
-      const songList = document.getElementById("songList");
-      const audio = document.getElementById("audioPlayer");
-      audio.src = songList.value;
-      audio.play();
+      const index = document.getElementById("songList").value;
+      if (index >= 0) {
+        const song = savedSongs[index];
+        const audio = document.getElementById("audioPlayer");
+        audio.src = song.data;
+        audio.play();
+
+        const download = document.getElementById("downloadLink");
+        download.href = song.data;
+        download.download = song.name + ".mp3";
+        download.style.display = "inline-block";
+      }
     }
+
+    // načítanie pri štarte
+    window.onload = updateSongList;
   </script>
+
 </body>
 </html>
