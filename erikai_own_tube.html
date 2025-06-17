@@ -1,114 +1,99 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI OWN Tube</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      color: red;
-    }
-    .container {
-      margin: 0 auto;
-      max-width: 600px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-    }
+    body { font-family: sans-serif; text-align: center; background: #fefefe; color: #222; }
+    h1 { color: red; }
     input, button, select {
-      margin: 10px;
-      padding: 10px;
+      padding: 8px;
+      margin: 5px;
       font-size: 16px;
     }
     video {
-      width: 100%;
-      max-height: 300px;
-      margin-top: 20px;
+      width: 90%;
+      max-width: 500px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
+
   <h1>🎥 ErikAI OWN Tube</h1>
-  <p>Vyber si svoje vlastné video a prehraj ho offline alebo online</p>  <div class="container">
-    <input type="file" id="fileInput" accept="video/*">
-    <br>
-    <input type="text" id="videoName" placeholder="Zadaj názov videa...">
-    <br>
+  <p>Vyber si svoje vlastné video a prehraj ho offline alebo online</p>
+
+  <div>
+    <input type="file" id="videoInput" accept="video/*"><br>
+    <input type="text" id="videoName" placeholder="Zadaj názov videa..."><br>
     <button onclick="saveVideo()">Uložiť</button>
-    <button onclick="clearVideos()">Vymazať</button>
-    <br>
-    <label for="videoSelect">Vyber video:</label>
-    <select id="videoSelect" onchange="loadVideo()">
-      <option>Žiadne uložené video</option>
+    <button onclick="deleteVideo()">Vymazať</button><br><br>
+
+    <label for="videoList">Vyber video:</label>
+    <select id="videoList" onchange="loadVideo()">
+      <option>Žiadne video</option>
     </select>
-    <br>
+
     <video id="videoPlayer" controls></video>
-  </div>  <script>
-    const fileInput = document.getElementById('fileInput');
-    const videoName = document.getElementById('videoName');
-    const videoSelect = document.getElementById('videoSelect');
+  </div>
+
+  <script>
+    const videoList = document.getElementById('videoList');
     const videoPlayer = document.getElementById('videoPlayer');
 
+    function loadStoredVideos() {
+      const stored = JSON.parse(localStorage.getItem("erikaiVideos") || "{}");
+      videoList.innerHTML = '<option>Žiadne video</option>';
+      for (let name in stored) {
+        const option = document.createElement("option");
+        option.value = stored[name];
+        option.textContent = name;
+        videoList.appendChild(option);
+      }
+    }
+
     function saveVideo() {
+      const fileInput = document.getElementById("videoInput");
+      const nameInput = document.getElementById("videoName");
       const file = fileInput.files[0];
-      const name = videoName.value.trim();
+      const name = nameInput.value.trim();
 
       if (!file || !name) {
-        alert('Vyber video a zadaj jeho názov!');
+        alert("Vyber súbor a zadaj názov.");
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        localStorage.setItem('video_' + name, e.target.result);
-        updateVideoList();
-        videoName.value = '';
-        fileInput.value = '';
-      }
-      reader.readAsDataURL(file);
-    }
-
-    function updateVideoList() {
-      videoSelect.innerHTML = '';
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.startsWith('video_')) {
-          const name = key.replace('video_', '');
-          const option = document.createElement('option');
-          option.value = name;
-          option.textContent = name;
-          videoSelect.appendChild(option);
-        }
-      }
+      const url = URL.createObjectURL(file);
+      const stored = JSON.parse(localStorage.getItem("erikaiVideos") || "{}");
+      stored[name] = url;
+      localStorage.setItem("erikaiVideos", JSON.stringify(stored));
+      loadStoredVideos();
+      alert("Video bolo uložené.");
+      nameInput.value = "";
+      fileInput.value = "";
     }
 
     function loadVideo() {
-      const name = videoSelect.value;
-      const dataUrl = localStorage.getItem('video_' + name);
-      if (dataUrl) {
-        videoPlayer.src = dataUrl;
+      const selected = videoList.options[videoList.selectedIndex].value;
+      if (selected && selected !== "Žiadne video") {
+        videoPlayer.src = selected;
+        videoPlayer.load();
+        videoPlayer.play();
       }
     }
 
-    function clearVideos() {
-      const confirmed = confirm('Naozaj chceš vymazať všetky uložené videá?');
-      if (confirmed) {
-        for (let i = localStorage.length - 1; i >= 0; i--) {
-          const key = localStorage.key(i);
-          if (key.startsWith('video_')) {
-            localStorage.removeItem(key);
-          }
-        }
-        updateVideoList();
-        videoPlayer.src = '';
-      }
+    function deleteVideo() {
+      const selectedText = videoList.options[videoList.selectedIndex].textContent;
+      if (selectedText === "Žiadne video") return;
+      const stored = JSON.parse(localStorage.getItem("erikaiVideos") || "{}");
+      delete stored[selectedText];
+      localStorage.setItem("erikaiVideos", JSON.stringify(stored));
+      loadStoredVideos();
+      videoPlayer.src = "";
     }
 
-    updateVideoList();
-  </script></body>
+    loadStoredVideos();
+  </script>
+
+</body>
 </html>
