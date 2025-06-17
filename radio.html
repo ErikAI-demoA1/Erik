@@ -1,50 +1,58 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ErikAI Rádio</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       text-align: center;
       padding: 30px;
-      background-color: #f5f5f5;
+      background-color: #f9f9f9;
     }
     h1 {
-      color: #e60000;
+      color: #d70000;
+      font-size: 32px;
     }
-    select, audio {
-      margin: 20px auto;
+    select, button {
       font-size: 16px;
+      margin: 10px;
+      padding: 5px 10px;
     }
-    .logo {
-      width: 100px;
-      margin-bottom: 10px;
+    audio {
+      margin-top: 20px;
+      width: 80%;
     }
   </style>
 </head>
 <body>
-  <img src="/APP_download/erikai2025.jpg" alt="ErikAI logo" class="logo">
   <h1>🎵 ErikAI Rádio</h1>
-  <p>Vyber si stanicu a zapni si ErikAI internetové rádio</p>  <select id="stanica" onchange="zmenRadio()">
-    <option value="https://stream.radioparadise.com/rock-128">Rock Radio (Paradise)</option>
-    <option value="https://icecast.funradio.sk/fun128.mp3">Fun Rádio</option>
-    <option value="https://live.slovakradio.sk:8000/RSR_128.mp3">Rádio Slovensko</option>
-    <option value="https://icecast4.play.cz/evropa2-128.mp3">Evropa 2 CZ</option>
-    <option value="https://icecast4.play.cz/kiss-128.mp3">Kiss Rádio CZ</option>
-  </select>  <br>
-  <audio id="radioPlayer" controls autoplay>
-    Tvoj prehliadač nepodporuje prehrávanie audia.
-  </audio>  <script>
-    function zmenRadio() {
-      const player = document.getElementById("radioPlayer");
-      const stanica = document.getElementById("stanica").value;
-      player.src = stanica;
-      player.play();
+  <p>Vyber si stanicu a zapni si ErikAI internetové rádio</p>
+
+  <select id="radioStation">
+    <option value="https://stream.rockradio.com/rock">Rock Radio (US)</option>
+    <option value="https://jazz-wr03.ice.infomaniak.ch/jazz-wr03-128.mp3">Jazz Radio (Swiss)</option>
+    <option value="https://ice1.somafm.com/groovesalad-128-mp3">Chill (Groove Salad)</option>
+    <option value="https://stream.radioparty.pl:8000/dance.mp3">Dance (RadioParty)</option>
+  </select>
+
+  <br />
+  <audio id="audioPlayer" controls autoplay></audio>
+
+  <script>
+    const audio = document.getElementById("audioPlayer");
+    const station = document.getElementById("radioStation");
+
+    function playStation() {
+      audio.src = station.value;
+      audio.play().catch(err => {
+        alert("Nepodarilo sa spustiť rádio. Skús inú stanicu.");
+      });
     }
-    // Spusti prvú stanicu automaticky
-    window.onload = () => {
-      zmenRadio();
-    };
-  </script></body>
+
+    station.addEventListener("change", playStation);
+    window.onload = playStation;
+  </script>
+</body>
 </html>
