@@ -2,37 +2,60 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Speedmeter</title>
   <style>
-    body { font-family: sans-serif; text-align: center; }
-    #result { font-size: 1.4em; margin-top: 1em; }
-    button { font-size: 1em; padding: 10px 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #d60000;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      background-color: orange;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <h1>📶 ErikAI Speedmeter</h1>
   <p>Zmeraj si rýchlosť svojho internetu</p>
-  <button onclick="startTest()">▶️ Spustiť meranie</button>
-  <div id="result">⬜ Čakám na meranie...</div>
+  <button onclick="startTest()">▶ Spustiť meranie</button>
+  <div id="result">Čakám na meranie...</div>
 
   <script>
     function startTest() {
-      const fileUrl = "https://speed.hetzner.de/10MB.bin"; // verejný súbor na test
+      const result = document.getElementById("result");
+      result.textContent = "⏳ Meriam rýchlosť...";
+
+      const image = new Image();
       const startTime = new Date().getTime();
-      const resultDiv = document.getElementById("result");
-      
-      fetch(fileUrl, { method: 'GET', cache: 'no-store' })
-        .then(response => response.blob())
-        .then(blob => {
-          const endTime = new Date().getTime();
-          const duration = (endTime - startTime) / 1000;
-          const bitsLoaded = blob.size * 8;
-          const speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
-          resultDiv.innerHTML = `🔍 Rýchlosť: <strong>${speedMbps} Mbps</strong>`;
-        })
-        .catch(() => {
-          resultDiv.innerHTML = "❌ Nepodarilo sa zmerať rýchlosť.";
-        });
+
+      image.onload = () => {
+        const endTime = new Date().getTime();
+        const duration = (endTime - startTime) / 1000; // sekundy
+        const imageSizeKB = 500; // obrázok má cca 500 KB
+        const bitsLoaded = imageSizeKB * 1024 * 8;
+        const speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
+        result.textContent = `📶 Tvoja rýchlosť je približne: ${speedMbps} Mbps`;
+      };
+
+      image.onerror = () => {
+        result.textContent = "❌ Nepodarilo sa zmerať rýchlosť.";
+      };
+
+      image.src = "https://via.placeholder.com/1500x1500.jpg?rand=" + Math.random();
     }
   </script>
 </body>
