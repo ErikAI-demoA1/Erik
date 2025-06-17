@@ -1,173 +1,183 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ErikAI Poznámky</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      padding: 2rem;
+      background-color: #fefefe;
       color: #222;
       text-align: center;
+      padding: 1rem;
     }
     h1 {
-      color: #d62828;
+      color: #c62828;
     }
-    input, textarea {
-      width: 95%;
+    textarea, input {
+      width: 90%;
       max-width: 600px;
       padding: 10px;
       margin: 0.5rem auto;
-      border-radius: 8px;
       border: 1px solid #ccc;
+      border-radius: 8px;
       display: block;
       font-size: 1rem;
     }
     button {
-      background-color: #d62828;
+      background-color: #c62828;
       color: white;
       padding: 10px 18px;
-      margin: 0.3rem;
+      margin: 5px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
     button:hover {
-      background-color: #b71d1d;
+      background-color: #a61b1b;
     }
-    .poznamky-zoznam {
-      margin-top: 1.2rem;
-      font-size: 0.95rem;
-      color: #333;
+    .note-list span {
+      display: inline-block;
+      margin: 3px 6px;
+      padding: 4px 10px;
+      background-color: #ffe8e8;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .note-list span:hover {
+      background-color: #ffcccc;
+    }
+    .info {
+      background-color: #fff3cd;
+      color: #664d03;
+      padding: 10px;
+      border-left: 6px solid #ffecb5;
+      max-width: 700px;
+      margin: 10px auto;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <h1>📝 ErikAI Poznámky</h1>
-  <p id="cas"></p>
+  <p>🕓 Aktuálny čas: <span id="cas"></span></p>
 
-  <input type="text" id="nazov" placeholder="Zadaj názov poznámky">
-  <textarea id="obsah" placeholder="Napíš si sem svoje poznámky..."></textarea>
+  <input id="nazov" type="text" placeholder="Zadaj názov poznámky" />
+  <textarea id="text" placeholder="Napíš si sem svoje poznámky..."></textarea>
 
-  <button onclick="skopiruj()">📋 Skopírovať</button>
-  <button onclick="stiahni()">💾 Stiahnuť ako TXT</button>
-  <button onclick="uloz()">💾 Uložiť</button>
-  <button onclick="nacitaj()">📂 Načítať</button>
-  <button onclick="zmaz()">🗑️ Vymazať poznámku</button>
-  <button onclick="zmazVsetko()">🗑️ Vymazať všetky poznámky</button>
-
-  <div class="poznamky-zoznam">
-    <h3>📒 Uložené poznámky:</h3>
-    <ul id="zoznamPoznamok"></ul>
+  <div>
+    <button onclick="skopirovat()">📋 Skopírovať</button>
+    <button onclick="stiahnut()">💾 Stiahnuť ako TXT</button>
+    <button onclick="ulozit()">💾 Uložiť</button>
+    <button onclick="nacitat()">📁 Načítať</button>
+    <button onclick="zmazat()">🗑️ Vymazať poznámku</button>
+    <button onclick="zmazatVsetky()">🗑️ Vymazať všetky poznámky</button>
   </div>
 
-  <p style="font-size: 14px; margin-top: 20px; background-color: #fff3cd; padding: 10px; border-left: 5px solid #ffecb5;">
-    <strong>Upozornenie:</strong> Poznámky sa ukladajú každé 2 sekundy lokálne (offline). Funguje len na tomto zariadení a v tomto prehliadači.
+  <h3>📒 Uložené poznámky:</h3>
+  <div class="note-list" id="zoznamPoznamok"></div>
+
+  <div class="info">
+    <strong>Upozornenie:</strong> Poznámky sa ukladajú každé 2 sekundy lokálne (offline).
+    Funguje len na tomto zariadení a v tomto prehliadači.
+  </div>
+
+  <p><a href="zoznam_straniek.html">← Zoznam Strániek</a></p>
+
+  <p style="font-size: 13px; color: gray;">
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+    © 2025 Erik Mohylák – All rights reserved.
   </p>
 
 <script>
-  const nazovInput = document.getElementById('nazov');
-  const obsahTextarea = document.getElementById('obsah');
+  const nazov = document.getElementById("nazov");
+  const text = document.getElementById("text");
+  const zoznam = document.getElementById("zoznamPoznamok");
 
-  // ⏰ Čas
-  function aktualizujCas() {
-    const teraz = new Date();
-    document.getElementById("cas").innerText = "🕓 Aktuálny čas: " + teraz.toLocaleString('sk-SK');
-  }
-  setInterval(aktualizujCas, 1000);
-  aktualizujCas();
-
-  // 💾 Automatické ukladanie každé 2 sekundy
-  setInterval(() => {
-    if (nazovInput.value.trim() && obsahTextarea.value.trim()) {
-      localStorage.setItem("poznamka_" + nazovInput.value.trim(), obsahTextarea.value);
-      zobrazZoznam();
-    }
-  }, 2000);
-
-  // 💾 Uložiť manuálne
-  function uloz() {
-    const nazov = nazovInput.value.trim();
-    const obsah = obsahTextarea.value.trim();
-    if (nazov && obsah) {
-      localStorage.setItem("poznamka_" + nazov, obsah);
-      alert("Poznámka bola uložená.");
-      zobrazZoznam();
-    } else {
-      alert("Zadaj názov a obsah poznámky.");
-    }
+  function skopirovat() {
+    text.select();
+    document.execCommand("copy");
+    alert("Poznámka bola skopírovaná.");
   }
 
-  // 📂 Načítať poznámku
-  function nacitaj() {
-    const nazov = nazovInput.value.trim();
-    const obsah = localStorage.getItem("poznamka_" + nazov);
-    if (obsah) {
-      obsahTextarea.value = obsah;
-    } else {
-      alert("Poznámka sa nenašla. Skontroluj názov.");
-    }
-  }
-
-  // 🗑️ Vymazať jednu poznámku
-  function zmaz() {
-    const nazov = nazovInput.value.trim();
-    if (nazov && localStorage.getItem("poznamka_" + nazov)) {
-      localStorage.removeItem("poznamka_" + nazov);
-      alert("Poznámka bola vymazaná.");
-      obsahTextarea.value = "";
-      zobrazZoznam();
-    } else {
-      alert("Poznámka neexistuje.");
-    }
-  }
-
-  // 🗑️ Vymazať všetky poznámky
-  function zmazVsetko() {
-    if (confirm("Naozaj chceš vymazať všetky poznámky?")) {
-      for (let key in localStorage) {
-        if (key.startsWith("poznamka_")) {
-          localStorage.removeItem(key);
-        }
-      }
-      zobrazZoznam();
-    }
-  }
-
-  // 📋 Skopírovať
-  function skopiruj() {
-    obsahTextarea.select();
-    navigator.clipboard.writeText(obsahTextarea.value)
-      .then(() => alert("Poznámka bola skopírovaná."));
-  }
-
-  // 💾 Stiahnuť ako TXT
-  function stiahni() {
-    const nazov = nazovInput.value.trim() || "poznamka";
-    const obsah = obsahTextarea.value;
-    const blob = new Blob([obsah], { type: "text/plain;charset=utf-8" });
+  function stiahnut() {
+    const blob = new Blob([text.value], { type: "text/plain;charset=utf-8" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = nazov + ".txt";
+    link.download = (nazov.value || "poznamka") + ".txt";
     link.click();
   }
 
-  // 📜 Zobraziť zoznam uložených poznámok
-  function zobrazZoznam() {
-    const ul = document.getElementById("zoznamPoznamok");
-    ul.innerHTML = "";
-    const mena = Object.keys(localStorage).filter(k => k.startsWith("poznamka_")).map(k => k.replace("poznamka_", ""));
-    mena.forEach(nazov => {
-      const li = document.createElement("li");
-      li.textContent = nazov;
-      ul.appendChild(li);
+  function ulozit() {
+    if (!nazov.value.trim()) return alert("Zadaj názov poznámky!");
+    localStorage.setItem("poznamka_" + nazov.value, text.value);
+    nacitajZoznam();
+    alert("Poznámka bola uložená.");
+  }
+
+  function nacitat() {
+    const hodnota = localStorage.getItem("poznamka_" + nazov.value);
+    if (hodnota === null) {
+      alert("Poznámka sa nenašla. Skontroluj názov.");
+    } else {
+      text.value = hodnota;
+    }
+  }
+
+  function zmazat() {
+    if (!nazov.value.trim()) return alert("Zadaj názov poznámky na vymazanie!");
+    localStorage.removeItem("poznamka_" + nazov.value);
+    text.value = "";
+    nacitajZoznam();
+    alert("Poznámka bola vymazaná.");
+  }
+
+  function zmazatVsetky() {
+    const kluce = Object.keys(localStorage);
+    kluce.forEach((key) => {
+      if (key.startsWith("poznamka_")) {
+        localStorage.removeItem(key);
+      }
+    });
+    text.value = "";
+    nazov.value = "";
+    nacitajZoznam();
+    alert("Všetky poznámky boli zmazané.");
+  }
+
+  function nacitajZoznam() {
+    zoznam.innerHTML = "";
+    const kluce = Object.keys(localStorage).filter(k => k.startsWith("poznamka_"));
+    if (kluce.length === 0) {
+      zoznam.innerHTML = "<i>Žiadne poznámky</i>";
+      return;
+    }
+    kluce.forEach(key => {
+      const meno = key.replace("poznamka_", "");
+      const span = document.createElement("span");
+      span.textContent = meno;
+      span.onclick = () => {
+        nazov.value = meno;
+        text.value = localStorage.getItem(key);
+      };
+      zoznam.appendChild(span);
     });
   }
 
-  // Načítaj zoznam po načítaní stránky
-  window.onload = zobrazZoznam;
+  setInterval(() => {
+    if (nazov.value.trim()) {
+      localStorage.setItem("poznamka_" + nazov.value, text.value);
+    }
+  }, 2000);
+
+  function aktualizujCas() {
+    const teraz = new Date();
+    document.getElementById("cas").innerText = teraz.toLocaleString("sk-SK");
+  }
+  setInterval(aktualizujCas, 1000);
+  aktualizujCas();
+  nacitajZoznam();
 </script>
 </body>
 </html>
