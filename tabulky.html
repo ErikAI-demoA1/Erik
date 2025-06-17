@@ -30,6 +30,55 @@
   </style>
 </head>
 <body>
+
+  <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
+
+<script>
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+  }
+</script>
+
+<style>
+  body.dark-mode {
+    background-color: #121212;
+    color: white;
+  }
+</style>
+
+<p id="cas" style="font-size: 18px;"></p>
+
+  <script>
+    function aktualizujCas() {
+      const teraz = new Date();
+      const moznosti = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
+      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+    }
+    setInterval(aktualizujCas, 1000);
+    aktualizujCas();
+  </script>
+
+  <div id="google_translate_element"></div>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'sk',
+      includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  
   <h1>📊 ErikAI Tabuľky</h1>
   <p>Maximálne rozmery: 100 x 100 (označenie A1 až CV100)</p><label for="fileInput">Vybrať Excel alebo CSV:</label> <input type="file" id="fileInput" accept=".csv, .xlsx">
 
