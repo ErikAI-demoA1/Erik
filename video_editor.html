@@ -1,64 +1,70 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8" />
-  <title>ErikAI Video Editor</title>
-  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js"></script>
+  <meta charset="UTF-8">
+  <title>🎬 ErikAI Video Editor</title>
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js"></script>
   <style>
-    body { font-family: sans-serif; background: #111; color: white; text-align: center; padding: 20px; }
-    input, button { padding: 10px; margin: 5px; }
-    video { width: 90%; max-width: 500px; margin-top: 20px; }
+    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
+    input, button { padding: 10px; margin: 10px; }
+    video { width: 90%; margin-top: 20px; }
   </style>
 </head>
 <body>
+
   <h1>🎬 ErikAI Video Editor</h1>
-  <input type="file" id="videoFile" accept="video/*"><br>
-  Od (s): <input type="number" id="startTime" value="0" min="0">
-  Do (s): <input type="number" id="endTime" value="10" min="1"><br>
-  <button onclick="trimVideo()">✂️ Strihnúť video</button><br><br>
-  <div id="status">🕓 Pripravené</div>
+  <p>Vyber si video, nastav časový úsek a strihni ako profík.</p>
+
+  <input type="file" id="videoInput" accept="video/mp4"><br>
+  <input type="number" id="start" placeholder="Od (s)" value="0">
+  <input type="number" id="end" placeholder="Do (s)" value="10"><br>
+  <button onclick="strihniVideo()">✂️ Strihnúť video</button>
+
+  <p id="stav">⏳ Pripravené</p>
+
   <video id="preview" controls></video><br>
-  <a id="downloadLink" style="display:none;" download="strihnute_video.mp4">⬇️ Stiahnuť zostrihané video</a>
+  <a id="downloadLink" style="display:none" download="erik_strih.mp4">⬇️ Stiahnuť výsledok</a>
 
-<script>
-  const { createFFmpeg, fetchFile } = FFmpeg;
-  const ffmpeg = createFFmpeg({ log: true });
+  <script>
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    const ffmpeg = createFFmpeg({ log: true });
 
-  async function trimVideo() {
-    const fileInput = document.getElementById('videoFile');
-    const start = document.getElementById('startTime').value;
-    const end = document.getElementById('endTime').value;
-    const preview = document.getElementById('preview');
-    const downloadLink = document.getElementById('downloadLink');
-    const status = document.getElementById('status');
+    async function strihniVideo() {
+      const fileInput = document.getElementById('videoInput');
+      const start = parseInt(document.getElementById('start').value);
+      const end = parseInt(document.getElementById('end').value);
+      const stav = document.getElementById('stav');
 
-    if (!fileInput.files.length) {
-      alert("Vyber najskôr video.");
-      return;
+      if (!fileInput.files.length) {
+        alert("Prosím, vyber video.");
+        return;
+      }
+
+      stav.innerText = "🔄 Načítavam FFmpeg...";
+      if (!ffmpeg.isLoaded()) await ffmpeg.load();
+
+      const file = fileInput.files[0];
+      const fileName = 'input.mp4';
+      const outName = 'output.mp4';
+
+      ffmpeg.FS('writeFile', fileName, await fetchFile(file));
+
+      stav.innerText = "✂️ Strihám video...";
+      await ffmpeg.run('-i', fileName, '-ss', String(start), '-to', String(end), '-c', 'copy', outName);
+
+      stav.innerText = "✅ Hotovo!";
+      const data = ffmpeg.FS('readFile', outName);
+      const videoBlob = new Blob([data.buffer], { type: 'video/mp4' });
+      const videoURL = URL.createObjectURL(videoBlob);
+
+      const preview = document.getElementById('preview');
+      preview.src = videoURL;
+
+      const downloadLink = document.getElementById('downloadLink');
+      downloadLink.href = videoURL;
+      downloadLink.style.display = 'inline-block';
     }
+  </script>
 
-    const file = fileInput.files[0];
-    const fileName = 'input.mp4';
-    const outputName = 'output.mp4';
-
-    status.innerText = "🔄 Načítavam FFmpeg...";
-    if (!ffmpeg.isLoaded()) await ffmpeg.load();
-
-    status.innerText = "📥 Načítavam video...";
-    ffmpeg.FS('writeFile', fileName, await fetchFile(file));
-
-    status.innerText = "✂️ Strihám video...";
-    await ffmpeg.run('-i', fileName, '-ss', start, '-to', end, '-c', 'copy', outputName);
-
-    const data = ffmpeg.FS('readFile', outputName);
-    const videoBlob = new Blob([data.buffer], { type: 'video/mp4' });
-    const url = URL.createObjectURL(videoBlob);
-
-    preview.src = url;
-    downloadLink.href = url;
-    downloadLink.style.display = 'inline';
-    status.innerText = "✅ Hotovo!";
-  }
-</script>
 </body>
 </html>
