@@ -1,72 +1,97 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
-  <meta charset="UTF-8" />
-  <title>ErikAI Video Editor</title>
-  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Video Editor – jednoduché strihanie</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    video {
+      max-width: 100%;
+      margin: 10px 0;
+    }
+  </style>
 </head>
-<body style="background:#111;color:#fff;text-align:center">
+<body>
+  <h1>🎥 ErikAI Video Editor</h1>
+  <p>Vyber si video, nastav úsek a urob strih ako profík – bez zložitostí.</p><input type="file" id="videoInput" accept="video/*"><br> <label>Od (sekundy):</label> <input type="number" id="startTime" value="0"> <label>Do (sekundy):</label> <input type="number" id="endTime" value="10"> <br> <button onclick="trimVideo()">✂️ Strihnúť video</button>
 
-  <h1>🎬 ErikAI Video Editor</h1>
-  <input type="file" id="videoFile" accept="video/mp4"><br><br>
+  <h3>🎦 Náhľada videa</h3>
+  <video id="preview" controls></video>  <h3>🔽 Strihnutý úsek</h3>
+  <video id="outputVideo" controls></video>
+  <a id="downloadLink" href="#" download="erikai-strih.mp4" style="display:none;color:#0f0">Stiahnuť video</a>  <script>
+    let inputVideoFile;
 
-  Od (s): <input type="number" id="start" value="0">
-  Do (s): <input type="number" id="end" value="10">
-  <br><br>
+    document.getElementById('videoInput').addEventListener('change', function(e) {
+      inputVideoFile = e.target.files[0];
+      const url = URL.createObjectURL(inputVideoFile);
+      const video = document.getElementById('preview');
+      video.src = url;
+    });
 
-  <button onclick="trimVideo()">✂️ Strihnúť video</button>
-  <p id="status">Stav: Čakám na výber videa...</p>
-
-  <video id="preview" controls style="width:90%;margin-top:15px"></video>
-  <br>
-  <a id="downloadLink" style="color:lime;font-weight:bold"></a>
-
-  <script>
-    const { createFFmpeg, fetchFile } = FFmpeg;
-    const ffmpeg = createFFmpeg({ log: true });
-
-    async function trimVideo() {
-      const fileInput = document.getElementById('videoFile');
-      const start = document.getElementById('start').value;
-      const end = document.getElementById('end').value;
-      const status = document.getElementById('status');
-
-      if (!fileInput.files[0]) {
-        status.innerText = "❌ Prosím, vyber video.";
+    function trimVideo() {
+      if (!inputVideoFile) {
+        alert('Prosím vyber video.');
         return;
       }
 
-      status.innerText = "⚙️ Načítavam FFmpeg...";
-      if (!ffmpeg.isLoaded()) await ffmpeg.load();
+      const start = parseFloat(document.getElementById('startTime').value);
+      const end = parseFloat(document.getElementById('endTime').value);
 
-      const file = fileInput.files[0];
-      const fileName = "input.mp4";
-      const outputName = "output.mp4";
+      const video = document.createElement('video');
+      video.src = URL.createObjectURL(inputVideoFile);
+      video.muted = true;
+      video.crossOrigin = "anonymous";
 
-      ffmpeg.FS('writeFile', fileName, await fetchFile(file));
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
 
-      status.innerText = "✂️ Strihám video...";
-      await ffmpeg.run(
-        '-i', fileName,
-        '-ss', start,
-        '-to', end,
-        '-c', 'copy',
-        outputName
-      );
+      let chunks = [];
+      let recorder;
 
-      const data = ffmpeg.FS('readFile', outputName);
-      const videoBlob = new Blob([data.buffer], { type: 'video/mp4' });
-      const videoURL = URL.createObjectURL(videoBlob);
+      video.addEventListener('loadedmetadata', () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
 
-      document.getElementById('preview').src = videoURL;
-      const link = document.getElementById('downloadLink');
-      link.href = videoURL;
-      link.download = "trimmed_erikai.mp4";
-      link.innerText = "⬇️ Stiahni zostrihané video";
+        const stream = canvas.captureStream();
+        recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = e => chunks.push(e.data);
 
-      status.innerText = "✅ Hotovo!";
+        recorder.onstop = () => {
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          const outUrl = URL.createObjectURL(blob);
+          const outVid = document.getElementById('outputVideo');
+          outVid.src = outUrl;
+          document.getElementById('downloadLink').href = outUrl;
+          document.getElementById('downloadLink').style.display = 'block';
+        };
+
+        let now = 0;
+        const fps = 30;
+        recorder.start();
+        video.currentTime = start;
+
+        const draw = () => {
+          if (video.currentTime >= end || video.ended) {
+            recorder.stop();
+            return;
+          }
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          setTimeout(draw, 1000 / fps);
+        };
+
+        video.play();
+        draw();
+      });
     }
-  </script>
-
-</body>
+  </script></body>
 </html>
