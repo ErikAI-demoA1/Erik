@@ -5,20 +5,31 @@
   <title>ErikAI Stránkovač</title>
   <style>
     body { font-family: sans-serif; padding: 20px; }
-    textarea { width: 100%; height: 200px; }
+    textarea { width: 100%; height: 220px; }
     iframe { width: 100%; height: 300px; border: 1px solid #ccc; margin-top: 20px; }
     button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+    .napoveda { background: #f2f2f2; padding: 15px; margin-bottom: 10px; border-left: 5px solid #00cc66; }
   </style>
 </head>
 <body>
 
-  <h2>🧠 ErikAI Mini Stránkovač</h2>
-  <p>Zadaj svoj vlastný kód pomocou špeciálnych značiek:</p>
+  <h2>🌍 ErikAI Mini Stránkovač</h2>
 
-  <textarea id="vstup" placeholder="Príklad:
-<tittle>Moja stránka</tittle>
-<name>Ahoj!</name>
-<text>Vitaj na mojej stránke cez ErikAI OS</text>"></textarea>
+  <div class="napoveda">
+    <strong>🛠 Ako vytvoriť svoju stránku:</strong><br>
+    ▸ Používaj značky:
+    <pre>
+&lt;title&gt;Názov tvojej stránky&lt;/title&gt;
+&lt;name&gt;Hlavný nadpis&lt;/name&gt;
+&lt;text&gt;Popis, text alebo čokoľvek&lt;/text&gt;
+    </pre>
+    ▸ Zobrazí sa pod URL: <code>www.erikai/čo-chceš.erikai</code><br>
+    (simulované lokálne)
+  </div>
+
+  <textarea id="vstup" placeholder="<title>Moja stránka</title>
+<name>ErikAI</name>
+<text>Vitaj vo vlastnom svete</text>"></textarea>
 
   <br>
   <button onclick="vygenerujStranku()">Zobraziť stránku</button>
@@ -29,8 +40,7 @@
     function vygenerujStranku() {
       const vstup = document.getElementById('vstup').value;
 
-      // Nahradenie špeciálnych značiek za HTML
-      const title = (vstup.match(/<tittle>(.*?)<\/tittle>/) || [,''])[1];
+      const title = (vstup.match(/<title>(.*?)<\/title>/) || [,''])[1];
       const name = (vstup.match(/<name>(.*?)<\/name>/) || [,''])[1];
       const text = (vstup.match(/<text>(.*?)<\/text>/) || [,''])[1];
 
@@ -41,15 +51,14 @@
           <meta charset="UTF-8">
           <title>${title}</title>
         </head>
-        <body>
+        <body style="font-family: sans-serif; padding: 20px;">
           <h1>${name}</h1>
           <p>${text}</p>
         </body>
         </html>
       `;
 
-      const iframe = document.getElementById('vystup');
-      iframe.srcdoc = html;
+      document.getElementById('vystup').srcdoc = html;
     }
   </script>
 
