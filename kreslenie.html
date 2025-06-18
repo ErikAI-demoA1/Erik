@@ -1,77 +1,109 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎨 ErikAI Kreslenie</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ErikAI Kreslenie</title>
   <style>
     body {
       background-color: #111;
-      color: #fff;
+      color: white;
       font-family: sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 10px;
     }
     canvas {
-      background-color: #fff;
-      border: 2px solid #000;
-      display: block;
-      margin: 20px auto;
+      border: 2px solid white;
+      background-color: white;
       touch-action: none;
     }
-    input, button {
-      margin: 10px;
-      font-size: 16px;
+    input[type=color], input[type=range], button {
+      margin: 5px;
     }
   </style>
 </head>
 <body>
   <h1>🎨 ErikAI Kreslenie</h1>
-  <p>Kresli si priamo v prehliadači. Upravuj farbu, hrúbku a ulož svoj výtvor ako obrázok.</p><label>Farba:</label> <input type="color" id="colorPicker" value="#ff0000">
+  <p>Kresli si priamo v prehliadači. Upravuj farbu, hrúbku a ulož svoj výtvor ako obrázok.</p>
 
-<label>Hrúbka:</label> <input type="range" id="lineWidth" min="1" max="20" value="5">
-
+  <label>Farba:
+    <input type="color" id="colorPicker" value="#ff0000" />
+  </label>
+  <label>Hrúbka:
+    <input type="range" id="brushSize" min="1" max="30" value="5" />
+  </label>
   <br>
-  <button id="clearBtn">Vyčistiť</button>
-  <button id="saveBtn">Uložiť ako PNG</button><canvas id="drawingCanvas" width="300" height="400"></canvas>
+  <button onclick="clearCanvas()">Vyčistiť</button>
+  <button onclick="saveCanvas()">Uložiť ako PNG</button>
+
+  <br><br>
+  <canvas id="drawingCanvas" width="300" height="400"></canvas>
 
   <script>
-    const canvas = document.getElementById('drawingCanvas');
-    const ctx = canvas.getContext('2d');
-    let isDrawing = false;
+    const canvas = document.getElementById("drawingCanvas");
+    const ctx = canvas.getContext("2d");
+    let drawing = false;
 
-    const colorPicker = document.getElementById('colorPicker');
-    const lineWidth = document.getElementById('lineWidth');
-    ctx.strokeStyle = colorPicker.value;
-    ctx.lineWidth = lineWidth.value;
-
-    colorPicker.addEventListener('input', e => ctx.strokeStyle = e.target.value);
-    lineWidth.addEventListener('input', e => ctx.lineWidth = e.target.value);
-
-    canvas.addEventListener('mousedown', e => {
-      isDrawing = true;
-      ctx.beginPath();
-      ctx.moveTo(e.offsetX, e.offsetY);
-    });
-
-    canvas.addEventListener('mousemove', e => {
-      if (isDrawing) {
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.stroke();
+    function getPosition(e) {
+      if (e.touches) {
+        return {
+          x: e.touches[0].clientX - canvas.getBoundingClientRect().left,
+          y: e.touches[0].clientY - canvas.getBoundingClientRect().top
+        };
+      } else {
+        return {
+          x: e.clientX - canvas.getBoundingClientRect().left,
+          y: e.clientY - canvas.getBoundingClientRect().top
+        };
       }
-    });
+    }
 
-    canvas.addEventListener('mouseup', () => isDrawing = false);
-    canvas.addEventListener('mouseleave', () => isDrawing = false);
+    function startDraw(e) {
+      drawing = true;
+      draw(e);
+    }
 
-    document.getElementById('clearBtn').addEventListener('click', () => {
+    function endDraw() {
+      drawing = false;
+      ctx.beginPath();
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      const pos = getPosition(e);
+      ctx.lineWidth = document.getElementById("brushSize").value;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = document.getElementById("colorPicker").value;
+
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
+
+    function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
+    }
 
-    document.getElementById('saveBtn').addEventListener('click', () => {
-      const link = document.createElement('a');
-      link.download = 'erikai_kresba.png';
+    function saveCanvas() {
+      const link = document.createElement("a");
+      link.download = "erikai_kresba.png";
       link.href = canvas.toDataURL();
       link.click();
-    });
-  </script></body>
+    }
+
+    // Mouse
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mouseup", endDraw);
+    canvas.addEventListener("mouseout", endDraw);
+    canvas.addEventListener("mousemove", draw);
+
+    // Touch (mobil)
+    canvas.addEventListener("touchstart", startDraw);
+    canvas.addEventListener("touchend", endDraw);
+    canvas.addEventListener("touchcancel", endDraw);
+    canvas.addEventListener("touchmove", draw);
+  </script>
+</body>
 </html>
