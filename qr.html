@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI QR Generátor</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0e0e0e;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #17f717;
+    }
+    input {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #17f717;
+      border: none;
+      color: black;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    #qrcode {
+      margin-top: 10px;
+    }
+    #download {
+      margin-top: 15px;
+      display: none;
+      color: #17f717;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 ErikAI QR Generátor</h1>
+
+  <input type="text" id="text" placeholder="Zadaj text alebo odkaz" />
+  <button onclick="generateQR()">🔳 Vygeneruj QR</button>
+  <div id="qrcode"></div>
+  <div id="download" onclick="downloadQR()">⬇️ Stiahnuť QR ako obrázok</div>
+
+  <script>
+    let qrCode;
+
+    function generateQR() {
+      const qrText = document.getElementById("text").value;
+      if (!qrText) return;
+
+      document.getElementById("qrcode").innerHTML = "";
+      qrCode = new QRCode(document.getElementById("qrcode"), {
+        text: qrText,
+        width: 256,
+        height: 256,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      setTimeout(() => {
+        document.getElementById("download").style.display = "block";
+      }, 500);
+    }
+
+    function downloadQR() {
+      const img = document.querySelector("#qrcode img");
+      if (img) {
+        const link = document.createElement('a');
+        link.href = img.src;
+        link.download = "ErikAI-QR.png";
+        link.click();
+      }
+    }
+  </script>
+
+</body>
+</html>
