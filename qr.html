@@ -2,90 +2,74 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI QR Generátor</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     body {
-      background-color: #111;
-      color: #00ff66;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: sans-serif;
       text-align: center;
-      padding: 20px;
+      background: #f7f7f7;
     }
-    input {
-      width: 80%;
+    #qrcode {
+      margin-top: 20px;
       padding: 10px;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #00cc44;
-      border: none;
-      color: white;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
-    button:hover {
-      background-color: #009933;
+      background: #ffffff;
+      display: inline-block;
     }
     canvas {
-      margin-top: 10px;
-    }
-    a {
-      display: block;
-      margin-top: 15px;
-      color: #33ccff;
-      font-size: 16px;
-      text-decoration: none;
+      image-rendering: pixelated;
     }
   </style>
 </head>
 <body>
 
-  <h1>🧠 ErikAI QR Generátor</h1>
-
-  <input type="text" id="qrInput" placeholder="Zadaj odkaz alebo text">
-  <br>
-  <button onclick="generateQR()">🟩 Vygeneruj QR</button>
+  <h2>ErikAI QR Generátor</h2>
+  <input type="text" id="text" placeholder="Sem vlož text alebo URL" size="40">
+  <br><br>
+  <button onclick="generateQR()">Generovať QR kód</button>
+  <button onclick="downloadQR()">Stiahnuť ako PNG</button>
 
   <div id="qrcode"></div>
 
-  <a id="downloadLink" href="#" onclick="downloadQR()">⬇️ Stiahnuť QR ako obrázok</a>
-
   <script>
-    let qrcode = null;
+    let canvas;
 
     function generateQR() {
-      const qrText = document.getElementById("qrInput").value;
-      const qrContainer = document.getElementById("qrcode");
-      qrContainer.innerHTML = "";
-
-      if (qrText.trim() === "") {
-        alert("Zadaj text alebo odkaz pre QR kód.");
+      const text = document.getElementById("text").value;
+      if (!text) {
+        alert("Zadaj text alebo odkaz.");
         return;
       }
 
-      qrcode = new QRCode(qrContainer, {
-        text: qrText,
-        width: 256,
-        height: 256,
-        correctLevel: QRCode.CorrectLevel.H
+      // Vyčisti starý QR
+      document.getElementById("qrcode").innerHTML = "";
+
+      // Vytvor nový QR
+      QRCode.toCanvas(text, {
+        errorCorrectionLevel: 'H',
+        width: 300,
+        margin: 4,
+        color: {
+          dark: "#000000",
+          light: "#ffffff"
+        }
+      }, function (err, c) {
+        if (err) console.error(err);
+        canvas = c;
+        document.getElementById("qrcode").appendChild(canvas);
       });
     }
 
     function downloadQR() {
-      const canvas = document.querySelector("#qrcode canvas");
-      if (canvas) {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "ErikAI-QR.png";
-        link.click();
-      } else {
-        alert("Najskôr vygeneruj QR kód.");
+      if (!canvas) {
+        alert("Najprv vygeneruj QR kód.");
+        return;
       }
+
+      const link = document.createElement('a');
+      link.download = 'erikai-qr.png';
+      link.href = canvas.toDataURL("image/png");
+      link.click();
     }
   </script>
 
