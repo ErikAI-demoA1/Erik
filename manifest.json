@@ -1,0 +1,21 @@
+{
+  "name": "ErikAI Universe",
+  "short_name": "ErikAI",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00cc66",
+  "description": "Tvoja offline AI platforma s nástrojmi, videami, kreslením a ďalšími funkciami.",
+  "icons": [
+    {
+      "src": "icon192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
