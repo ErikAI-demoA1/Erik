@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI Stránkovač</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    textarea { width: 100%; height: 200px; }
+    iframe { width: 100%; height: 300px; border: 1px solid #ccc; margin-top: 20px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <h2>🧠 ErikAI Mini Stránkovač</h2>
+  <p>Zadaj svoj vlastný kód pomocou špeciálnych značiek:</p>
+
+  <textarea id="vstup" placeholder="Príklad:
+<tittle>Moja stránka</tittle>
+<name>Ahoj!</name>
+<text>Vitaj na mojej stránke cez ErikAI OS</text>"></textarea>
+
+  <br>
+  <button onclick="vygenerujStranku()">Zobraziť stránku</button>
+
+  <iframe id="vystup"></iframe>
+
+  <script>
+    function vygenerujStranku() {
+      const vstup = document.getElementById('vstup').value;
+
+      // Nahradenie špeciálnych značiek za HTML
+      const title = (vstup.match(/<tittle>(.*?)<\/tittle>/) || [,''])[1];
+      const name = (vstup.match(/<name>(.*?)<\/name>/) || [,''])[1];
+      const text = (vstup.match(/<text>(.*?)<\/text>/) || [,''])[1];
+
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>${title}</title>
+        </head>
+        <body>
+          <h1>${name}</h1>
+          <p>${text}</p>
+        </body>
+        </html>
+      `;
+
+      const iframe = document.getElementById('vystup');
+      iframe.srcdoc = html;
+    }
+  </script>
+
+</body>
+</html>
