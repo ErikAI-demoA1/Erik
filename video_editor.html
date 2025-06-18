@@ -1,57 +1,72 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <title>🎬 ErikAI Video Editor</title>
-  <style>
-    body { background-color: #111; color: #fff; font-family: sans-serif; text-align: center; }
-    input, button { padding: 10px; margin: 5px; }
-    video { width: 90%; max-width: 600px; margin: 15px auto; background: #333; }
-  </style>
+  <meta charset="UTF-8" />
+  <title>ErikAI Video Editor</title>
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
 </head>
-<body>
-  <h2>🎬 ErikAI Video Editor</h2>
-  <p>Vyber si video, zobrazí sa náhľad. Potom nastav úsek a vystrihni.</p>
+<body style="background:#111;color:#fff;text-align:center">
 
-  <input type="file" id="videoInput" accept="video/*"><br>
+  <h1>🎬 ErikAI Video Editor</h1>
+  <input type="file" id="videoFile" accept="video/mp4"><br><br>
 
-  <video id="originalVideo" controls></video><br>
-
-  <input type="number" id="start" placeholder="Od (s)" value="0">
-  <input type="number" id="end" placeholder="Do (s)" value="10"><br>
+  Od (s): <input type="number" id="start" value="0">
+  Do (s): <input type="number" id="end" value="10">
+  <br><br>
 
   <button onclick="trimVideo()">✂️ Strihnúť video</button>
+  <p id="status">Stav: Čakám na výber videa...</p>
 
-  <h3>🎞️ Výstup:</h3>
-  <video id="outputVideo" controls></video>
+  <video id="preview" controls style="width:90%;margin-top:15px"></video>
+  <br>
+  <a id="downloadLink" style="color:lime;font-weight:bold"></a>
 
   <script>
-    const videoInput = document.getElementById("videoInput");
-    const originalVideo = document.getElementById("originalVideo");
-    const outputVideo = document.getElementById("outputVideo");
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    const ffmpeg = createFFmpeg({ log: true });
 
-    let videoFile;
+    async function trimVideo() {
+      const fileInput = document.getElementById('videoFile');
+      const start = document.getElementById('start').value;
+      const end = document.getElementById('end').value;
+      const status = document.getElementById('status');
 
-    videoInput.addEventListener("change", function () {
-      videoFile = this.files[0];
-      if (videoFile) {
-        const videoURL = URL.createObjectURL(videoFile);
-        originalVideo.src = videoURL;
-      }
-    });
-
-    function trimVideo() {
-      const start = parseFloat(document.getElementById("start").value);
-      const end = parseFloat(document.getElementById("end").value);
-
-      if (!videoFile || isNaN(start) || isNaN(end) || end <= start) {
-        alert("Zadaj platné hodnoty a načítaj video.");
+      if (!fileInput.files[0]) {
+        status.innerText = "❌ Prosím, vyber video.";
         return;
       }
 
-      alert("⚙️ Strihanie videa bude v ďalšej verzii pomocou FFmpeg.js.");
-      // Tu môžeš doplniť integráciu ffmpeg.wasm na reálny strih videa.
+      status.innerText = "⚙️ Načítavam FFmpeg...";
+      if (!ffmpeg.isLoaded()) await ffmpeg.load();
+
+      const file = fileInput.files[0];
+      const fileName = "input.mp4";
+      const outputName = "output.mp4";
+
+      ffmpeg.FS('writeFile', fileName, await fetchFile(file));
+
+      status.innerText = "✂️ Strihám video...";
+      await ffmpeg.run(
+        '-i', fileName,
+        '-ss', start,
+        '-to', end,
+        '-c', 'copy',
+        outputName
+      );
+
+      const data = ffmpeg.FS('readFile', outputName);
+      const videoBlob = new Blob([data.buffer], { type: 'video/mp4' });
+      const videoURL = URL.createObjectURL(videoBlob);
+
+      document.getElementById('preview').src = videoURL;
+      const link = document.getElementById('downloadLink');
+      link.href = videoURL;
+      link.download = "trimmed_erikai.mp4";
+      link.innerText = "⬇️ Stiahni zostrihané video";
+
+      status.innerText = "✅ Hotovo!";
     }
   </script>
+
 </body>
 </html>
