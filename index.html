@@ -719,6 +719,7 @@ case "cdkeys":
     💬 Kým iné vyhľadávače ťa obmedzujú, <strong>ErikAI ti dáva slobodu vybrať si vlastnú cestu.</strong>
   </p>
   </section>
+  <button id="installBtn" style="display:none;">Pridať na plochu</button>
   <a href="zoznam_straniek.html" class="download-button" >Zoznam stránok</a>
   <a href="erikai-chat.html" class="download-button">💬 Spustiť Webovú verziu ErikAI Chat</a>
   <section style="margin-top: 40px;">
@@ -1103,5 +1104,29 @@ sortSelectOptions(engineSelect);
       .then(() => console.log('Service Worker registered ✅'));
   }
 </script>
+
+    <script>
+  let deferredPrompt; 
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Zabránime predvolenej udalosti
+    e.preventDefault(); 
+    // Uložíme event na neskoršie použitie
+    deferredPrompt = e; 
+    // Zobrazíme tlačidlo
+    document.getElementById('installBtn').style.display = 'block';
+
+    // Po kliknutí na tlačidlo spustíme inštaláciu
+    document.getElementById('installBtn').addEventListener('click', () => {
+      // Skúšame zobraziť výzvu
+      deferredPrompt.prompt();
+      // Čakáme na to, aby používateľ potvrdil
+      deferredPrompt.userChoice.then((choiceResult) => {
+        console.log(choiceResult.outcome); // "accepted" alebo "dismissed"
+        deferredPrompt = null; // resetujeme
+      });
+    });
+  });
+    </script>
 </body>
 </html>
