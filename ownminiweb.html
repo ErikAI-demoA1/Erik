@@ -1,57 +1,82 @@
 <!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Mini Stránkovač</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }
-    textarea { width: 100%; height: 140px; }
-    .output { border: 1px solid #ccc; padding: 10px; margin-top: 20px; background: white; }
-    h1 { font-size: 1.3em; }
-    img { max-width: 100%; margin: 10px 0; }
-    iframe { width: 100%; height: 300px; margin-top: 10px; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    textarea { width: 100%; height: 160px; font-family: monospace; margin-top: 10px; }
+    .vystup { background: #fff; border: 1px solid #ccc; padding: 20px; margin-top: 20px; }
+    button { margin: 5px 10px 5px 0; padding: 10px; }
   </style>
 </head>
-<body><h1>🌐 ErikAI Mini Stránkovač</h1>
-<p>Napíš si mini stránku pomocou jednoduchých značiek:</p>
-<pre>
+<body>
+  <h2>🌐 ErikAI Mini Stránkovač</h2>
+  <p>Napíš si mini stránku pomocou jednoduchých značiek:</p>
+  <pre>
 &lt;title&gt;Názov tvojej stránky&lt;/title&gt;
 &lt;name&gt;Hlavný nadpis&lt;/name&gt;
 &lt;text&gt;Popis, text alebo čokolvek&lt;/text&gt;
 &lt;odkaz&gt;https://adresa.sk&lt;/odkaz&gt;
 &lt;img&gt;https://obrazok.jpg&lt;/img&gt;
 &lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;
-</pre><textarea id="input">&lt;title&gt;Moja stranka&lt;/title&gt;
-&lt;name&gt;Ahoj svet&lt;/name&gt;
-&lt;text&gt;Toto je moja prvá mini stránka&lt;/text&gt;
-&lt;odkaz&gt;https://example.com&lt;/odkaz&gt;
-&lt;img&gt;https://via.placeholder.com/300&lt;/img&gt;
-&lt;video&gt;https://www.youtube.com/embed/dQw4w9WgXcQ&lt;/video&gt;</textarea><br><button onclick="render()">Zobraziť stránku</button>
+  </pre>
+  <textarea id="vstup" placeholder="Napíš sem svoj kód..."></textarea><br>
+  <button onclick="zobrazStranku()">Zobraziť stránku</button>
+  <button onclick="stiahnutStranku()">Stiahnuť moju stránku</button>
+  <div id="vystup" class="vystup"></div><script>
+function zobrazStranku() {
+  const vstup = document.getElementById('vstup').value;
+  const vystup = document.getElementById('vystup');
 
-<div class="output" id="vystup"></div><script>
-function render() {
-  let vstup = document.getElementById("input").value;
-  let html = "";
+  const nazov = extrahuj(vstup, 'title');
+  const nadpis = extrahuj(vstup, 'name');
+  const text = extrahuj(vstup, 'text');
+  const odkaz = extrahuj(vstup, 'odkaz');
+  const obrazok = extrahuj(vstup, 'img');
+  const video = extrahuj(vstup, 'video');
 
-  const get = (tag) => {
-    let match = vstup.match(new RegExp(`<${tag}>([\s\S]*?)</${tag}>`, 'i'));
-    return match ? match[1].trim() : "";
-  };
-
-  let title = get("title");
-  let name = get("name");
-  let text = get("text");
-  let odkaz = get("odkaz");
-  let img = get("img");
-  let video = get("video");
-
-  if (title) document.title = title;
-  if (name) html += `<h2>${name}</h2>`;
+  let html = '';
+  if (nadpis) html += `<h2>${nadpis}</h2>`;
   if (text) html += `<p>${text}</p>`;
-  if (odkaz) html += `<p><a href='${odkaz}' target='_blank'>🔗 Navštíviť odkaz</a></p>`;
-  if (img) html += `<img src='${img}' alt='Obrázok'>`;
-  if (video) html += `<iframe src='${video}' frameborder='0' allowfullscreen></iframe>`;
+  if (odkaz) html += `<p><a href="${odkaz}" target="_blank">${odkaz}</a></p>`;
+  if (obrazok) html += `<img src="${obrazok}" alt="obrazok" style="max-width:100%;">`;
+  if (video) html += `<iframe width="100%" height="315" src="${video}" frameborder="0" allowfullscreen></iframe>`;
 
-  document.getElementById("vystup").innerHTML = html;
+  vystup.innerHTML = html;
+}
+
+function stiahnutStranku() {
+  const vstup = document.getElementById('vstup').value;
+  const nazov = extrahuj(vstup, 'title') || 'moja-stranka';
+  const nadpis = extrahuj(vstup, 'name');
+  const text = extrahuj(vstup, 'text');
+  const odkaz = extrahuj(vstup, 'odkaz');
+  const obrazok = extrahuj(vstup, 'img');
+  const video = extrahuj(vstup, 'video');
+
+  let obsah = `<!DOCTYPE html><html lang='sk'><head><meta charset='UTF-8'><title>${nazov}</title></head><body>`;
+  if (nadpis) obsah += `<h2>${nadpis}</h2>`;
+  if (text) obsah += `<p>${text}</p>`;
+  if (odkaz) obsah += `<p><a href='${odkaz}' target='_blank'>${odkaz}</a></p>`;
+  if (obrazok) obsah += `<img src='${obrazok}' alt='obrazok' style='max-width:100%;'>`;
+  if (video) obsah += `<iframe width='100%' height='315' src='${video}' frameborder='0' allowfullscreen></iframe>`;
+  obsah += '</body></html>';
+
+  const blob = new Blob([obsah], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${nazov}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function extrahuj(text, znacka) {
+  const regex = new RegExp(`<${znacka}>([\s\S]*?)<\/${znacka}>`, 'i');
+  const match = text.match(regex);
+  return match ? match[1].trim() : '';
 }
 </script></body>
 </html>
