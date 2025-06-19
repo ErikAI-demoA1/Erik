@@ -52,8 +52,29 @@ Ak sa nič nezobrazí, klikni na odkaz ručne.
 
   <div id="output"></div>  <script>
     function render() {
-      let code = document.getElementById('input').value;
-      let html = '';
+  let code = document.getElementById('input').value;
+  let html = '';
+
+  html += code
+    .replace(/<title>(.*?)<\/title>/g, '')
+    .replace(/<name_red>(.*?)<\/name_red>/g, '<h2 style="color:red;">$1</h2>')
+    .replace(/<name_blue>(.*?)<\/name_blue>/g, '<h2 style="color:blue;">$1</h2>')
+    .replace(/<name_green>(.*?)<\/name_green>/g, '<h2 style="color:green;">$1</h2>')
+    .replace(/<text_red>(.*?)<\/text_red>/g, '<p style="color:red;">$1</p>')
+    .replace(/<text_blue>(.*?)<\/text_blue>/g, '<p style="color:blue;">$1</p>')
+    .replace(/<text_green>(.*?)<\/text_green>/g, '<p style="color:green;">$1</p>')
+    .replace(/<text_orange>(.*?)<\/text_orange>/g, '<p style="color:orange;">$1</p>')
+    .replace(/<text_gray>(.*?)<\/text_gray>/g, '<p style="color:gray;">$1</p>')
+    .replace(/<text_purple>(.*?)<\/text_purple>/g, '<p style="color:purple;">$1</p>')
+    .replace(/<erikai_black>/g, '<div style="background:black; color:white; padding:15px; border-radius:10px;">')
+    .replace(/<erikai_blue>/g, '<div style="background:#3498db; color:white; padding:15px; border-radius:10px;">')
+    .replace(/<erikai_red>/g, '<div style="background:#e74c3c; color:white; padding:15px; border-radius:10px;">')
+    .replace(/<\/erikai_.*?>/g, '</div>')
+    .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
+    .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="300" src="$1" frameborder="0" allowfullscreen></iframe>');
+
+  document.getElementById("output").innerHTML = html;
+    }
 
       const bgMatch = code.match(/<erikai_(.*?)>/);
       if (bgMatch) {
