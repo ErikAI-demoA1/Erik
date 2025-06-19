@@ -65,25 +65,49 @@
 </head>
 <body>
 
-  <h2>🖼️ ErikAI Kombinátor Obrázkov</h2>
-<p>Zadaj <b>2 obrázky</b> – môžeš buď zadať odkaz, alebo nahrať súbor:</p>
+  <h2>🖼️ ErikAI Kombinátor Obrázkov (Spojenie)</h2>
+<p>Zadaj 2 obrázky – buď URL alebo nahrané súbory. Spojíme ich do jedného:</p>
 
-<form id="kombinujForm">
-  <label><b>Obrázok 1:</b></label><br>
-  <input type="url" id="url1" placeholder="alebo zadaj URL odkazu"><br>
+<form id="form">
+  <label>Obrázok 1:</label><br>
+  <input type="url" id="url1" placeholder="alebo zadaj URL"><br>
   <input type="file" id="file1" accept="image/*"><br><br>
 
-  <label><b>Obrázok 2:</b></label><br>
-  <input type="url" id="url2" placeholder="alebo zadaj URL odkazu"><br>
+  <label>Obrázok 2:</label><br>
+  <input type="url" id="url2" placeholder="alebo zadaj URL"><br>
   <input type="file" id="file2" accept="image/*"><br><br>
 
-  <button type="submit">🧠 Kombinuj</button>
+  <button type="submit">🧠 Spoj obrázky</button>
 </form>
 
+<canvas id="canvas" style="display:none;"></canvas>
 <div id="vysledok" style="margin-top:20px;"></div>
 
 <script>
-document.getElementById("kombinujForm").addEventListener("submit", function(e) {
+function loadImage(src, file) {
+  return new Promise((resolve, reject) => {
+    if (src) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    } else if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      resolve(null);
+    }
+  });
+}
+
+document.getElementById("form").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const url1 = document.getElementById("url1").value.trim();
@@ -92,38 +116,39 @@ document.getElementById("kombinujForm").addEventListener("submit", function(e) {
   const file2 = document.getElementById("file2").files[0];
 
   const vysledok = document.getElementById("vysledok");
-  vysledok.innerHTML = "";
+  vysledok.innerHTML = "⏳ Generujem výstup...";
 
-  // Funkcia pre získanie obrázku (buď z odkazu alebo z lokálneho súboru)
-  function getImageSrc(url, file, callback) {
-    if (url) {
-      callback(url);
-    } else if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        callback(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      callback(null);
+  try {
+    const img1 = await loadImage(url1, file1);
+    const img2 = await loadImage(url2, file2);
+
+    if (!img1 || !img2) {
+      vysledok.innerHTML = "⚠️ Musíš zadať <b>oba</b> obrázky.";
+      return;
     }
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const height = Math.max(img1.height, img2.height);
+    const width = img1.width + img2.width;
+
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.display = "block";
+
+    ctx.drawImage(img1, 0, 0);
+    ctx.drawImage(img2, img1.width, 0);
+
+    const resultUrl = canvas.toDataURL("image/png");
+
+    vysledok.innerHTML = `
+      <p><b>🧠 Výsledný obrázok:</b></p>
+      <img src="${resultUrl}" style="max-width:100%; border:1px solid #ccc;">
+      <br><a href="${resultUrl}" download="spojene.png">⬇️ Stiahnuť výstup</a>
+    `;
+  } catch (err) {
+    vysledok.innerHTML = "❌ Chyba pri spájaní obrázkov.";
   }
-
-  getImageSrc(url1, file1, function(src1) {
-    getImageSrc(url2, file2, function(src2) {
-      if (!src1 || !src2) {
-        vysledok.innerHTML = "⚠️ Prosím, zadaj alebo nahraj <b>oba</b> obrázky.";
-        return;
-      }
-
-      vysledok.innerHTML = `
-        <p><b>🧠 Výsledná kombinácia:</b></p>
-        <div style="display:flex; gap:10px;">
-          <div><img src="${src1}" alt="Obrázok 1" style="max-width:150px; border:1px solid #ccc;"></div>
-          <div><img src="${src2}" alt="Obrázok 2" style="max-width:150px; border:1px solid #ccc;"></div>
-        </div>
-      `;
-    });
-  });
 });
 </script>
