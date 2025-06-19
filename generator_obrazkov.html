@@ -2,51 +2,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ErikAI SVG Generátor</title>
+  <title>ErikAI Generátor SVG obrázkov – 5 zoznamov</title>
   <style>
-    body { font-family: sans-serif; padding: 1rem; background: #f9f9f9; }
-    input, button { font-size: 16px; padding: 8px; }
-    #output { margin-top: 20px; padding: 20px; background: #fff; border: 1px solid #ccc; border-radius: 10px; text-align: center; }
+    body { font-family: sans-serif; padding: 20px; background: #f2f2f2; }
+    h1 { font-size: 1.6em; }
+    select, input, button { font-size: 16px; padding: 10px; margin-top: 10px; }
+    .svg-box { margin-top: 20px; padding: 10px; background: white; border: 1px solid #ccc; border-radius: 8px; }
   </style>
 </head>
-<body><h2>✏️ ErikAI Generátor SVG obrázkov</h2>
-<p>Zadaj tému (napr. <strong>lopta</strong>, <strong>brána</strong>, <strong>hráč</strong>) a ErikAI ti nakreslí jednoduchý obrázok.</p><input type="text" id="prompt" placeholder="Zadaj tému (napr. hráč, lopta)">
-<button onclick="generujSVG()">🖼️ Zobraziť SVG</button><div id="output"></div><script>
-  function generujSVG() {
-    const vstup = document.getElementById("prompt").value.toLowerCase().trim();
-    const output = document.getElementById("output");
+<body>
+  <h1>✏️ ErikAI Generátor SVG obrázkov (5 zoznamov)</h1>
+  <label for="listSelect">Vyber zoznam (1 – 5):</label><br>
+  <select id="listSelect">
+    <option value="1">Zoznam 1</option>
+    <option value="2">Zoznam 2</option>
+    <option value="3">Zoznam 3</option>
+    <option value="4">Zoznam 4</option>
+    <option value="5">Zoznam 5</option>
+  </select><br><br><label for="topicInput">Zadaj tému (napr. "hráč", "lopta"):</label><br> <input type="text" id="topicInput" placeholder="Téma SVG obrázka"> <button onclick="showSVG()">🖨 Zobraziť SVG</button>
 
-    let svg = "";
+  <div id="svgOutput" class="svg-box"></div><script>
+  function showSVG() {
+    const topic = document.getElementById('topicInput').value.trim().toLowerCase();
+    const list = document.getElementById('listSelect').value;
+    const output = document.getElementById('svgOutput');
 
-    switch(vstup) {
-      case "lopta":
-        svg = `
-          <svg width="100" height="100">
-            <circle cx="50" cy="50" r="40" fill="white" stroke="black" stroke-width="4" />
-            <text x="50" y="55" font-size="18" fill="black" text-anchor="middle">⚽</text>
-          </svg>`;
-        break;
-      case "brána":
-        svg = `
-          <svg width="120" height="80">
-            <rect x="10" y="20" width="100" height="50" fill="lightgray" stroke="black" stroke-width="3" />
-            <line x1="10" y1="35" x2="110" y2="35" stroke="black" stroke-width="2" />
-            <line x1="10" y1="50" x2="110" y2="50" stroke="black" stroke-width="2" />
-          </svg>`;
-        break;
-      case "hráč":
-        svg = `
-          <svg width="100" height="120">
-            <circle cx="50" cy="20" r="10" fill="peachpuff" />
-            <rect x="35" y="30" width="30" height="40" fill="blue" />
-            <line x1="35" y1="30" x2="20" y2="60" stroke="black" stroke-width="2" />
-            <line x1="65" y1="30" x2="80" y2="60" stroke="black" stroke-width="2" />
-            <line x1="40" y1="70" x2="35" y2="100" stroke="black" stroke-width="2" />
-            <line x1="60" y1="70" x2="65" y2="100" stroke="black" stroke-width="2" />
-          </svg>`;
-        break;
-      default:
-        svg = "⚠️ Neviem nakresliť túto tému. Skús zadať: <strong>lopta</strong>, <strong>brána</strong>, <strong>hráč</strong>.";
+    let svg = '';
+    if (list == '1') {
+      if (topic === 'hráč') {
+        svg = `<svg width="150" height="150">
+          <circle cx="75" cy="30" r="15" fill="#fcd5b5" />
+          <rect x="50" y="45" width="50" height="50" fill="blue" />
+          <line x1="50" y1="45" x2="30" y2="90" stroke="black"/>
+          <line x1="100" y1="45" x2="120" y2="90" stroke="black"/>
+          <line x1="60" y1="95" x2="60" y2="130" stroke="black"/>
+          <line x1="90" y1="95" x2="90" y2="130" stroke="black"/>
+        </svg>`;
+      } else if (topic === 'lopta') {
+        svg = `<svg width="100" height="100">
+          <circle cx="50" cy="50" r="30" fill="black" stroke="white" stroke-width="5" />
+        </svg>`;
+      } else if (topic === 'brána') {
+        svg = `<svg width="160" height="100">
+          <rect x="10" y="20" width="140" height="60" fill="white" stroke="black" stroke-width="4"/>
+        </svg>`;
+      } else {
+        svg = '<p>❌ SVG pre túto tému v Zozname 1 nie je definované.</p>';
+      }
+    } else {
+      svg = `<p>🔄 Zoznam ${list} zatiaľ neobsahuje SVG, pripravujeme ďalšie obrázky.</p>`;
     }
 
     output.innerHTML = svg;
