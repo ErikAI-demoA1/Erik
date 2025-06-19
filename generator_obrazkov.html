@@ -1,86 +1,102 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ErikAI Kombinátor Obrázkov (Mix)</title>
+  <title>🧠 ErikAI Kombinátor Obrázkov (Mix)</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; text-align: center; padding: 20px; }
-    h2 { color: #a30000; }
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; text-align: center; }
+    h1 { color: #a30000; }
     select, button, input { padding: 10px; margin: 10px; font-size: 16px; }
-    #resultArea img { border: 2px solid #888; border-radius: 10px; margin-top: 15px; max-width: 100%; height: auto; }
+    #vysledok img { max-width: 90%; margin-top: 20px; border: 2px solid #aaa; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <h2>🧠 ErikAI Kombinátor Obrázkov (Mix)</h2>
-  <p>Vyber 2 obrázky a ErikAI ich zmení na umelecký mix:</p><input type="file" id="img1" accept="image/*"><br> <input type="file" id="img2" accept="image/*"><br>
+  <h1>🧠 <b style="color:#b30000;">ErikAI Kombinátor Obrázkov (Mix)</b></h1>
+  <p>Vyber 2 obrázky a ErikAI ich zmení na umelecký mix:</p>
 
-  <select id="styleSelect">
-    <option>🎨 Farebný filter (mix)</option>
-    <option>🔁 Zrkadlenie + Otočenie</option>
-    <option>🌈 Duálna vrstvenosť</option>
-    <option>🌀 Pokrivenie + Deformácia</option>
-    <option>💫 Chaos Fusion (glitch)</option>
-  </select><br><button onclick="combineImages()">🖌️ Kombinuj obrázky</button>
+  <input type="file" id="obrazok1"><br>
+  <input type="file" id="obrazok2"><br>
 
-  <div id="resultArea"></div>  <script>
-    function combineImages() {
-      const style = document.getElementById("styleSelect").value;
-      const canvas = document.createElement("canvas");
-      canvas.width = 800;
-      canvas.height = 600;
-      const ctx = canvas.getContext("2d");
+  <button onclick="kombinujNahodne()">🎨 Kombinuj obrázky náhodne</button>
 
-      const img1 = new Image();
-      const img2 = new Image();
-      const file1 = document.getElementById("img1").files[0];
-      const file2 = document.getElementById("img2").files[0];
+  <div id="vysledok"></div>
 
-      if (!file1 || !file2) {
-        alert("Nahraj oba obrázky.");
+  <script>
+    const styly = ["farebny", "dualna", "zrkadlo", "deformacia", "chaos"];
+
+    function kombinujNahodne() {
+      const styl = styly[Math.floor(Math.random() * styly.length)];
+      const o1 = document.getElementById("obrazok1").files[0];
+      const o2 = document.getElementById("obrazok2").files[0];
+
+      if (!o1 || !o2) {
+        document.getElementById("vysledok").innerHTML = "⚠️ Nahraj oba obrázky!";
         return;
       }
 
-      img1.onload = () => {
-        img2.onload = () => {
-          if (style.includes("Farebný")) {
-            ctx.filter = "hue-rotate(75deg) contrast(120%)";
-            ctx.globalAlpha = 0.6;
-            ctx.drawImage(img1, 0, 0, 800, 600);
-            ctx.drawImage(img2, 0, 0, 800, 600);
-          }
-          else if (style.includes("Zrkadlenie")) {
-            ctx.save();
-            ctx.scale(-1, 1);
-            ctx.drawImage(img1, -800, 0, 800, 600);
-            ctx.restore();
-            ctx.rotate(0.05);
-            ctx.drawImage(img2, 0, 0, 800, 600);
-          }
-          else if (style.includes("Duálna")) {
-            ctx.globalAlpha = 1.0;
-            ctx.drawImage(img1, 0, 0, 400, 600);
-            ctx.globalAlpha = 0.6;
-            ctx.drawImage(img2, 400, 0, 400, 600);
-          }
-          else if (style.includes("Pokrivenie")) {
-            ctx.drawImage(img1, 50, 0, 700, 600);
-            ctx.rotate(0.15);
-            ctx.drawImage(img2, 100, 50, 700, 500);
-          }
-          else {
-            ctx.globalAlpha = 0.5;
-            ctx.drawImage(img1, Math.random()*50, Math.random()*50, 800, 600);
-            ctx.globalAlpha = 0.7;
-            ctx.filter = "saturate(180%) blur(1px)";
-            ctx.drawImage(img2, Math.random()*30, Math.random()*30, 800, 600);
-          }
+      const reader1 = new FileReader();
+      const reader2 = new FileReader();
 
-          const result = document.getElementById("resultArea");
-          result.innerHTML = `<h3>🧠 Výsledný obrázok:</h3><img src="${canvas.toDataURL()}" alt="vysledny mix">`;
+      reader1.onload = function(e1) {
+        reader2.onload = function(e2) {
+          const img1 = new Image();
+          const img2 = new Image();
+          img1.src = e1.target.result;
+          img2.src = e2.target.result;
+
+          img1.onload = () => {
+            img2.onload = () => {
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+
+              canvas.width = Math.max(img1.width, img2.width);
+              canvas.height = Math.max(img1.height, img2.height);
+
+              switch (styl) {
+                case "farebny":
+                  ctx.filter = "hue-rotate(180deg)";
+                  ctx.drawImage(img1, 0, 0);
+                  ctx.filter = "contrast(1.2)";
+                  ctx.drawImage(img2, 0, 0);
+                  break;
+                case "dualna":
+                  ctx.globalAlpha = 1;
+                  ctx.drawImage(img1, 0, 0);
+                  ctx.globalAlpha = 0.5;
+                  ctx.drawImage(img2, 0, 0);
+                  break;
+                case "zrkadlo":
+                  ctx.translate(canvas.width, 0);
+                  ctx.scale(-1, 1);
+                  ctx.drawImage(img1, 0, 0);
+                  ctx.setTransform(1, 0, 0, 1, 0, 0);
+                  ctx.drawImage(img2, canvas.width/2, 0, canvas.width/2, canvas.height);
+                  break;
+                case "deformacia":
+                  ctx.drawImage(img1, 0, 0);
+                  ctx.translate(20, 20);
+                  ctx.rotate(0.1);
+                  ctx.globalAlpha = 0.7;
+                  ctx.drawImage(img2, 0, 0);
+                  break;
+                case "chaos":
+                  ctx.filter = "grayscale(0.5) brightness(1.1)";
+                  ctx.drawImage(img2, 0, 0);
+                  ctx.filter = "sepia(0.7)";
+                  ctx.globalAlpha = 0.8;
+                  ctx.drawImage(img1, 20, 30);
+                  break;
+              }
+
+              const vysledny = canvas.toDataURL();
+              document.getElementById("vysledok").innerHTML = `<img src="${vysledny}" alt="Mix obrázkov">`;
+            }
+          }
         };
-        img2.src = URL.createObjectURL(file2);
+        reader2.readAsDataURL(o2);
       };
-      img1.src = URL.createObjectURL(file1);
+      reader1.readAsDataURL(o1);
     }
-  </script></body>
+  </script>
+</body>
 </html>
