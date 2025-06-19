@@ -4,41 +4,46 @@
   <meta charset="UTF-8">
   <title>🧠 ErikAI Kombinátor Obrázkov (Mix)</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; text-align: center; }
-    h1 { color: #a30000; }
-    select, button, input { padding: 10px; margin: 10px; font-size: 16px; }
-    #vysledok img { max-width: 90%; margin-top: 20px; border: 2px solid #aaa; border-radius: 8px; }
+    body { font-family: sans-serif; text-align: center; padding: 20px; background: #f6f6f6; }
+    h1 { color: #b30000; }
+    input, button { margin: 10px; padding: 10px; font-size: 16px; }
+    #vysledok img { max-width: 90%; margin-top: 20px; border-radius: 10px; border: 2px solid #ccc; }
   </style>
 </head>
 <body>
-  <h1>🧠 <b style="color:#b30000;">ErikAI Kombinátor Obrázkov (Mix)</b></h1>
+  <h1>🧠 <b style="color:#cc0000;">ErikAI Kombinátor Obrázkov (Mix)</b></h1>
   <p>Vyber 2 obrázky a ErikAI ich premieša náhodne ako umelec:</p>
 
   <input type="file" id="obrazok1"><br>
   <input type="file" id="obrazok2"><br>
 
-  <button onclick="kombinujNahodne()">🎨 Kombinuj obrázky náhodne</button>
-
+  <button onclick="kombinujNahodne()">🧠 Kombinuj obrázky náhodne</button>
   <div id="vysledok"></div>
 
   <script>
-    const styly = ["farebny", "dualna", "zrkadlo", "deformacia", "chaos", "rotacia", "pixelmix", "umely_hluk"];
+    const efekty = ["rotate", "mirror", "hue", "contrast", "dual", "glitch"];
+
+    function nahodneEfekty(pocet = 3) {
+      const shuffled = efekty.sort(() => 0.5 - Math.random());
+      const vybrane = shuffled.slice(0, Math.floor(Math.random() * 4) + 2); // 2 až 5 efektov
+      return vybrane;
+    }
 
     function kombinujNahodne() {
-      const styl = styly[Math.floor(Math.random() * styly.length)];
       const o1 = document.getElementById("obrazok1").files[0];
       const o2 = document.getElementById("obrazok2").files[0];
+      const resultDiv = document.getElementById("vysledok");
 
       if (!o1 || !o2) {
-        document.getElementById("vysledok").innerHTML = "⚠️ Nahraj oba obrázky!";
+        resultDiv.innerHTML = "⚠️ Nahraj oba obrázky!";
         return;
       }
 
       const reader1 = new FileReader();
       const reader2 = new FileReader();
 
-      reader1.onload = function(e1) {
-        reader2.onload = function(e2) {
+      reader1.onload = function (e1) {
+        reader2.onload = function (e2) {
           const img1 = new Image();
           const img2 = new Image();
           img1.src = e1.target.result;
@@ -48,80 +53,55 @@
             img2.onload = () => {
               const canvas = document.createElement("canvas");
               const ctx = canvas.getContext("2d");
-
               canvas.width = Math.max(img1.width, img2.width);
               canvas.height = Math.max(img1.height, img2.height);
 
-              switch (styl) {
-                case "farebny":
-                  ctx.filter = `hue-rotate(${Math.random()*360}deg)`;
-                  ctx.drawImage(img1, 0, 0);
-                  ctx.filter = `contrast(${1 + Math.random()*0.5})`;
-                  ctx.drawImage(img2, 0, 0);
-                  break;
-                case "dualna":
-                  ctx.globalAlpha = 1;
-                  ctx.drawImage(img1, 0, 0);
-                  ctx.globalAlpha = 0.4 + Math.random()*0.5;
-                  ctx.drawImage(img2, 0, 0);
-                  break;
-                case "zrkadlo":
-                  ctx.translate(canvas.width, 0);
-                  ctx.scale(-1, 1);
-                  ctx.drawImage(img1, 0, 0);
-                  ctx.setTransform(1, 0, 0, 1, 0, 0);
-                  ctx.drawImage(img2, canvas.width/2, 0, canvas.width/2, canvas.height);
-                  break;
-                case "deformacia":
-                  ctx.drawImage(img1, 0, 0);
-                  ctx.translate(Math.random()*50, Math.random()*50);
-                  ctx.rotate(Math.random() * 1);
-                  ctx.globalAlpha = 0.5 + Math.random()*0.5;
-                  ctx.drawImage(img2, 0, 0);
-                  break;
-                case "chaos":
-                  ctx.filter = `brightness(${1 + Math.random()*0.5})`;
-                  ctx.drawImage(img2, Math.random()*50, Math.random()*50);
-                  ctx.filter = "sepia(0.7)";
-                  ctx.globalAlpha = 0.6 + Math.random()*0.3;
-                  ctx.drawImage(img1, 20 + Math.random()*30, 30 + Math.random()*30);
-                  break;
-                case "rotacia":
-                  ctx.translate(canvas.width/2, canvas.height/2);
-                  ctx.rotate((Math.random() * 360) * Math.PI / 180);
-                  ctx.drawImage(img1, -img1.width/2, -img1.height/2);
-                  ctx.rotate((Math.random() * 180) * Math.PI / 180);
-                  ctx.drawImage(img2, -img2.width/2, -img2.height/2);
-                  break;
-                case "pixelmix":
-                  ctx.drawImage(img1, 0, 0);
-                  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                  for (let i = 0; i < imageData.data.length; i += 4) {
-                    imageData.data[i] = imageData.data[i] ^ (Math.random() * 255);
-                    imageData.data[i+1] = imageData.data[i+1] ^ (Math.random() * 255);
-                  }
-                  ctx.putImageData(imageData, 0, 0);
-                  ctx.globalAlpha = 0.5;
-                  ctx.drawImage(img2, Math.random()*20, Math.random()*20);
-                  break;
-                case "umely_hluk":
-                  ctx.drawImage(img1, 0, 0);
-                  let d = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                  for (let i = 0; i < d.data.length; i += 4) {
-                    d.data[i] += Math.random()*50 - 25;
-                    d.data[i+1] += Math.random()*50 - 25;
-                    d.data[i+2] += Math.random()*50 - 25;
-                  }
-                  ctx.putImageData(d, 0, 0);
-                  ctx.globalAlpha = 0.6;
-                  ctx.drawImage(img2, 0, 0);
-                  break;
+              const efektyPouzite = nahodneEfekty();
+
+              // Reset transformácie
+              ctx.setTransform(1, 0, 0, 1, 0, 0);
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              for (let efekt of efektyPouzite) {
+                switch (efekt) {
+                  case "rotate":
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate((Math.random() * 0.4) - 0.2); // rotácia ±0.2 rad
+                    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+                    break;
+                  case "mirror":
+                    ctx.scale(-1, 1);
+                    ctx.translate(-canvas.width, 0);
+                    break;
+                  case "hue":
+                    ctx.filter = `hue-rotate(${Math.floor(Math.random() * 360)}deg)`;
+                    break;
+                  case "contrast":
+                    ctx.filter = `contrast(${1 + Math.random() * 0.5}) brightness(${1 + Math.random() * 0.2})`;
+                    break;
+                  case "dual":
+                    ctx.globalAlpha = 1;
+                    ctx.drawImage(img1, 0, 0);
+                    ctx.globalAlpha = 0.4 + Math.random() * 0.4;
+                    ctx.drawImage(img2, 0, 0);
+                    break;
+                  case "glitch":
+                    ctx.drawImage(img2, Math.random() * 30, Math.random() * 30);
+                    break;
+                }
               }
 
-              const vysledny = canvas.toDataURL();
-              document.getElementById("vysledok").innerHTML = `<img src="${vysledny}" alt="Mix obrázkov (ErikAI)">`;
-            }
-          }
+              // Ak ešte neboli obrázky nakreslené (napr. bez dual/glitch)
+              if (!efektyPouzite.includes("dual") && !efektyPouzite.includes("glitch")) {
+                ctx.globalAlpha = 1;
+                ctx.drawImage(img1, 0, 0);
+                ctx.globalAlpha = 0.5;
+                ctx.drawImage(img2, 0, 0);
+              }
+
+              resultDiv.innerHTML = `<img src="${canvas.toDataURL()}" alt="Mix obrázkov">`;
+            };
+          };
         };
         reader2.readAsDataURL(o2);
       };
