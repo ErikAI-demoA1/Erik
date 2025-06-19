@@ -1,119 +1,86 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>🧠 ErikAI Kombinátor Obrázkov (Mix)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Kombinátor Obrázkov (Mix)</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f8f9fa;
-      padding: 20px;
-      text-align: center;
-    }
-    input, select, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
-    }
-    #output {
-      margin-top: 20px;
-    }
-    .canvas-wrap {
-      position: relative;
-      display: inline-block;
-    }
-    canvas {
-      border: 1px solid #ccc;
-    }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; text-align: center; padding: 20px; }
+    h2 { color: #a30000; }
+    select, button, input { padding: 10px; margin: 10px; font-size: 16px; }
+    #resultArea img { border: 2px solid #888; border-radius: 10px; margin-top: 15px; max-width: 100%; height: auto; }
   </style>
 </head>
 <body>
+  <h2>🧠 ErikAI Kombinátor Obrázkov (Mix)</h2>
+  <p>Vyber 2 obrázky a ErikAI ich zmení na umelecký mix:</p><input type="file" id="img1" accept="image/*"><br> <input type="file" id="img2" accept="image/*"><br>
 
-<h2>🧠 ErikAI Kombinátor Obrázkov (Mix)</h2>
-<p>Vyber 2 obrázky a štýl miešania:</p>
+  <select id="styleSelect">
+    <option>🎨 Farebný filter (mix)</option>
+    <option>🔁 Zrkadlenie + Otočenie</option>
+    <option>🌈 Duálna vrstvenosť</option>
+    <option>🌀 Pokrivenie + Deformácia</option>
+    <option>💫 Chaos Fusion (glitch)</option>
+  </select><br><button onclick="combineImages()">🖌️ Kombinuj obrázky</button>
 
-<input type="file" id="img1" accept="image/*">
-<input type="file" id="img2" accept="image/*"><br>
+  <div id="resultArea"></div>  <script>
+    function combineImages() {
+      const style = document.getElementById("styleSelect").value;
+      const canvas = document.createElement("canvas");
+      canvas.width = 800;
+      canvas.height = 600;
+      const ctx = canvas.getContext("2d");
 
-<select id="mixMode">
-  <option value="overlay">🔮 Priesvitné prekrytie</option>
-  <option value="flip">🔄 Zrkadlenie + Otočenie</option>
-  <option value="hue">🌈 Farebný filter (mix)</option>
-</select><br>
+      const img1 = new Image();
+      const img2 = new Image();
+      const file1 = document.getElementById("img1").files[0];
+      const file2 = document.getElementById("img2").files[0];
 
-<button onclick="mixImages()">🧪 Kombinuj obrázky</button>
+      if (!file1 || !file2) {
+        alert("Nahraj oba obrázky.");
+        return;
+      }
 
-<div id="output"></div>
+      img1.onload = () => {
+        img2.onload = () => {
+          if (style.includes("Farebný")) {
+            ctx.filter = "hue-rotate(75deg) contrast(120%)";
+            ctx.globalAlpha = 0.6;
+            ctx.drawImage(img1, 0, 0, 800, 600);
+            ctx.drawImage(img2, 0, 0, 800, 600);
+          }
+          else if (style.includes("Zrkadlenie")) {
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.drawImage(img1, -800, 0, 800, 600);
+            ctx.restore();
+            ctx.rotate(0.05);
+            ctx.drawImage(img2, 0, 0, 800, 600);
+          }
+          else if (style.includes("Duálna")) {
+            ctx.globalAlpha = 1.0;
+            ctx.drawImage(img1, 0, 0, 400, 600);
+            ctx.globalAlpha = 0.6;
+            ctx.drawImage(img2, 400, 0, 400, 600);
+          }
+          else if (style.includes("Pokrivenie")) {
+            ctx.drawImage(img1, 50, 0, 700, 600);
+            ctx.rotate(0.15);
+            ctx.drawImage(img2, 100, 50, 700, 500);
+          }
+          else {
+            ctx.globalAlpha = 0.5;
+            ctx.drawImage(img1, Math.random()*50, Math.random()*50, 800, 600);
+            ctx.globalAlpha = 0.7;
+            ctx.filter = "saturate(180%) blur(1px)";
+            ctx.drawImage(img2, Math.random()*30, Math.random()*30, 800, 600);
+          }
 
-<script>
-  function mixImages() {
-    const file1 = document.getElementById('img1').files[0];
-    const file2 = document.getElementById('img2').files[0];
-    const mode = document.getElementById('mixMode').value;
-    const output = document.getElementById('output');
-
-    if (!file1 || !file2) {
-      output.innerHTML = "⚠️ Nahraj 2 obrázky.";
-      return;
-    }
-
-    const img1 = new Image();
-    const img2 = new Image();
-    const reader1 = new FileReader();
-    const reader2 = new FileReader();
-
-    reader1.onload = function (e1) {
-      img1.src = e1.target.result;
-    };
-    reader2.onload = function (e2) {
-      img2.src = e2.target.result;
-    };
-
-    img1.onload = () => {
-      img2.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        const width = Math.min(img1.width, img2.width, 500);
-        const height = Math.min(img1.height, img2.height, 500);
-
-        canvas.width = width;
-        canvas.height = height;
-
-        if (mode === 'overlay') {
-          ctx.globalAlpha = 1;
-          ctx.drawImage(img1, 0, 0, width, height);
-          ctx.globalAlpha = 0.4;
-          ctx.drawImage(img2, 0, 0, width, height);
-        } else if (mode === 'flip') {
-          ctx.save();
-          ctx.translate(width, 0);
-          ctx.scale(-1, 1);
-          ctx.drawImage(img1, 0, 0, width, height);
-          ctx.restore();
-          ctx.translate(0, height / 2);
-          ctx.rotate(Math.PI / 10);
-          ctx.drawImage(img2, 0, 0, width, height);
-        } else if (mode === 'hue') {
-          ctx.drawImage(img1, 0, 0, width, height);
-          ctx.globalCompositeOperation = "hue";
-          ctx.drawImage(img2, 0, 0, width, height);
-        }
-
-        const resultImg = new Image();
-        resultImg.src = canvas.toDataURL("image/png");
-        resultImg.style.maxWidth = "100%";
-        resultImg.style.border = "1px solid #ccc";
-        resultImg.style.borderRadius = "8px";
-
-        output.innerHTML = "<h3>🧠 Výsledný obrázok:</h3>";
-        output.appendChild(resultImg);
+          const result = document.getElementById("resultArea");
+          result.innerHTML = `<h3>🧠 Výsledný obrázok:</h3><img src="${canvas.toDataURL()}" alt="vysledny mix">`;
+        };
+        img2.src = URL.createObjectURL(file2);
       };
-      reader2.readAsDataURL(file2);
-    };
-    reader1.readAsDataURL(file1);
-  }
-</script>
-
-</body>
+      img1.src = URL.createObjectURL(file1);
+    }
+  </script></body>
 </html>
