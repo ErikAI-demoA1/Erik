@@ -1,74 +1,57 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
   <title>ErikAI Mini Stránkovač</title>
   <style>
-    body { font-family: sans-serif; background: #e0ffe0; padding: 20px; }
-    textarea { width: 100%; height: 140px; font-family: monospace; }
-    .vystup { margin-top: 20px; padding: 15px; background: white; border: 1px solid #ccc; }
-    button { margin-top: 10px; padding: 10px 20px; font-weight: bold; }
+    body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }
+    textarea { width: 100%; height: 140px; }
+    .output { border: 1px solid #ccc; padding: 10px; margin-top: 20px; background: white; }
+    h1 { font-size: 1.3em; }
+    img { max-width: 100%; margin: 10px 0; }
+    iframe { width: 100%; height: 300px; margin-top: 10px; }
   </style>
 </head>
-<body>
-  <h2>🌍 ErikAI Mini Stránkovač</h2>
-  <p><strong>🛠 Ako vytvoriť svoju stránku:</strong></p>
-  <pre>
-▸ Používaj značky:
-  &lt;title&gt;Názov tvojej stránky&lt;/title&gt;
-  &lt;name&gt;Hlavný nadpis&lt;/name&gt;
-  &lt;text&gt;Popis, text alebo čokoľvek&lt;/text&gt;
+<body><h1>🌐 ErikAI Mini Stránkovač</h1>
+<p>Napíš si mini stránku pomocou jednoduchých značiek:</p>
+<pre>
+&lt;title&gt;Názov tvojej stránky&lt;/title&gt;
+&lt;name&gt;Hlavný nadpis&lt;/name&gt;
+&lt;text&gt;Popis, text alebo čokolvek&lt;/text&gt;
+&lt;odkaz&gt;https://adresa.sk&lt;/odkaz&gt;
+&lt;img&gt;https://obrazok.jpg&lt;/img&gt;
+&lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;
+</pre><textarea id="input">&lt;title&gt;Moja stranka&lt;/title&gt;
+&lt;name&gt;Ahoj svet&lt;/name&gt;
+&lt;text&gt;Toto je moja prvá mini stránka&lt;/text&gt;
+&lt;odkaz&gt;https://example.com&lt;/odkaz&gt;
+&lt;img&gt;https://via.placeholder.com/300&lt;/img&gt;
+&lt;video&gt;https://www.youtube.com/embed/dQw4w9WgXcQ&lt;/video&gt;</textarea><br><button onclick="render()">Zobraziť stránku</button>
 
-▸ Zobrazí sa pod URL: www.erikai/čo-chceš.erikai (simulované lokálne)
-  </pre>
+<div class="output" id="vystup"></div><script>
+function render() {
+  let vstup = document.getElementById("input").value;
+  let html = "";
 
-  <textarea id="input" placeholder="<title>Moja stránka</title>\n<name>ErikAI</name>\n<text>Vitaj na mojej stránke</text>"></textarea><br>
-  <button onclick="zobrazStranku()">Zobraziť stránku</button>
-  <button onclick="stiahniHTML()">Stiahnuť moju stránku</button>
+  const get = (tag) => {
+    let match = vstup.match(new RegExp(`<${tag}>([\s\S]*?)</${tag}>`, 'i'));
+    return match ? match[1].trim() : "";
+  };
 
-  <div class="vystup" id="preview"></div>
+  let title = get("title");
+  let name = get("name");
+  let text = get("text");
+  let odkaz = get("odkaz");
+  let img = get("img");
+  let video = get("video");
 
-  <script>
-    function extrahuj(tag, text) {
-      const regex = new RegExp(`<${tag}>(.*?)<\\/${tag}>`, 'i');
-      const match = text.match(regex);
-      return match ? match[1] : '';
-    }
+  if (title) document.title = title;
+  if (name) html += `<h2>${name}</h2>`;
+  if (text) html += `<p>${text}</p>`;
+  if (odkaz) html += `<p><a href='${odkaz}' target='_blank'>🔗 Navštíviť odkaz</a></p>`;
+  if (img) html += `<img src='${img}' alt='Obrázok'>`;
+  if (video) html += `<iframe src='${video}' frameborder='0' allowfullscreen></iframe>`;
 
-    function zobrazStranku() {
-      const vstup = document.getElementById("input").value;
-      const nadpis = extrahuj("name", vstup);
-      const obsah = extrahuj("text", vstup);
-      const html = `<h2>${nadpis}</h2><p>${obsah}</p>`;
-      document.getElementById("preview").innerHTML = html;
-    }
-
-    function stiahniHTML() {
-      const vstup = document.getElementById("input").value;
-      const nazov = extrahuj("title", vstup) || "moja-stranka";
-      const nadpis = extrahuj("name", vstup);
-      const obsah = extrahuj("text", vstup);
-
-      const htmlObsah = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>${nazov}</title>
-</head>
-<body>
-  <h1>${nadpis}</h1>
-  <p>${obsah}</p>
-</body>
-</html>`;
-
-      const blob = new Blob([htmlObsah], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = nazov + ".html";
-      link.click();
-    }
-  </script>
-</body>
+  document.getElementById("vystup").innerHTML = html;
+}
+</script></body>
 </html>
