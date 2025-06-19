@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Kombinátor Obrázkov</title>
+  <title>🧠 ErikAI Kombinátor Obrázkov</title>
   <style>
     body {
       font-family: sans-serif;
@@ -39,16 +39,27 @@
       margin-top: 25px;
       text-align: center;
     }
-    img {
-      max-width: 45%;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    }
     .image-row {
       display: flex;
       justify-content: center;
-      gap: 15px;
+      gap: 25px;
       flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .img-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .img-block img {
+      max-width: 280px;
+      max-height: 250px;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+    }
+    .img-block p {
+      margin-top: 8px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -66,7 +77,11 @@
 
   <script>
     function isImage(url) {
-      return url.match(/\.(jpeg|jpg|gif|png|webp)$/i) || url.startsWith("data:image/");
+      return (
+        url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ||
+        url.startsWith("data:image/") ||
+        url.includes("photos.app.goo.gl") // aj Google Photos
+      );
     }
 
     function isLink(url) {
@@ -83,14 +98,20 @@
 
       if (valid1 && valid2) {
         out.innerHTML = `
-          <p>🧠 Výsledná kombinácia:</p>
+          <p>🧠 <strong>Výsledná kombinácia:</strong></p>
           <div class="image-row">
-            <img src="${val1}" alt="Obrázok 1">
-            <img src="${val2}" alt="Obrázok 2">
+            <div class="img-block">
+              <img src="${val1}" alt="Obrázok 1">
+              <p>🖼️ Obrázok 1</p>
+            </div>
+            <div class="img-block">
+              <img src="${val2}" alt="Obrázok 2">
+              <p>🖼️ Obrázok 2</p>
+            </div>
           </div>
         `;
       } else {
-        out.innerHTML = "❌ Táto kombinácia nie je podporovaná. Zadaj len odkazy alebo obrázky.";
+        out.innerHTML = "❌ Táto kombinácia nie je podporovaná. Zadaj platné odkazy na obrázky.";
       }
     }
   </script>
