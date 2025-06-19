@@ -1,82 +1,104 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Mini Stránkovač</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    textarea { width: 100%; height: 160px; font-family: monospace; margin-top: 10px; }
-    .vystup { background: #fff; border: 1px solid #ccc; padding: 20px; margin-top: 20px; }
-    button { margin: 5px 10px 5px 0; padding: 10px; }
+    body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
+    textarea { width: 100%; height: 200px; font-family: monospace; }
+    .output { background: white; padding: 10px; margin-top: 10px; border: 1px solid #ccc; }
+    button { margin-top: 10px; padding: 10px 20px; margin-right: 10px; }
+    code { background: #eee; padding: 2px 4px; display: block; margin: 4px 0; }
   </style>
 </head>
 <body>
   <h2>🌐 ErikAI Mini Stránkovač</h2>
   <p>Napíš si mini stránku pomocou jednoduchých značiek:</p>
-  <pre>
-&lt;title&gt;Názov tvojej stránky&lt;/title&gt;
-&lt;name&gt;Hlavný nadpis&lt;/name&gt;
-&lt;text&gt;Popis, text alebo čokolvek&lt;/text&gt;
-&lt;odkaz&gt;https://adresa.sk&lt;/odkaz&gt;
-&lt;img&gt;https://obrazok.jpg&lt;/img&gt;
-&lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;
-  </pre>
-  <textarea id="vstup" placeholder="Napíš sem svoj kód..."></textarea><br>
+  <code>&lt;title&gt;Názov tvojej stránky&lt;/title&gt;</code>
+  <code>&lt;name&gt;Hlavný nadpis&lt;/name&gt;</code>
+  <code>&lt;text&gt;Popis, text alebo čokoľvek&lt;/text&gt;</code>
+  <code>&lt;odkaz&gt;https://adresa.sk&lt;/odkaz&gt;</code>
+  <code>&lt;img&gt;https://obrazok.jpg&lt;/img&gt;</code>
+  <code>&lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;</code>
+
+  <textarea id="input"><title>Moja stránka</title>
+<name>Moje meno</name>
+<text>Toto je text o mne.</text>
+<odkaz>https://mojeportfolio.sk</odkaz>
+<img>https://example.com/obrazok.jpg</img>
+<video>https://www.youtube.com/embed/abc123xyz</video></textarea>
+
   <button onclick="zobrazStranku()">Zobraziť stránku</button>
-  <button onclick="stiahnutStranku()">Stiahnuť moju stránku</button>
-  <div id="vystup" class="vystup"></div><script>
-function zobrazStranku() {
-  const vstup = document.getElementById('vstup').value;
-  const vystup = document.getElementById('vystup');
+  <button onclick="stiahniStranku()">Stiahnuť moju stránku</button>
 
-  const nazov = extrahuj(vstup, 'title');
-  const nadpis = extrahuj(vstup, 'name');
-  const text = extrahuj(vstup, 'text');
-  const odkaz = extrahuj(vstup, 'odkaz');
-  const obrazok = extrahuj(vstup, 'img');
-  const video = extrahuj(vstup, 'video');
+  <div class="output" id="vystup"></div>
 
-  let html = '';
-  if (nadpis) html += `<h2>${nadpis}</h2>`;
-  if (text) html += `<p>${text}</p>`;
-  if (odkaz) html += `<p><a href="${odkaz}" target="_blank">${odkaz}</a></p>`;
-  if (obrazok) html += `<img src="${obrazok}" alt="obrazok" style="max-width:100%;">`;
-  if (video) html += `<iframe width="100%" height="315" src="${video}" frameborder="0" allowfullscreen></iframe>`;
+  <script>
+    function zobrazStranku() {
+      const data = document.getElementById('input').value;
+      let html = '';
+      html += '<div>';
 
-  vystup.innerHTML = html;
-}
+      const lines = data.split('\n');
+      for (let line of lines) {
+        if (line.includes('<title>')) {
+          let text = line.replace('<title>', '').replace('</title>', '');
+          html += `<h1 style="display:none">${text}</h1>`;
+        } else if (line.includes('<name>')) {
+          let text = line.replace('<name>', '').replace('</name>', '');
+          html += `<h2>${text}</h2>`;
+        } else if (line.includes('<text>')) {
+          let text = line.replace('<text>', '').replace('</text>', '');
+          html += `<p>${text}</p>`;
+        } else if (line.includes('<odkaz>')) {
+          let link = line.replace('<odkaz>', '').replace('</odkaz>', '');
+          html += `<p><a href="${link}" target="_blank">${link}</a></p>`;
+        } else if (line.includes('<img>')) {
+          let img = line.replace('<img>', '').replace('</img>', '');
+          html += `<img src="${img}" style="max-width:100%;"><br>`;
+        } else if (line.includes('<video>')) {
+          let video = line.replace('<video>', '').replace('</video>', '');
+          html += `<iframe width="100%" height="200" src="${video}" frameborder="0" allowfullscreen></iframe><br>`;
+        }
+      }
+      html += '</div>';
+      document.getElementById('vystup').innerHTML = html;
+    }
 
-function stiahnutStranku() {
-  const vstup = document.getElementById('vstup').value;
-  const nazov = extrahuj(vstup, 'title') || 'moja-stranka';
-  const nadpis = extrahuj(vstup, 'name');
-  const text = extrahuj(vstup, 'text');
-  const odkaz = extrahuj(vstup, 'odkaz');
-  const obrazok = extrahuj(vstup, 'img');
-  const video = extrahuj(vstup, 'video');
+    function stiahniStranku() {
+      const data = document.getElementById('input').value;
+      let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>';
+      let title = data.match(/<title>(.*?)<\/title>/);
+      html += title ? title[1] : 'Moja stránka';
+      html += '</title></head><body>';
 
-  let obsah = `<!DOCTYPE html><html lang='sk'><head><meta charset='UTF-8'><title>${nazov}</title></head><body>`;
-  if (nadpis) obsah += `<h2>${nadpis}</h2>`;
-  if (text) obsah += `<p>${text}</p>`;
-  if (odkaz) obsah += `<p><a href='${odkaz}' target='_blank'>${odkaz}</a></p>`;
-  if (obrazok) obsah += `<img src='${obrazok}' alt='obrazok' style='max-width:100%;'>`;
-  if (video) obsah += `<iframe width='100%' height='315' src='${video}' frameborder='0' allowfullscreen></iframe>`;
-  obsah += '</body></html>';
+      const lines = data.split('\n');
+      for (let line of lines) {
+        if (line.includes('<name>')) {
+          let text = line.replace('<name>', '').replace('</name>', '');
+          html += `<h2>${text}</h2>`;
+        } else if (line.includes('<text>')) {
+          let text = line.replace('<text>', '').replace('</text>', '');
+          html += `<p>${text}</p>`;
+        } else if (line.includes('<odkaz>')) {
+          let link = line.replace('<odkaz>', '').replace('</odkaz>', '');
+          html += `<p><a href="${link}" target="_blank">${link}</a></p>`;
+        } else if (line.includes('<img>')) {
+          let img = line.replace('<img>', '').replace('</img>', '');
+          html += `<img src="${img}" style="max-width:100%;"><br>`;
+        } else if (line.includes('<video>')) {
+          let video = line.replace('<video>', '').replace('</video>', '');
+          html += `<iframe width="100%" height="200" src="${video}" frameborder="0" allowfullscreen></iframe><br>`;
+        }
+      }
+      html += '</body></html>';
 
-  const blob = new Blob([obsah], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${nazov}.html`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
-function extrahuj(text, znacka) {
-  const regex = new RegExp(`<${znacka}>([\s\S]*?)<\/${znacka}>`, 'i');
-  const match = text.match(regex);
-  return match ? match[1].trim() : '';
-}
-</script></body>
+      const blob = new Blob([html], { type: 'text/html' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = "moja-stranka.html";
+      link.click();
+    }
+  </script>
+</body>
 </html>
