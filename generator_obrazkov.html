@@ -66,55 +66,64 @@
 <body>
 
   <h2>🖼️ ErikAI Kombinátor Obrázkov</h2>
-  <p>Zadaj 2 odkazy alebo obrázky (môžeš aj zmiešať):</p>
+<p>Zadaj <b>2 obrázky</b> – môžeš buď zadať odkaz, alebo nahrať súbor:</p>
 
-  <input id="input1" type="text" placeholder="Vlož 1. odkaz alebo obrázok (napr. https://... .jpg)">
-  <input id="input2" type="text" placeholder="Vlož 2. odkaz alebo obrázok (napr. https://... .png)">
+<form id="kombinujForm">
+  <label><b>Obrázok 1:</b></label><br>
+  <input type="url" id="url1" placeholder="alebo zadaj URL odkazu"><br>
+  <input type="file" id="file1" accept="image/*"><br><br>
 
-  <button onclick="combine()">🔄 Kombinuj</button>
+  <label><b>Obrázok 2:</b></label><br>
+  <input type="url" id="url2" placeholder="alebo zadaj URL odkazu"><br>
+  <input type="file" id="file2" accept="image/*"><br><br>
 
-  <div id="output"></div>
+  <button type="submit">🧠 Kombinuj</button>
+</form>
 
-  <script>
-    function isImage(url) {
-      return (
-        url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ||
-        url.startsWith("data:image/") ||
-        url.includes("photos.app.goo.gl") // aj Google Photos
-      );
+<div id="vysledok" style="margin-top:20px;"></div>
+
+<script>
+document.getElementById("kombinujForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const url1 = document.getElementById("url1").value.trim();
+  const url2 = document.getElementById("url2").value.trim();
+  const file1 = document.getElementById("file1").files[0];
+  const file2 = document.getElementById("file2").files[0];
+
+  const vysledok = document.getElementById("vysledok");
+  vysledok.innerHTML = "";
+
+  // Funkcia pre získanie obrázku (buď z odkazu alebo z lokálneho súboru)
+  function getImageSrc(url, file, callback) {
+    if (url) {
+      callback(url);
+    } else if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        callback(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      callback(null);
     }
+  }
 
-    function isLink(url) {
-      return url.startsWith("http://") || url.startsWith("https://");
-    }
-
-    function combine() {
-      const val1 = document.getElementById("input1").value.trim();
-      const val2 = document.getElementById("input2").value.trim();
-      const out = document.getElementById("output");
-
-      const valid1 = isImage(val1) || isLink(val1);
-      const valid2 = isImage(val2) || isLink(val2);
-
-      if (valid1 && valid2) {
-        out.innerHTML = `
-          <p>🧠 <strong>Výsledná kombinácia:</strong></p>
-          <div class="image-row">
-            <div class="img-block">
-              <img src="${val1}" alt="Obrázok 1">
-              <p>🖼️ Obrázok 1</p>
-            </div>
-            <div class="img-block">
-              <img src="${val2}" alt="Obrázok 2">
-              <p>🖼️ Obrázok 2</p>
-            </div>
-          </div>
-        `;
-      } else {
-        out.innerHTML = "❌ Táto kombinácia nie je podporovaná. Zadaj platné odkazy na obrázky.";
+  getImageSrc(url1, file1, function(src1) {
+    getImageSrc(url2, file2, function(src2) {
+      if (!src1 || !src2) {
+        vysledok.innerHTML = "⚠️ Prosím, zadaj alebo nahraj <b>oba</b> obrázky.";
+        return;
       }
-    }
-  </script>
 
-</body>
-</html>
+      vysledok.innerHTML = `
+        <p><b>🧠 Výsledná kombinácia:</b></p>
+        <div style="display:flex; gap:10px;">
+          <div><img src="${src1}" alt="Obrázok 1" style="max-width:150px; border:1px solid #ccc;"></div>
+          <div><img src="${src2}" alt="Obrázok 2" style="max-width:150px; border:1px solid #ccc;"></div>
+        </div>
+      `;
+    });
+  });
+});
+</script>
