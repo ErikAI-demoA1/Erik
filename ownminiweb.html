@@ -67,9 +67,11 @@ function render() {
 
   const bgColorMatch = code.match(/<background_color>(.*?)<\/background_color>/);
 if (bgColorMatch) {
-  document.body.style.background = bgColorMatch[1];
+  document.getElementById("output").style.background = bgColorMatch[1];
+  document.getElementById("output").style.padding = "1rem";
+  document.getElementById("output").style.borderRadius = "10px";
 } else {
-  document.body.style.background = "#f9f9f9"; // predvolené pozadie
+  document.getElementById("output").style.background = "white";
 }
 
   const bgMatch = code.match(/<erikai_(.*?)>/);
