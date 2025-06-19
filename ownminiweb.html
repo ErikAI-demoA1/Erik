@@ -51,6 +51,7 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
 &lt;odkaz&gt;https://odkaz.sk&lt;/odkaz&gt;
 &lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;
 &lt;erikai_red&gt;...obsah...&lt;/erikai_red&gt;
+  &lt;background_color&gt;skyblue&lt;/background_color&gt;
 </code></pre>
 
 <textarea id="input" placeholder="Sem napíš kód..."></textarea><br>
@@ -63,6 +64,13 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
 function render() {
   let code = document.getElementById('input').value;
   let html = '';
+
+  const bgColorMatch = code.match(/<background_color>(.*?)<\/background_color>/);
+if (bgColorMatch) {
+  document.body.style.background = bgColorMatch[1];
+} else {
+  document.body.style.background = "#f9f9f9"; // predvolené pozadie
+}
 
   const bgMatch = code.match(/<erikai_(.*?)>/);
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
