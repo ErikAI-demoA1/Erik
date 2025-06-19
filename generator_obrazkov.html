@@ -1,56 +1,55 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Generátor Obrázkov (DeepAI)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI SVG Generátor</title>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f4f4f4; }
-    input, button { font-size: 1rem; padding: 10px; width: 100%; max-width: 400px; }
-    button { margin-top: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-    #result img { margin-top: 20px; border-radius: 10px; max-width: 100%; }
-    #result { margin-top: 20px; }
+    body { font-family: sans-serif; padding: 1rem; background: #f9f9f9; }
+    input, button { font-size: 16px; padding: 8px; }
+    #output { margin-top: 20px; padding: 20px; background: #fff; border: 1px solid #ccc; border-radius: 10px; text-align: center; }
   </style>
 </head>
-<body>
+<body><h2>✏️ ErikAI Generátor SVG obrázkov</h2>
+<p>Zadaj tému (napr. <strong>lopta</strong>, <strong>brána</strong>, <strong>hráč</strong>) a ErikAI ti nakreslí jednoduchý obrázok.</p><input type="text" id="prompt" placeholder="Zadaj tému (napr. hráč, lopta)">
+<button onclick="generujSVG()">🖼️ Zobraziť SVG</button><div id="output"></div><script>
+  function generujSVG() {
+    const vstup = document.getElementById("prompt").value.toLowerCase().trim();
+    const output = document.getElementById("output");
 
-<h2>🎨 ErikAI Generátor Obrázkov (DeepAI)</h2>
+    let svg = "";
 
-<input type="text" id="promptInput" placeholder="Napíš, čo chceš nakresliť (napr. Futbalista v daždi)">
-<button onclick="generateImage()">Vygeneruj obrázok</button>
-
-<div id="result"></div>
-
-<script>
-  async function generateImage() {
-    const prompt = document.getElementById('promptInput').value.trim();
-    const resultDiv = document.getElementById('result');
-    if (!prompt) {
-      resultDiv.innerHTML = '⚠️ Napíš niečo.';
-      return;
+    switch(vstup) {
+      case "lopta":
+        svg = `
+          <svg width="100" height="100">
+            <circle cx="50" cy="50" r="40" fill="white" stroke="black" stroke-width="4" />
+            <text x="50" y="55" font-size="18" fill="black" text-anchor="middle">⚽</text>
+          </svg>`;
+        break;
+      case "brána":
+        svg = `
+          <svg width="120" height="80">
+            <rect x="10" y="20" width="100" height="50" fill="lightgray" stroke="black" stroke-width="3" />
+            <line x1="10" y1="35" x2="110" y2="35" stroke="black" stroke-width="2" />
+            <line x1="10" y1="50" x2="110" y2="50" stroke="black" stroke-width="2" />
+          </svg>`;
+        break;
+      case "hráč":
+        svg = `
+          <svg width="100" height="120">
+            <circle cx="50" cy="20" r="10" fill="peachpuff" />
+            <rect x="35" y="30" width="30" height="40" fill="blue" />
+            <line x1="35" y1="30" x2="20" y2="60" stroke="black" stroke-width="2" />
+            <line x1="65" y1="30" x2="80" y2="60" stroke="black" stroke-width="2" />
+            <line x1="40" y1="70" x2="35" y2="100" stroke="black" stroke-width="2" />
+            <line x1="60" y1="70" x2="65" y2="100" stroke="black" stroke-width="2" />
+          </svg>`;
+        break;
+      default:
+        svg = "⚠️ Neviem nakresliť túto tému. Skús zadať: <strong>lopta</strong>, <strong>brána</strong>, <strong>hráč</strong>.";
     }
 
-    resultDiv.innerHTML = '⏳ Generujem obrázok, čakaj...';
-
-    try {
-      const response = await fetch("proxy.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "text=" + encodeURIComponent(prompt)
-      });
-
-      const data = await response.json();
-      if (data.output_url) {
-        resultDiv.innerHTML = `<img src="${data.output_url}" alt="Vygenerovaný obrázok">`;
-      } else {
-        resultDiv.innerHTML = "⚠️ Niečo zlyhalo.";
-      }
-    } catch (e) {
-      resultDiv.innerHTML = "❌ Chyba spojenia s generátorom.";
-    }
+    output.innerHTML = svg;
   }
-</script>
-
-</body>
+</script></body>
 </html>
