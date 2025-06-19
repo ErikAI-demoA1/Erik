@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
   <title>ErikAI Kalendár</title>
@@ -35,17 +34,23 @@
       text-align: center;
       padding: 5px;
       border-radius: 5px;
-      background: #f0f0f0;
-      transition: 0.2s;
-    }
-    .day:hover {
-      background: #ddd;
       cursor: pointer;
     }
     .today {
       background: red;
       color: white;
       font-weight: bold;
+    }
+    .holiday {
+      background: #90ee90;
+    }
+    .daynames {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      margin-bottom: 5px;
     }
     .controls {
       text-align: center;
@@ -55,154 +60,127 @@
       padding: 8px 16px;
       margin: 5px;
     }
-    body.dark-mode {
-      background-color: #121212;
-      color: white;
-    }
   </style>
 </head>
 <body>
+<h1>ErikAI Kalendár</h1>
+<div class="controls">
+  <button onclick="changeYear(-1)">◀ Rok späť</button>
+  <span id="yearDisplay"></span>
+  <button onclick="changeYear(1)">Rok vpred ▶</button>
+</div>
+<div id="calendar"></div><script>
+const calendar = document.getElementById('calendar');
+const yearDisplay = document.getElementById('yearDisplay');
+const monthNames = [
+  "Január", "Február", "Marec", "Apríl", "Máj", "Jún",
+  "Júl", "August", "September", "Október", "November", "December"
+];
+const dayNames = ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"];
+const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
 
-  <h1>ErikAI Kalendár</h1>
+let currentYear = new Date().getFullYear();
+let holidays = {
+  // formát: 'MM-DD': 'popis'
+  '01-01': 'Nový rok',
+  '05-01': 'Sviatok práce',
+  '07-05': 'Sviatok sv. Cyrila a Metoda',
+  '09-01': 'Deň ústavy SR',
+  '11-17': 'Deň boja za slobodu',
+  '12-24': 'Vianoce (1)',
+  '12-25': 'Vianoce (2)',
+  '12-26': 'Vianoce (3)'
+};
 
-  <div class="controls">
-    <button onclick="changeYear(-1)">◀ Rok späť</button>
-    <span id="yearDisplay"></span>
-    <button onclick="changeYear(1)">Rok vpred ▶</button>
-  </div>
+function renderCalendar(year) {
+  calendar.innerHTML = '';
+  yearDisplay.textContent = year;
 
-  <div id="calendar"></div>
+  const today = new Date();
 
-  <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
-  <p id="cas" style="font-size: 18px;"></p>
+  for (let m = 0; m < 12; m++) {
+    const monthDiv = document.createElement('div');
+    monthDiv.className = 'month';
 
-  <div id="google_translate_element"></div>
+    const header = document.createElement('h3');
+    header.textContent = monthNames[m];
+    monthDiv.appendChild(header);
 
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
-    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-    © 2025 Erik Mohylák – All rights reserved.
-  </p>
+    const daynameDiv = document.createElement('div');
+    daynameDiv.className = 'daynames';
+    dayNames.forEach(dn => {
+      const el = document.createElement('div');
+      el.textContent = dn;
+      daynameDiv.appendChild(el);
+    });
+    monthDiv.appendChild(daynameDiv);
 
-  <a href="index.html" class="spat">← Späť na hlavnú stránku 1</a>
-  <a href="zoznam_straniek.html" class="spat">← Zoznam Straniek</a>
+    const daysDiv = document.createElement('div');
+    daysDiv.className = 'days';
 
-  <script>
-    const calendar = document.getElementById('calendar');
-    const yearDisplay = document.getElementById('yearDisplay');
-    const monthNames = [
-      "Január", "Február", "Marec", "Apríl", "Máj", "Jún",
-      "Júl", "August", "September", "Október", "November", "December"
-    ];
-    const dayNames = ["Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"];
+    const firstDay = new Date(year, m, 1).getDay();
+    const offset = (firstDay + 6) % 7;
 
-    const sviatky = {
-      "1.1.": "Nový rok",
-      "6.1.": "Zjavenie Pána",
-      "1.5.": "Sviatok práce",
-      "8.5.": "Deň víťazstva nad fašizmom",
-      "5.7.": "Cyril a Metod",
-      "29.8.": "Výročie SNP",
-      "1.9.": "Deň ústavy SR",
-      "15.9.": "Sedembolestná Panna Mária",
-      "1.11.": "Sviatok všetkých svätých",
-      "17.11.": "Deň boja za slobodu a demokraciu",
-      "24.12.": "Štedrý deň",
-      "25.12.": "Prvý sviatok vianočný",
-      "26.12.": "Druhý sviatok vianočný"
-    };
+    for (let i = 0; i < offset; i++) {
+      const empty = document.createElement('div');
+      daysDiv.appendChild(empty);
+    }
 
-    const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
-    let currentYear = new Date().getFullYear();
+    const totalDays = daysInMonth(m, year);
+    for (let d = 1; d <= totalDays; d++) {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'day';
+      dayDiv.textContent = d;
 
-    function renderCalendar(year) {
-      calendar.innerHTML = '';
-      yearDisplay.textContent = year;
-
-      const today = new Date();
-
-      for (let m = 0; m < 12; m++) {
-        const monthDiv = document.createElement('div');
-        monthDiv.className = 'month';
-
-        const header = document.createElement('h3');
-        header.textContent = monthNames[m];
-        monthDiv.appendChild(header);
-
-        const daysDiv = document.createElement('div');
-        daysDiv.className = 'days';
-
-        const totalDays = daysInMonth(m, year);
-        for (let d = 1; d <= totalDays; d++) {
-          const dateObj = new Date(year, m, d);
-          const dayName = dayNames[dateObj.getDay()];
-          const key = `${d}.${m + 1}.`;
-          const popis = sviatky[key] || '';
-
-          const dayDiv = document.createElement('div');
-          dayDiv.className = 'day';
-          dayDiv.textContent = d;
-          dayDiv.title = `${dayName} – ${popis || 'Žiadny špeciálny deň'}`;
-
-          if (
-            d === today.getDate() &&
-            m === today.getMonth() &&
-            year === today.getFullYear()
-          ) {
-            dayDiv.classList.add('today');
-          }
-
-          if (sviatky[key]) {
-            dayDiv.style.backgroundColor = '#a8e6a2';
-            dayDiv.style.fontWeight = 'bold';
-          }
-
-          daysDiv.appendChild(dayDiv);
-        }
-
-        monthDiv.appendChild(daysDiv);
-        calendar.appendChild(monthDiv);
+      const key = String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      if (holidays[key]) {
+        dayDiv.classList.add('holiday');
+        dayDiv.title = holidays[key];
       }
-    }
 
-    function changeYear(offset) {
-      currentYear += offset;
-      renderCalendar(currentYear);
-    }
+      if (d === today.getDate() && m === today.getMonth() && year === today.getFullYear()) {
+        dayDiv.classList.add('today');
+      }
 
-    function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-    }
-
-    function aktualizujCas() {
-      const teraz = new Date();
-      const moznosti = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
+      dayDiv.onclick = () => {
+        const popis = prompt("Zadaj popis pre "+d+"."+String(m+1).padStart(2, '0')+":" , holidays[key] || '');
+        if (popis) {
+          holidays[key] = popis;
+          renderCalendar(year);
+        }
       };
-      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
-      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+
+      daysDiv.appendChild(dayDiv);
     }
 
-    setInterval(aktualizujCas, 1000);
-    aktualizujCas();
-    renderCalendar(currentYear);
-  </script>
+    monthDiv.appendChild(daysDiv);
+    calendar.appendChild(monthDiv);
+  }
+}
 
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'sk',
-        includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-    }
-  </script>
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+function changeYear(offset) {
+  currentYear += offset;
+  renderCalendar(currentYear);
+}
 
+renderCalendar(currentYear);
+</script><p id="cas" style="font-size: 18px;"></p>
+<script>
+function aktualizujCas() {
+  const teraz = new Date();
+  const moznosti = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  };
+  document.getElementById('cas').innerText = `\u23f0 Aktu\u00e1lny \u010das: ${teraz.toLocaleDateString('sk-SK', moznosti)}`;
+}
+setInterval(aktualizujCas, 1000);
+aktualizujCas();
+</script>
 </body>
 </html>
