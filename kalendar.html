@@ -9,62 +9,100 @@
   background: #f2f2f2;
   color: #222;
   padding: 20px 10px;
-  max-width: 1280px;
+  max-width: 1320px;
   margin: 0 auto;
-    }
-    h1 {
-      margin-bottom: 10px;
-    }
-    .calendar {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-    }
-    .month {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      width: 180px;
-    }
-    .month h3 {
-      margin: 5px 0;
-    }
-    .days {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 3px;
-    }
-    .day, .dow {
-      padding: 5px;
-      border-radius: 4px;
-    }
-    .dow {
-      font-weight: bold;
-    }
-    .today { background: red; color: white; }
-    .holiday { background: #00cc66; color: white; }
-    .note { background: #ffeb3b; }
-    .controls { margin: 10px 0; }
-    .legend {
-  font-size: 14px;
-  margin-top: 15px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.controls {
+  text-align: center;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
+  gap: 15px;
   flex-wrap: wrap;
-    }
-    .legend span {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: bold;
-  color: white;
-  min-width: 70px;
+}
+
+#calendar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 15px;
+}
+
+.month {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 220px;
+  padding: 10px;
   text-align: center;
-    }
+}
+
+.month h3 {
+  margin: 0 0 10px;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day {
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.today {
+  background: red;
+  color: white;
+  font-weight: bold;
+}
+
+.holiday {
+  background: #00cc66;
+  color: white;
+}
+
+.note {
+  background: #ffeb3b;
+  font-weight: bold;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.legend span {
+  display: inline-block;
+  padding: 3px 6px;
+  margin: 0 5px;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+}
+
+.legend .today {
+  background: red;
+}
+
+.legend .holiday {
+  background: #00cc66;
+}
+
+.legend .note {
+  background: #ffeb3b;
+  color: black;
+}
   </style>
 </head>
 <body>
