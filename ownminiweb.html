@@ -187,6 +187,43 @@ function download() {
 }
 </script>
 
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const elements = document.getElementsByTagName("erikai_calendar");
+  for (let el of elements) {
+    el.outerHTML = `
+      <!-- BEGIN ERIKAI KALENDÁR -->
+      <div class="controls">
+        <button onclick="changeYear(-1)">◀ Rok späť</button>
+        <span id="yearDisplay"></span>
+        <button onclick="changeYear(1)">Rok vpred ▶</button>
+      </div>
+      <div id="calendar" class="calendar"></div>
+      <div class="legend">
+        <strong>Legenda:</strong>
+        <span class="today">Dnes</span>
+        <span class="holiday">Sviatok</span>
+        <span class="note">Udalosť</span>
+      </div>
+      <p id="cas" style="margin-top: 15px; font-weight: bold;"></p>
+
+      <style>
+        /* celý CSS KÓD SEM VLOŽÍŠ (alebo linkneš externý súbor) */
+      </style>
+
+      <script>
+        // SEM VLOŽÍŠ SVOJ JS KÓD kalendára (renderCalendar, holidays, atď.)
+        // aby fungoval aj po nahradení značky
+      <\/script>
+      <!-- END ERIKAI KALENDÁR -->
+    `;
+  }
+});
+  </script>
+
+  
+
 <a href="zoznam_straniek.html" class="spat">← Zoznam Straniek</a>
 
 <p style="font-size: 14px; color: gray; margin-top: 20px;">
