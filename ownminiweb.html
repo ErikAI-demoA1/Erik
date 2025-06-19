@@ -77,6 +77,7 @@ if (bgColorMatch) {
 
   html += code
     .replace(/<title>(.*?)<\/title>/g, '')
+    .replace(/<background_color>(.*?)<\/background_color>/g, '')
     .replace(/<name_red>(.*?)<\/name_red>/g, '<h2 style="color:red;">$1</h2>')
     .replace(/<name_blue>(.*?)<\/name_blue>/g, '<h2 style="color:blue;">$1</h2>')
     .replace(/<name_green>(.*?)<\/name_green>/g, '<h2 style="color:green;">$1</h2>')
