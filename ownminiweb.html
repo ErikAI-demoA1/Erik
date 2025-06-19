@@ -1,66 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Stránkovač</title>
+  <title>ErikAI Mini Stránkovač</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    textarea { width: 100%; height: 220px; }
-    iframe { width: 100%; height: 300px; border: 1px solid #ccc; margin-top: 20px; }
-    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
-    .napoveda { background: #f2f2f2; padding: 15px; margin-bottom: 10px; border-left: 5px solid #00cc66; }
+    body { font-family: sans-serif; background: #e0ffe0; padding: 20px; }
+    textarea { width: 100%; height: 140px; font-family: monospace; }
+    .vystup { margin-top: 20px; padding: 15px; background: white; border: 1px solid #ccc; }
+    button { margin-top: 10px; padding: 10px 20px; font-weight: bold; }
   </style>
 </head>
 <body>
-
   <h2>🌍 ErikAI Mini Stránkovač</h2>
+  <p><strong>🛠 Ako vytvoriť svoju stránku:</strong></p>
+  <pre>
+▸ Používaj značky:
+  &lt;title&gt;Názov tvojej stránky&lt;/title&gt;
+  &lt;name&gt;Hlavný nadpis&lt;/name&gt;
+  &lt;text&gt;Popis, text alebo čokoľvek&lt;/text&gt;
 
-  <div class="napoveda">
-    <strong>🛠 Ako vytvoriť svoju stránku:</strong><br>
-    ▸ Používaj značky:
-    <pre>
-&lt;title&gt;Názov tvojej stránky&lt;/title&gt;
-&lt;name&gt;Hlavný nadpis&lt;/name&gt;
-&lt;text&gt;Popis, text alebo čokoľvek&lt;/text&gt;
-    </pre>
-    ▸ Zobrazí sa pod URL: <code>www.erikai/čo-chceš.erikai</code><br>
-    (simulované lokálne)
-  </div>
+▸ Zobrazí sa pod URL: www.erikai/čo-chceš.erikai (simulované lokálne)
+  </pre>
 
-  <textarea id="vstup" placeholder="<title>Moja stránka</title>
-<name>ErikAI</name>
-<text>Vitaj vo vlastnom svete</text>"></textarea>
+  <textarea id="input" placeholder="<title>Moja stránka</title>\n<name>ErikAI</name>\n<text>Vitaj na mojej stránke</text>"></textarea><br>
+  <button onclick="zobrazStranku()">Zobraziť stránku</button>
+  <button onclick="stiahniHTML()">Stiahnuť moju stránku</button>
 
-  <br>
-  <button onclick="vygenerujStranku()">Zobraziť stránku</button>
-
-  <iframe id="vystup"></iframe>
+  <div class="vystup" id="preview"></div>
 
   <script>
-    function vygenerujStranku() {
-      const vstup = document.getElementById('vstup').value;
+    function extrahuj(tag, text) {
+      const regex = new RegExp(`<${tag}>(.*?)<\\/${tag}>`, 'i');
+      const match = text.match(regex);
+      return match ? match[1] : '';
+    }
 
-      const title = (vstup.match(/<title>(.*?)<\/title>/) || [,''])[1];
-      const name = (vstup.match(/<name>(.*?)<\/name>/) || [,''])[1];
-      const text = (vstup.match(/<text>(.*?)<\/text>/) || [,''])[1];
+    function zobrazStranku() {
+      const vstup = document.getElementById("input").value;
+      const nadpis = extrahuj("name", vstup);
+      const obsah = extrahuj("text", vstup);
+      const html = `<h2>${nadpis}</h2><p>${obsah}</p>`;
+      document.getElementById("preview").innerHTML = html;
+    }
 
-      const html = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <title>${title}</title>
-        </head>
-        <body style="font-family: sans-serif; padding: 20px;">
-          <h1>${name}</h1>
-          <p>${text}</p>
-        </body>
-        </html>
-      `;
+    function stiahniHTML() {
+      const vstup = document.getElementById("input").value;
+      const nazov = extrahuj("title", vstup) || "moja-stranka";
+      const nadpis = extrahuj("name", vstup);
+      const obsah = extrahuj("text", vstup);
 
-      document.getElementById('vystup').srcdoc = html;
+      const htmlObsah = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${nazov}</title>
+</head>
+<body>
+  <h1>${nadpis}</h1>
+  <p>${obsah}</p>
+</body>
+</html>`;
+
+      const blob = new Blob([htmlObsah], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = nazov + ".html";
+      link.click();
     }
   </script>
-
 </body>
 </html>
