@@ -2,100 +2,88 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ErikAI Create Own APK</title>
+  <title>ErikAI - Vytvor si PWA aplikáciu</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f5f5f5;
-      padding: 20px;
-    }
-    textarea {
-      width: 100%;
-      height: 300px;
-      margin-top: 10px;
-      font-family: monospace;
-    }
-    .btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background: #ff4757;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      border-radius: 6px;
-    }
-    .btn:hover {
-      background: #e84118;
-    }
-    .info {
-      background: #dfe6e9;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-    #preview {
-      background: white;
-      padding: 15px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      margin-top: 15px;
-      white-space: normal;
-    }
+    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+    textarea, input { width: 100%; padding: 10px; margin-top: 10px; font-family: monospace; }
+    button { padding: 10px 20px; margin-top: 15px; background: #00a8ff; color: white; border: none; border-radius: 6px; font-weight: bold; }
+    button:hover { background: #0097e6; }
   </style>
 </head>
 <body>
-  <h1>ErikAI Create Own APK</h1>
 
-  <div class="info">
-    👋 V tomto editore si môžeš vytvoriť vlastnú Android aplikáciu z jednoduchého HTML.<br><br>
-    Použi príkazy ako:
-    <ul>
-      <li><code>&lt;text&gt;tvoj text&lt;/text&gt;</code></li>
-      <li><code>&lt;name_red&gt;Červený nadpis&lt;/name_red&gt;</code></li>
-      <li><code>&lt;text_blue&gt;Modrý text&lt;/text_blue&gt;</code></li>
-      <li><code>&lt;odkaz&gt;https://odkaz.sk&lt;/odkaz&gt;</code></li>
-      <li><code>&lt;video&gt;https://www.youtube.com/embed/xyz&lt;/video&gt;</code></li>
-      <li><code>&lt;erikai_black&gt;</code> = čierne pozadie aplikácie</li>
-    </ul>
-    🔒 <b>Upozornenie:</b> Niektoré videá sa nemusia zobraziť, ak ich stránka blokuje. Obsah musí byť tvoj vlastný a bez prekladov.
-  </div>
+  <h1>ErikAI - Vytvor si vlastnú PWA appku</h1>
 
-  <label>Názov tvojej aplikácie:</label><br>
-  <input id="apkName" placeholder="Napr. MojaSuperApp" style="width:100%; padding:8px; margin-top:5px;" />
+  <label>Názov tvojej appky:</label>
+  <input id="appName" type="text" placeholder="MojaSuperPWA" />
 
-  <textarea id="editor" placeholder="Sem vlož svoj ErikAI HTML kód..."></textarea>
+  <label>HTML kód tvojej aplikácie:</label>
+  <textarea id="htmlCode" rows="15" placeholder="Sem vlož svoj HTML kód..."></textarea>
 
-  <button class="btn" onclick="zobrazNahlad()">Zobraziť náhľad</button>
-  <button class="btn" onclick="exportToAPK()">Stiahnuť ako APK</button>
-
-  <div id="preview"></div>
+  <button onclick="createPWA()">Stiahnuť ako PWA (.zip)</button>
 
   <script>
-    function zobrazNahlad() {
-      let raw = document.getElementById("editor").value;
+    function createPWA() {
+      const name = document.getElementById('appName').value || "MojaErikAIApk";
+      const html = document.getElementById('htmlCode').value;
 
-      // farebné pozadia
-      if (raw.includes("<erikai_black>")) raw = `<div style="background:black; color:white; padding:15px;">` + raw.replace("<erikai_black>", "") + "</div>";
-      if (raw.includes("<erikai_blue>")) raw = `<div style="background:#3498db; color:white; padding:15px;">` + raw.replace("<erikai_blue>", "") + "</div>";
+      const indexHtml = `<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${name}</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+${html}
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+</script>
+</body>
+</html>`;
 
-      // jednoduché tagy
-      raw = raw.replace(/<name_red>(.*?)<\/name_red>/gi, `<h2 style="color:red;">$1</h2>`);
-      raw = raw.replace(/<text_blue>(.*?)<\/text_blue>/gi, `<p style="color:blue;">$1</p>`);
-      raw = raw.replace(/<text>(.*?)<\/text>/gi, `<p>$1</p>`);
-      raw = raw.replace(/<odkaz>(.*?)<\/odkaz>/gi, `<a href="$1" target="_blank">$1</a>`);
-      raw = raw.replace(/<video>(.*?)<\/video>/gi, `<iframe width="100%" height="250" src="$1" frameborder="0" allowfullscreen></iframe>`);
+      const manifest = {
+        name: name,
+        short_name: name,
+        start_url: "./index.html",
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#00a8ff",
+        icons: [
+          {
+            src: "icon.png",
+            sizes: "192x192",
+            type: "image/png"
+          }
+        ]
+      };
 
-      document.getElementById("preview").innerHTML = raw;
-    }
+      const serviceWorker = `self.addEventListener('fetch', function(event) {
+  event.respondWith(fetch(event.request).catch(function() {
+    return new Response('Offline');
+  }));
+});`;
 
-    function exportToAPK() {
-      const html = document.getElementById("editor").value;
-      const name = document.getElementById("apkName").value || "MojaApp";
-      const encoded = encodeURIComponent(html);
-      window.open(`https://pwa2apk.com/?url=data:text/html,${encoded}&name=${encodeURIComponent(name)}`);
+      const zip = new JSZip();
+      zip.file("index.html", indexHtml);
+      zip.file("manifest.json", JSON.stringify(manifest, null, 2));
+      zip.file("service-worker.js", serviceWorker);
+      zip.file("icon.png", ""); // môžeš neskôr pridať svoju ikonku
+
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(content);
+        a.download = `${name}_PWA.zip`;
+        a.click();
+      });
     }
   </script>
+
+  <!-- Knižnica JSZip -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 </body>
 </html>
