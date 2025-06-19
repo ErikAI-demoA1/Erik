@@ -1,116 +1,82 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Mini Stránkovač</title>
   <style>
-    body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
-    textarea { width: 100%; height: 200px; font-family: monospace; }
-    .output { background: white; padding: 10px; margin-top: 10px; border: 1px solid #ccc; }
-    button { margin-top: 10px; padding: 10px 20px; margin-right: 10px; }
-    code { background: #eee; padding: 2px 4px; display: block; margin: 4px 0; }
+    body { font-family: sans-serif; padding: 1rem; background: #f9f9f9; }
+    textarea { width: 100%; height: 140px; font-family: monospace; }
+    button { margin-top: 10px; padding: 8px 12px; font-size: 1rem; }
+    #output { margin-top: 1rem; padding: 1rem; background: #fff; border: 1px solid #ccc; }
+    .notice {
+      background: #fff3cd;
+      padding: 10px;
+      border-left: 5px solid #ffa500;
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
-  <div style="border: 2px solid orange; background-color: #fff3cd; padding: 12px; margin-top: 20px; border-radius: 8px; color: #664d03;">
-  <strong>🔒 English Notice for International Users:</strong><br><br>
-  Please note: Everything you enter here must be original.<br>
-  Do <strong>not</strong> use direct translators or automated translation tools.<br>
-  All content must be written by you.<br>
-  ErikAI respects <strong>creativity</strong>, <strong>privacy</strong>, and <strong>authenticity</strong>.
-  </div>
-  <h2>🌐 ErikAI Mini Stránkovač</h2>
+  <div class="notice">
+    <strong>🔐 English Notice for International Users:</strong><br>
+    Please note: Everything you enter here must be original.<br>
+    Do <strong>not</strong> use direct translators or automated translation tools.<br>
+    All content must be written by you.<br>
+    ErikAI respects <strong>creativity</strong>, <strong>privacy</strong>, and <strong>authenticity</strong>.
+  </div>  <h2>🌐 ErikAI Mini Stránkovač</h2>
   <p>Napíš si mini stránku pomocou jednoduchých značiek:</p>
-  <code>&lt;title&gt;Názov tvojej stránky&lt;/title&gt;</code>
-  <code>&lt;name&gt;Hlavný nadpis&lt;/name&gt;</code>
-  <code>&lt;text&gt;Popis, text alebo čokoľvek&lt;/text&gt;</code>
-  <code>&lt;odkaz&gt;https://adresa.sk&lt;/odkaz&gt;</code>
-  <code>&lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;</code>
+  <pre><code>&lt;title&gt;Názov tvojej stránky&lt;/title&gt;
+&lt;name_farba&gt;Hlavný nadpis&lt;/name_farba&gt;
+&lt;text_farba&gt;Popis, text alebo čokolvek&lt;/text_farba&gt;
+&lt;odkaz&gt;https://adresa.sk&lt;/odkaz&gt;
+&lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;
+&lt;erikai_farebnepozadie&gt;</code></pre>  <textarea id="input" placeholder="Sem napíš kód..."></textarea><br><button onclick="render()">Zobraziť stránku</button> <button onclick="download()">Stiahnuť moju stránku</button>
 
-  <textarea id="input"><title>Moja stránka</title>
-<name>Moje meno</name>
-<text>Toto je text o mne.</text>
-<odkaz>https://mojeportfolio.sk</odkaz>
-<video>https://www.youtube.com/embed/abc123xyz</video></textarea>
-
-  <button onclick="zobrazStranku()">Zobraziť stránku</button>
-  <button onclick="stiahniStranku()">Stiahnuť moju stránku</button>
-
-  <div class="output" id="vystup"></div>
-
-  <script>
-    function zobrazStranku() {
-      const data = document.getElementById('input').value;
+  <div id="output"></div>  <script>
+    function render() {
+      let code = document.getElementById('input').value;
       let html = '';
-      html += '<div>';
 
-      const lines = data.split('\n');
-      for (let line of lines) {
-        if (line.includes('<title>')) {
-          let text = line.replace('<title>', '').replace('</title>', '');
-          html += `<h1 style="display:none">${text}</h1>`;
-        } else if (line.includes('<name>')) {
-          let text = line.replace('<name>', '').replace('</name>', '');
-          html += `<h2>${text}</h2>`;
-        } else if (line.includes('<text>')) {
-          let text = line.replace('<text>', '').replace('</text>', '');
-          html += `<p>${text}</p>`;
-        } else if (line.includes('<odkaz>')) {
-          let link = line.replace('<odkaz>', '').replace('</odkaz>', '');
-          html += `<p><a href="${link}" target="_blank">${link}</a></p>`;
-        } else if (line.includes('<img>')) {
-          let img = line.replace('<img>', '').replace('</img>', '');
-          html += `<img src="${img}" style="max-width:100%;"><br>`;
-        } else if (line.includes('<video>')) {
-          let video = line.replace('<video>', '').replace('</video>', '');
-          html += `<iframe width="100%" height="200" src="${video}" frameborder="0" allowfullscreen></iframe><br>`;
-        }
+      const bgMatch = code.match(/<erikai_(.*?)>/);
+      if (bgMatch) {
+        html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
       }
-      html += '</div>';
-      document.getElementById('vystup').innerHTML = html;
+
+      html += code
+        .replace(/<title>(.*?)<\/title>/g, '')
+        .replace(/<name_(.*?)>(.*?)<\/name_\1>/g, '<h2 style="color:$1;">$2</h2>')
+        .replace(/<text_(.*?)>(.*?)<\/text_\1>/g, '<p style="color:$1;">$2</p>')
+        .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
+        .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="250" src="$1" frameborder="0" allowfullscreen></iframe>');
+
+      if (bgMatch) html += '</div>';
+
+      document.getElementById('output').innerHTML = html;
     }
 
-    function stiahniStranku() {
-      const data = document.getElementById('input').value;
-      let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>';
-      let title = data.match(/<title>(.*?)<\/title>/);
-      html += title ? title[1] : 'Moja stránka';
-      html += '</title></head><body>';
+    function download() {
+      let code = document.getElementById('input').value;
+      let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Moja stránka</title></head><body>';
+      const bgMatch = code.match(/<erikai_(.*?)>/);
+      if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
-      const lines = data.split('\n');
-      for (let line of lines) {
-        if (line.includes('<name>')) {
-          let text = line.replace('<name>', '').replace('</name>', '');
-          html += `<h2>${text}</h2>`;
-        } else if (line.includes('<text>')) {
-          let text = line.replace('<text>', '').replace('</text>', '');
-          html += `<p>${text}</p>`;
-        } else if (line.includes('<odkaz>')) {
-          let link = line.replace('<odkaz>', '').replace('</odkaz>', '');
-          html += `<p><a href="${link}" target="_blank">${link}</a></p>`;
-        } else if (line.includes('<img>')) {
-          let img = line.replace('<img>', '').replace('</img>', '');
-          html += `<img src="${img}" style="max-width:100%;"><br>`;
-        } else if (line.includes('<video>')) {
-          let video = line.replace('<video>', '').replace('</video>', '');
-          html += `<iframe width="100%" height="200" src="${video}" frameborder="0" allowfullscreen></iframe><br>`;
-        }
-      }
+      html += code
+        .replace(/<title>(.*?)<\/title>/g, '')
+        .replace(/<name_(.*?)>(.*?)<\/name_\1>/g, '<h2 style="color:$1;">$2</h2>')
+        .replace(/<text_(.*?)>(.*?)<\/text_\1>/g, '<p style="color:$1;">$2</p>')
+        .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
+        .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="250" src="$1" frameborder="0" allowfullscreen></iframe>');
+
+      if (bgMatch) html += '</div>';
       html += '</body></html>';
 
       const blob = new Blob([html], { type: 'text/html' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = "moja-stranka.html";
-      link.click();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'moja-stranka.html';
+      a.click();
+      URL.revokeObjectURL(url);
     }
-  </script>
-  <a href="zoznam_straniek.html" class="spat">← Zoznam Straniek</a>
-
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
-  </p>
-</body>
+  </script></body>
 </html>
