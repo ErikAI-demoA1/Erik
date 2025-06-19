@@ -153,7 +153,8 @@ if (bgColorMatch) {
 .replace(/<erikai_white>/g, '<div style="background:white; color:black; padding:15px; border-radius:10px;">')
     .replace(/<\/erikai_.*?>/g, '</div>')
     .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
-    .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="600" src="$1" frameborder="0" allowfullscreen></iframe>');
+    .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="600" src="$1" frameborder="0" allowfullscreen></iframe>')
+  .replace(/<calendar>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kalendar.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
 
   if (bgMatch) html += '</div>';
 
