@@ -1,11 +1,12 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Mini Stránkovač</title>
   <style>
     body { font-family: sans-serif; padding: 1rem; background: #f9f9f9; }
-    textarea { width: 100%; height: 140px; font-family: monospace; }
+    textarea { width: 100%; height: 160px; font-family: monospace; }
     button { margin-top: 10px; padding: 8px 12px; font-size: 1rem; }
     #output { margin-top: 1rem; padding: 1rem; background: #fff; border: 1px solid #ccc; }
     .notice {
@@ -17,43 +18,54 @@
   </style>
 </head>
 <body>
-  <div class="notice">
-    <strong>🔐 English Notice for International Users:</strong><br>
-    Please note: Everything you enter here must be original.<br>
-    Do <strong>not</strong> use direct translators or automated translation tools.<br>
-    All content must be written by you.<br>
-    ErikAI respects <strong>creativity</strong>, <strong>privacy</strong>, and <strong>authenticity</strong>.
-  </div>  <h2>🌐 ErikAI Create eazy own web</h2>
 
-  <div style="background-color: #fff3cd; border: 2px solid #ffeeba; padding: 10px; margin-bottom: 15px; border-radius: 6px;">
-  <h3 style="margin-top: 0; color: #856404;">📽️ ErikAI – Informácia k tagu <code>&lt;video&gt;</code></h3>
-  <p style="color: #856404;">
-    Tag <code>&lt;video&gt;</code> je univerzálny zobrazovač:
-    <ul style="padding-left: 20px; color: #856404;">
-      <li>🎥 Ak vložíš odkaz ako <code>https://www.youtube.com/embed/...</code>, zobrazí sa video.</li>
-      <li>🌐 Ak vložíš inú webovú adresu, zobrazí sa daná web stránka (napr. SPU, portfólio...)</li>
-    </ul>
-    Tento tag vie zobraziť **video aj webovú stránku** bez nutnosti prepínať.
-  </p>
-  </div>
-  <div style="background:#fff3cd; padding:10px; border-left:5px solid #ffbf00; font-size:90%">
-⚠️ <strong>Upozornenie:</strong> Niektoré webové stránky alebo videá nemusia byť zobrazené.  
-Dôvodom je ochrana týchto stránok pred externým vložením.  
-Ak sa nič nezobrazí, klikni na odkaz ručne.
-  </div>
-  
-  <p>Napíš si mini stránku pomocou jednoduchých značiek:</p>
-  <pre><code>&lt;title&gt;Názov tvojej stránky&lt;/title&gt;
-&lt;name_farba&gt;Hlavný nadpis&lt;/name_farba&gt;
-&lt;text_farba&gt;Popis, text alebo čokolvek&lt;/text_farba&gt;
-&lt;odkaz&gt;https://adresa.sk&lt;/odkaz&gt;
+<div class="notice">
+  <strong>🔐 English Notice:</strong><br>
+  Do <b>not</b> use translators or AI-generated content here. Everything must be written by you.  
+  Respect creativity and originality. ErikAI supports fair and human-made content.
+</div>
+
+<h2>🌐 ErikAI – Vytvor si mini stránku</h2>
+
+<div style="background-color: #fff3cd; border: 2px solid #ffeeba; padding: 10px; border-radius: 6px;">
+  <h3 style="margin-top: 0; color: #856404;">📽️ Tag <code>&lt;video&gt;</code> zobrazuje:</h3>
+  <ul style="color: #856404;">
+    <li>🎥 YouTube video (<code>https://www.youtube.com/embed/...</code>)</li>
+    <li>🌐 Web stránku (napr. univerzita, portfólio...)</li>
+  </ul>
+  Funguje univerzálne pre video aj web.
+</div>
+
+<div style="background:#fff3cd; padding:10px; border-left:5px solid #ffbf00;">
+⚠️ <strong>Upozornenie:</strong> Niektoré stránky alebo videá sa nemusia načítať vo vnútri aplikácie kvôli bezpečnostným obmedzeniam.  
+Ak sa nič nezobrazí, použi odkaz manuálne.
+</div>
+
+<p>Napíš HTML kód svojej stránky pomocou značiek:</p>
+<pre><code>&lt;title&gt;Názov stránky&lt;/title&gt;
+&lt;name_red&gt;Červený nadpis&lt;/name_red&gt;
+&lt;text_green&gt;Zelený text&lt;/text_green&gt;
+&lt;text_blue&gt;Modrý text&lt;/text_blue&gt;
+&lt;text_orange&gt;Oranžová výstraha&lt;/text_orange&gt;
+&lt;text_purple&gt;Fialový kreatívny text&lt;/text_purple&gt;
+&lt;odkaz&gt;https://odkaz.sk&lt;/odkaz&gt;
 &lt;video&gt;https://www.youtube.com/embed/ID&lt;/video&gt;
-&lt;erikai_farebnepozadie&gt;</code></pre>  <textarea id="input" placeholder="Sem napíš kód..."></textarea><br><button onclick="render()">Zobraziť stránku</button> <button onclick="download()">Stiahnuť moju stránku</button>
+&lt;erikai_red&gt;...obsah...&lt;/erikai_red&gt;
+</code></pre>
 
-  <div id="output"></div>  <script>
-    function render() {
+<textarea id="input" placeholder="Sem napíš kód..."></textarea><br>
+<button onclick="render()">Zobraziť stránku</button>
+<button onclick="download()">Stiahnuť moju stránku</button>
+
+<div id="output"></div>
+
+<script>
+function render() {
   let code = document.getElementById('input').value;
   let html = '';
+
+  const bgMatch = code.match(/<erikai_(.*?)>/);
+  if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
   html += code
     .replace(/<title>(.*?)<\/title>/g, '')
@@ -66,64 +78,51 @@ Ak sa nič nezobrazí, klikni na odkaz ručne.
     .replace(/<text_orange>(.*?)<\/text_orange>/g, '<p style="color:orange;">$1</p>')
     .replace(/<text_gray>(.*?)<\/text_gray>/g, '<p style="color:gray;">$1</p>')
     .replace(/<text_purple>(.*?)<\/text_purple>/g, '<p style="color:purple;">$1</p>')
+    .replace(/<erikai_red>/g, '<div style="background:#e74c3c; color:white; padding:15px; border-radius:10px;">')
     .replace(/<erikai_black>/g, '<div style="background:black; color:white; padding:15px; border-radius:10px;">')
     .replace(/<erikai_blue>/g, '<div style="background:#3498db; color:white; padding:15px; border-radius:10px;">')
-    .replace(/<erikai_red>/g, '<div style="background:#e74c3c; color:white; padding:15px; border-radius:10px;">')
     .replace(/<\/erikai_.*?>/g, '</div>')
     .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
     .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="300" src="$1" frameborder="0" allowfullscreen></iframe>');
 
+  if (bgMatch) html += '</div>';
+
   document.getElementById("output").innerHTML = html;
-    }
+}
 
-      const bgMatch = code.match(/<erikai_(.*?)>/);
-      if (bgMatch) {
-        html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
-      }
+function download() {
+  let code = document.getElementById('input').value;
+  let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Moja stránka</title></head><body>';
 
-      html += code
-        .replace(/<title>(.*?)<\/title>/g, '')
-        .replace(/<name_(.*?)>(.*?)<\/name_\1>/g, '<h2 style="color:$1;">$2</h2>')
-        .replace(/<text_(.*?)>(.*?)<\/text_\1>/g, '<p style="color:$1;">$2</p>')
-        .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
-        .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="500" src="$1" frameborder="0" allowfullscreen></iframe>');
+  const bgMatch = code.match(/<erikai_(.*?)>/);
+  if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
-      if (bgMatch) html += '</div>';
+  html += code
+    .replace(/<title>(.*?)<\/title>/g, '')
+    .replace(/<name_(.*?)>(.*?)<\/name_\1>/g, '<h2 style="color:$1;">$2</h2>')
+    .replace(/<text_(.*?)>(.*?)<\/text_\1>/g, '<p style="color:$1;">$2</p>')
+    .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
+    .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="300" src="$1" frameborder="0" allowfullscreen></iframe>');
 
-      document.getElementById('output').innerHTML = html;
-    }
+  if (bgMatch) html += '</div>';
+  html += '</body></html>';
 
-    function download() {
-      let code = document.getElementById('input').value;
-      let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Moja stránka</title></head><body>';
-      const bgMatch = code.match(/<erikai_(.*?)>/);
-      if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'moja-stranka.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
 
-      html += code
-        .replace(/<title>(.*?)<\/title>/g, '')
-        .replace(/<name_(.*?)>(.*?)<\/name_\1>/g, '<h2 style="color:$1;">$2</h2>')
-        .replace(/<text_(.*?)>(.*?)<\/text_\1>/g, '<p style="color:$1;">$2</p>')
-        .replace(/<odkaz>(.*?)<\/odkaz>/g, '<a href="$1" target="_blank">$1</a>')
-        .replace(/<video>(.*?)<\/video>/g, '<iframe width="100%" height="500" src="$1" frameborder="0" allowfullscreen></iframe>');
-
-      if (bgMatch) html += '</div>';
-      html += '</body></html>';
-
-      const blob = new Blob([html], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'moja-stranka.html';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  </script>
 <a href="zoznam_straniek.html" class="spat">← Zoznam Straniek</a>
 
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
+<p style="font-size: 14px; color: gray; margin-top: 20px;">
   This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
-  </p>
+  To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
+  © 2025 Erik Mohylák – All rights reserved.
+</p>
 </body>
 </html>
