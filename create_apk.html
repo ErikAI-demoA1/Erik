@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ErikAI Create Own APK</title>
   <style>
     body {
@@ -17,7 +17,7 @@
       font-family: monospace;
     }
     .btn {
-      margin-top: 15px;
+      margin-top: 10px;
       padding: 10px 20px;
       background: #ff4757;
       color: white;
@@ -35,56 +35,66 @@
       border-radius: 8px;
       margin-bottom: 15px;
     }
-    iframe {
-      width: 100%;
-      height: 400px;
-      margin-top: 20px;
-      border: 1px solid #ccc;
+    #preview {
       background: white;
+      padding: 15px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      margin-top: 15px;
+      white-space: normal;
     }
   </style>
 </head>
 <body>
   <h1>ErikAI Create Own APK</h1>
+
   <div class="info">
-    <p>
-      👋 V tomto editore si môžeš vytvoriť vlastnú Android aplikáciu z jednoduchého HTML.
-      Použi príkazy ako:
-    </p>
+    👋 V tomto editore si môžeš vytvoriť vlastnú Android aplikáciu z jednoduchého HTML.<br><br>
+    Použi príkazy ako:
     <ul>
-      <li><code>&lt;text&gt;Tvoj text&lt;/text&gt;</code></li>
-      <li><code>&lt;name_red&gt;Červený text&lt;/name_red&gt;</code></li>
-      <li><code>&lt;video&gt;https://tvoj-odkaz.com&lt;/video&gt;</code></li>
-      <li><code>&lt;erikai_blue&gt;</code> = modré pozadie</li>
+      <li><code>&lt;text&gt;tvoj text&lt;/text&gt;</code></li>
+      <li><code>&lt;name_red&gt;Červený nadpis&lt;/name_red&gt;</code></li>
+      <li><code>&lt;text_blue&gt;Modrý text&lt;/text_blue&gt;</code></li>
+      <li><code>&lt;odkaz&gt;https://odkaz.sk&lt;/odkaz&gt;</code></li>
+      <li><code>&lt;video&gt;https://www.youtube.com/embed/xyz&lt;/video&gt;</code></li>
+      <li><code>&lt;erikai_black&gt;</code> = čierne pozadie aplikácie</li>
     </ul>
-    <p>
-      🔒 <strong>Upozornenie:</strong> Niektoré videá sa nemusia zobraziť, ak ich stránka blokuje. Všetok obsah musí byť tvoj vlastný a bez prekladov.
-    </p>
+    🔒 <b>Upozornenie:</b> Niektoré videá sa nemusia zobraziť, ak ich stránka blokuje. Obsah musí byť tvoj vlastný a bez prekladov.
   </div>
 
-  <label for="apkName">Názov tvojej aplikácie:</label><br />
-  <input type="text" id="apkName" placeholder="Napr. MojaSuperApp" style="width:100%; padding:8px; margin-top:5px;" />
+  <label>Názov tvojej aplikácie:</label><br>
+  <input id="apkName" placeholder="Napr. MojaSuperApp" style="width:100%; padding:8px; margin-top:5px;" />
 
   <textarea id="editor" placeholder="Sem vlož svoj ErikAI HTML kód..."></textarea>
 
-  <button class="btn" onclick="showPreview()">Zobraziť náhľad</button>
+  <button class="btn" onclick="zobrazNahlad()">Zobraziť náhľad</button>
   <button class="btn" onclick="exportToAPK()">Stiahnuť ako APK</button>
 
-  <iframe id="preview"></iframe>
+  <div id="preview"></div>
 
   <script>
-    function showPreview() {
-      const html = document.getElementById("editor").value;
-      const previewFrame = document.getElementById("preview");
-      previewFrame.srcdoc = html;
+    function zobrazNahlad() {
+      let raw = document.getElementById("editor").value;
+
+      // farebné pozadia
+      if (raw.includes("<erikai_black>")) raw = `<div style="background:black; color:white; padding:15px;">` + raw.replace("<erikai_black>", "") + "</div>";
+      if (raw.includes("<erikai_blue>")) raw = `<div style="background:#3498db; color:white; padding:15px;">` + raw.replace("<erikai_blue>", "") + "</div>";
+
+      // jednoduché tagy
+      raw = raw.replace(/<name_red>(.*?)<\/name_red>/gi, `<h2 style="color:red;">$1</h2>`);
+      raw = raw.replace(/<text_blue>(.*?)<\/text_blue>/gi, `<p style="color:blue;">$1</p>`);
+      raw = raw.replace(/<text>(.*?)<\/text>/gi, `<p>$1</p>`);
+      raw = raw.replace(/<odkaz>(.*?)<\/odkaz>/gi, `<a href="$1" target="_blank">$1</a>`);
+      raw = raw.replace(/<video>(.*?)<\/video>/gi, `<iframe width="100%" height="250" src="$1" frameborder="0" allowfullscreen></iframe>`);
+
+      document.getElementById("preview").innerHTML = raw;
     }
 
     function exportToAPK() {
-      const htmlContent = document.getElementById("editor").value;
-      const appName = document.getElementById("apkName").value || "MojaErikAIApp";
-      const encoded = encodeURIComponent(htmlContent);
-      // Budúci cieľ: nahradiť pwa2apk.com vlastným generátorom
-      window.open(`https://pwa2apk.com/?url=data:text/html,${encoded}&name=${encodeURIComponent(appName)}`);
+      const html = document.getElementById("editor").value;
+      const name = document.getElementById("apkName").value || "MojaApp";
+      const encoded = encodeURIComponent(html);
+      window.open(`https://pwa2apk.com/?url=data:text/html,${encoded}&name=${encodeURIComponent(name)}`);
     }
   </script>
 </body>
