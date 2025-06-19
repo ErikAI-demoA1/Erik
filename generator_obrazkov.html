@@ -2,153 +2,118 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>🧠 ErikAI Kombinátor Obrázkov</title>
+  <title>🧠 ErikAI Kombinátor Obrázkov (Mix)</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f9f9f9;
-      padding: 2rem;
-      max-width: 700px;
-      margin: auto;
-    }
-    h2 {
+      background: #f8f9fa;
+      padding: 20px;
       text-align: center;
-      color: #e63946;
     }
-    input {
-      width: 100%;
+    input, select, button {
       padding: 10px;
+      margin: 5px;
       font-size: 16px;
-      margin-bottom: 15px;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #457b9d;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      display: block;
-      margin: auto;
-    }
-    button:hover {
-      background-color: #1d3557;
     }
     #output {
-      margin-top: 25px;
-      text-align: center;
-    }
-    .image-row {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      flex-wrap: wrap;
       margin-top: 20px;
     }
-    .img-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .canvas-wrap {
+      position: relative;
+      display: inline-block;
     }
-    .img-block img {
-      max-width: 280px;
-      max-height: 250px;
-      border-radius: 10px;
-      border: 2px solid #ccc;
-    }
-    .img-block p {
-      margin-top: 8px;
-      font-weight: bold;
+    canvas {
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
 
-  <h2>🖼️ ErikAI Kombinátor Obrázkov (Spojenie)</h2>
-<p>Zadaj 2 obrázky – buď URL alebo nahrané súbory. Spojíme ich do jedného:</p>
+<h2>🧠 ErikAI Kombinátor Obrázkov (Mix)</h2>
+<p>Vyber 2 obrázky a štýl miešania:</p>
 
-<form id="form">
-  <label>Obrázok 1:</label><br>
-  <input type="url" id="url1" placeholder="alebo zadaj URL"><br>
-  <input type="file" id="file1" accept="image/*"><br><br>
+<input type="file" id="img1" accept="image/*">
+<input type="file" id="img2" accept="image/*"><br>
 
-  <label>Obrázok 2:</label><br>
-  <input type="url" id="url2" placeholder="alebo zadaj URL"><br>
-  <input type="file" id="file2" accept="image/*"><br><br>
+<select id="mixMode">
+  <option value="overlay">🔮 Priesvitné prekrytie</option>
+  <option value="flip">🔄 Zrkadlenie + Otočenie</option>
+  <option value="hue">🌈 Farebný filter (mix)</option>
+</select><br>
 
-  <button type="submit">🧠 Spoj obrázky</button>
-</form>
+<button onclick="mixImages()">🧪 Kombinuj obrázky</button>
 
-<canvas id="canvas" style="display:none;"></canvas>
-<div id="vysledok" style="margin-top:20px;"></div>
+<div id="output"></div>
 
 <script>
-function loadImage(src, file) {
-  return new Promise((resolve, reject) => {
-    if (src) {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = src;
-    } else if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = reader.result;
-      };
-      reader.readAsDataURL(file);
-    } else {
-      resolve(null);
-    }
-  });
-}
+  function mixImages() {
+    const file1 = document.getElementById('img1').files[0];
+    const file2 = document.getElementById('img2').files[0];
+    const mode = document.getElementById('mixMode').value;
+    const output = document.getElementById('output');
 
-document.getElementById("form").addEventListener("submit", async function (e) {
-  e.preventDefault();
-
-  const url1 = document.getElementById("url1").value.trim();
-  const url2 = document.getElementById("url2").value.trim();
-  const file1 = document.getElementById("file1").files[0];
-  const file2 = document.getElementById("file2").files[0];
-
-  const vysledok = document.getElementById("vysledok");
-  vysledok.innerHTML = "⏳ Generujem výstup...";
-
-  try {
-    const img1 = await loadImage(url1, file1);
-    const img2 = await loadImage(url2, file2);
-
-    if (!img1 || !img2) {
-      vysledok.innerHTML = "⚠️ Musíš zadať <b>oba</b> obrázky.";
+    if (!file1 || !file2) {
+      output.innerHTML = "⚠️ Nahraj 2 obrázky.";
       return;
     }
 
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    const img1 = new Image();
+    const img2 = new Image();
+    const reader1 = new FileReader();
+    const reader2 = new FileReader();
 
-    const height = Math.max(img1.height, img2.height);
-    const width = img1.width + img2.width;
+    reader1.onload = function (e1) {
+      img1.src = e1.target.result;
+    };
+    reader2.onload = function (e2) {
+      img2.src = e2.target.result;
+    };
 
-    canvas.width = width;
-    canvas.height = height;
-    canvas.style.display = "block";
+    img1.onload = () => {
+      img2.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
 
-    ctx.drawImage(img1, 0, 0);
-    ctx.drawImage(img2, img1.width, 0);
+        const width = Math.min(img1.width, img2.width, 500);
+        const height = Math.min(img1.height, img2.height, 500);
 
-    const resultUrl = canvas.toDataURL("image/png");
+        canvas.width = width;
+        canvas.height = height;
 
-    vysledok.innerHTML = `
-      <p><b>🧠 Výsledný obrázok:</b></p>
-      <img src="${resultUrl}" style="max-width:100%; border:1px solid #ccc;">
-      <br><a href="${resultUrl}" download="spojene.png">⬇️ Stiahnuť výstup</a>
-    `;
-  } catch (err) {
-    vysledok.innerHTML = "❌ Chyba pri spájaní obrázkov.";
+        if (mode === 'overlay') {
+          ctx.globalAlpha = 1;
+          ctx.drawImage(img1, 0, 0, width, height);
+          ctx.globalAlpha = 0.4;
+          ctx.drawImage(img2, 0, 0, width, height);
+        } else if (mode === 'flip') {
+          ctx.save();
+          ctx.translate(width, 0);
+          ctx.scale(-1, 1);
+          ctx.drawImage(img1, 0, 0, width, height);
+          ctx.restore();
+          ctx.translate(0, height / 2);
+          ctx.rotate(Math.PI / 10);
+          ctx.drawImage(img2, 0, 0, width, height);
+        } else if (mode === 'hue') {
+          ctx.drawImage(img1, 0, 0, width, height);
+          ctx.globalCompositeOperation = "hue";
+          ctx.drawImage(img2, 0, 0, width, height);
+        }
+
+        const resultImg = new Image();
+        resultImg.src = canvas.toDataURL("image/png");
+        resultImg.style.maxWidth = "100%";
+        resultImg.style.border = "1px solid #ccc";
+        resultImg.style.borderRadius = "8px";
+
+        output.innerHTML = "<h3>🧠 Výsledný obrázok:</h3>";
+        output.appendChild(resultImg);
+      };
+      reader2.readAsDataURL(file2);
+    };
+    reader1.readAsDataURL(file1);
   }
-});
 </script>
+
+</body>
+</html>
