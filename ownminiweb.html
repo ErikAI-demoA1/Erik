@@ -157,7 +157,9 @@ if (bgColorMatch) {
   .replace(/<calendar>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kalendar.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<clockandstopwatch>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hodiny.html" width="100%" height="650px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<alarmclock>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/budik.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<randomgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_hesla_mena.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<randomgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_hesla_mena.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<calculator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kalkulacka.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
   
   
 
@@ -182,7 +184,9 @@ function download() {
   .replace(/<calendar>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kalendar.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<clockandstopwatch>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hodiny.html" width="100%" height="650px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<alarmclock>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/budik.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<randomgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_hesla_mena.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<randomgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_hesla_mena.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<calculator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kalkulacka.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
   
   
 
@@ -255,6 +259,22 @@ document.addEventListener("DOMContentLoaded", function () {
     iframe.src = "https://erikai-demoa1.github.io/ErikAI/generator_hesla_mena.html";
     iframe.width = "100%";
     iframe.height = "800px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("calculator");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/kalkulacka.html";
+    iframe.width = "100%";
+    iframe.height = "600px";
     iframe.style.border = "1px solid #ccc";
     iframe.style.borderRadius = "10px";
     iframe.loading = "lazy";
