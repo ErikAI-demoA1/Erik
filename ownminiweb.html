@@ -184,13 +184,9 @@ if (bgColorMatch) {
   .replace(/<helpertools>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/nastroje.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<erikaichatweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai-chat.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<erikaiopenapkweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/weberikai.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<ownmusic>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hudba.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<ownmusic>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hudba.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
   
-  
-  
-  
-  
-
   if (bgMatch) html += '</div>';
 
   document.getElementById("output").innerHTML = html;
@@ -239,12 +235,8 @@ function download() {
   .replace(/<helpertools>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/nastroje.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<erikaichatweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai-chat.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
     .replace(/<erikaiopenapkweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/weberikai.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<ownmusic>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hudba.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
-  
-  
-  
-  
-  
+  .replace(/<ownmusic>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hudba.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
 
   if (bgMatch) html += '</div>';
   html += '</body></html>';
@@ -746,6 +738,22 @@ document.addEventListener("DOMContentLoaded", function () {
   for (let el of calendarTags) {
     const iframe = document.createElement("iframe");
     iframe.src = "https://erikai-demoa1.github.io/ErikAI/hudba.html";
+    iframe.width = "100%";
+    iframe.height = "700px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("owntube");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html";
     iframe.width = "100%";
     iframe.height = "700px";
     iframe.style.border = "1px solid #ccc";
