@@ -237,6 +237,15 @@ function download() {
   let code = document.getElementById('input').value;
   let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>tvoj ErikAI</title></head><body>';
 
+  const bgColorMatch = code.match(/<background_color>(.*?)<\/background_color>/);
+if (bgColorMatch) {
+  document.getElementById("output").style.background = bgColorMatch[1];
+  document.getElementById("output").style.padding = "1rem";
+  document.getElementById("output").style.borderRadius = "10px";
+} else {
+  document.getElementById("output").style.background = "white";
+}
+
   const bgMatch = code.match(/<erikai_(.*?)>/);
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
