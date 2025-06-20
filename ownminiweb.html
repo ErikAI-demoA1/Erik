@@ -179,10 +179,9 @@ if (bgColorMatch) {
   .replace(/<editorvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/video_editor.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<qrgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/qr.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<drawing>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kreslenie.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<imagemixgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_obrazkov.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
-  
-  
-  
+  .replace(/<imagemixgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_obrazkov.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<weather>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/pocasie.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<helpertools>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/nastroje.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
   
   
 
@@ -229,10 +228,9 @@ function download() {
   .replace(/<editorvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/video_editor.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
     .replace(/<qrgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/qr.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<drawing>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kreslenie.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<imagemixgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_obrazkov.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
-  
-  
-  
+  .replace(/<imagemixgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/generator_obrazkov.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<weather>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/pocasie.html" width="100%" height="800px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<helpertools>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/nastroje.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
   
   
 
@@ -658,6 +656,38 @@ document.addEventListener("DOMContentLoaded", function () {
     iframe.src = "https://erikai-demoa1.github.io/ErikAI/generator_obrazkov.html";
     iframe.width = "100%";
     iframe.height = "600px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("weather");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/pocasie.html";
+    iframe.width = "100%";
+    iframe.height = "800px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("helpertools");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/nastroje.html";
+    iframe.width = "100%";
+    iframe.height = "700px";
     iframe.style.border = "1px solid #ccc";
     iframe.style.borderRadius = "10px";
     iframe.loading = "lazy";
