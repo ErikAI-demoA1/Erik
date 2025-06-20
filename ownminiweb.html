@@ -169,7 +169,9 @@ if (bgColorMatch) {
   .replace(/<sms>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/sms.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<gallery>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/galeria.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<maps>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/mapy.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<filemanager>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/spravca_subor.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<filemanager>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/spravca_subor.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<documents>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/dokumenty.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
   
   
   
@@ -207,7 +209,8 @@ function download() {
   .replace(/<sms>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/sms.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<gallery>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/galeria.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<maps>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/mapy.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<filemanager>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/spravca_subor.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<filemanager>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/spravca_subor.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<documents>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/dokumenty.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
   
   
 
@@ -470,6 +473,22 @@ document.addEventListener("DOMContentLoaded", function () {
   for (let el of calendarTags) {
     const iframe = document.createElement("iframe");
     iframe.src = "https://erikai-demoa1.github.io/ErikAI/spravca_subor.html";
+    iframe.width = "100%";
+    iframe.height = "700px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("documents");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/dokumenty.html";
     iframe.width = "100%";
     iframe.height = "700px";
     iframe.style.border = "1px solid #ccc";
