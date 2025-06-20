@@ -161,8 +161,10 @@ if (bgColorMatch) {
   .replace(/<calculator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kalkulacku.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<notes>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/poznamky.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<recordings>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/zaznam_nahravok.html" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<cameraandvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/zaznam_fotak.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<qrscanner>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/zaznam_skener.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<cameraandvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/fotak.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<qrscanner>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/skener.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+    .replace(/<compass>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kompas.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
   
   
   
@@ -196,8 +198,10 @@ function download() {
   .replace(/<calculator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kalkulacku.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<notes>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/poznamky.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<recordings>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/zaznam_nahravok.html" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<cameraandvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/zaznam_fotak.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<qrscanner>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/zaznam_skener.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<cameraandvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/fotak.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<qrscanner>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/skener.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<compass>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kompas.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
   
   
   
@@ -353,6 +357,22 @@ document.addEventListener("DOMContentLoaded", function () {
   for (let el of calendarTags) {
     const iframe = document.createElement("iframe");
     iframe.src = "https://erikai-demoa1.github.io/ErikAI/skener.html";
+    iframe.width = "100%";
+    iframe.height = "600px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("compass");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/kompas.html";
     iframe.width = "100%";
     iframe.height = "600px";
     iframe.style.border = "1px solid #ccc";
