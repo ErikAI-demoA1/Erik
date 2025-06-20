@@ -6,6 +6,8 @@ Autor: Erik Mohylak
 Doba vývoja: 3 mesiace (z toho 1 mesiac čistá práca)
 Rok vzniku: 2025
 
+ErikAI OS je aj PWA Aplikácia (je úplne offline aplikácia)
+
 
 ---
 
