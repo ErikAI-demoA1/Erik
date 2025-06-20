@@ -241,6 +241,7 @@ function download() {
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
   html += code
+    .replace(/<background_color>(.*?)<\/background_color>/g, '')
     .replace(/<\/erikai_.*?>/g, '</div>')
     .replace(/<title>(.*?)<\/title>/g, '')
     .replace(/<name_(.*?)>(.*?)<\/name_\1>/g, '<h2 style="color:$1;">$2</h2>')
