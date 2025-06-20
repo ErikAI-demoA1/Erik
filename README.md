@@ -51,7 +51,7 @@ ErikAI Mobilná aplikácia (.apk)
 
 💬 2 programovacie jazyky
 
-1. ErikAI pre HTML (oficiálny jazyk systému) – silný, intuitívny, podporuje značky ako <calendar>, <vyhladaj>, <hodiny>, ...
+1. ErikAI CoreLang (oficiálny jazyk systému) – silný, intuitívny, podporuje značky ako <calendar>, <vyhladaj>, <hodiny>, ...
 
 
 2. Základný jazyk ErikAI light – jednoduchý štartér pre PWA a tvorcov
@@ -88,6 +88,12 @@ Spustiteľný na akomkoľvek zariadení s prehliadačom (aj offline PWA)
 ErikAI OS je ľahko rozšíriteľný o nové AI nástroje
 
 
+
+---
+
+ErikAI CoreLang je intuitívny značkovací a príkazový jazyk navrhnutý špeciálne pre ErikAI OS.
+Podporuje inteligentné komponenty ako <vyhladaj>, <hodiny>, <calendar>, <openApp> a viac než 40+ značiek.
+Vytvorený pre jednoduchosť, rýchlosť a maximálnu použiteľnosť bez nutnosti tradičného programovania.
 
 ---
 
