@@ -174,8 +174,11 @@ if (bgColorMatch) {
   .replace(/<pdfsk>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/pdfsk.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<tables>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/tabulky.html" width="100%" height="900px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<presentations>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/prezentacie.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<speedmeter>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/speedmeter.html" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
-  
+  .replace(/<speedmeter>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/speedmeter.html" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+    .replace(/<radio>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/radio.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<editorvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/video_editor.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<qrgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/qr.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<drawing>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kreslenie.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
   
   
   
@@ -219,9 +222,11 @@ function download() {
   .replace(/<pdfsk>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/pdfsk.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<tables>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/tabulky.html" width="100%" height="900px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<presentations>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/prezentacie.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-    .replace(/<speedmeter>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/speedmeter.html" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
-  
-  
+    .replace(/<speedmeter>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/speedmeter.html" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<radio>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/radio.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<editorvideo>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/video_editor.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+    .replace(/<qrgenerator>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/qr.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<drawing>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/kreslenie.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
   
   
   
@@ -569,6 +574,70 @@ document.addEventListener("DOMContentLoaded", function () {
     iframe.src = "https://erikai-demoa1.github.io/ErikAI/speedmeter.html";
     iframe.width = "100%";
     iframe.height = "500px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("radio");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/radio.html";
+    iframe.width = "100%";
+    iframe.height = "600px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("editorvideo");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/video_editor.html";
+    iframe.width = "100%";
+    iframe.height = "600px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("qrgenerator");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/qr.html";
+    iframe.width = "100%";
+    iframe.height = "600px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("drawing");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/kreslenie.html";
+    iframe.width = "100%";
+    iframe.height = "600px";
     iframe.style.border = "1px solid #ccc";
     iframe.style.borderRadius = "10px";
     iframe.loading = "lazy";
