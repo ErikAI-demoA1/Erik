@@ -154,6 +154,19 @@ if (bgColorMatch) {
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
   html += code
+    .replace(/<thin>(.*?)<\/thin>/g, '<span style="font-weight:300;">$1</span>')
+.replace(/<gross>(.*?)<\/gross>/g, '<span style="font-weight:700;">$1</span>')
+
+.replace(/<thin_red>(.*?)<\/thin_red>/g, '<span style="font-weight:300; color:red;">$1</span>')
+.replace(/<gross_red>(.*?)<\/gross_red>/g, '<span style="font-weight:700; color:red;">$1</span>')
+
+.replace(/<thin_blue>(.*?)<\/thin_blue>/g, '<span style="font-weight:300; color:blue;">$1</span>')
+.replace(/<gross_blue>(.*?)<\/gross_blue>/g, '<span style="font-weight:700; color:blue;">$1</span>')
+
+.replace(/<thin_green>(.*?)<\/thin_green>/g, '<span style="font-weight:300; color:green;">$1</span>')
+.replace(/<gross_green>(.*?)<\/gross_green>/g, '<span style="font-weight:700; color:green;">$1</span>')
+
+    
     .replace(/<title>(.*?)<\/title>/g, '')
     .replace(/<background_color>(.*?)<\/background_color>/g, '')
     .replace(/<name_red>(.*?)<\/name_red>/g, '<h2 style="color:red;">$1</h2>')
