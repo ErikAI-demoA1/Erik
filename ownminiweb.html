@@ -170,7 +170,10 @@ if (bgColorMatch) {
   .replace(/<gallery>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/galeria.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<maps>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/mapy.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<filemanager>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/spravca_subor.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<documents>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/dokumenty.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<documents>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/dokumenty.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<pdfsk>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/pdfsk.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<tables>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/tabulky.html" width="100%" height="900px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<presentations>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/prezentacie.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
   
   
   
@@ -210,7 +213,13 @@ function download() {
   .replace(/<gallery>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/galeria.html" width="100%" height="600px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<maps>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/mapy.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<filemanager>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/spravca_subor.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<documents>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/dokumenty.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<documents>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/dokumenty.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<pdfsk>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/pdfsk.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<tables>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/tabulky.html" width="100%" height="900px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<presentations>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/prezentacie.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
+  
+  
   
   
 
@@ -489,6 +498,55 @@ document.addEventListener("DOMContentLoaded", function () {
   for (let el of calendarTags) {
     const iframe = document.createElement("iframe");
     iframe.src = "https://erikai-demoa1.github.io/ErikAI/dokumenty.html";
+    iframe.width = "100%";
+    iframe.height = "700px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("pdfsk");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/pdfsk.html";
+    iframe.width = "100%";
+    iframe.height = "700px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("tables");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/tabulky.html";
+    iframe.width = "100%";
+    iframe.height = "900px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("presentations");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/prezentacie.html";
     iframe.width = "100%";
     iframe.height = "700px";
     iframe.style.border = "1px solid #ccc";
