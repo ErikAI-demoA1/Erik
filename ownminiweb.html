@@ -154,10 +154,7 @@ if (bgColorMatch) {
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
   html += code
-    .replace(/<thin>(.*?)<\/thin>/g, '<span style="font-weight:300;">$1</span>')
-.replace(/<gross>(.*?)<\/gross>/g, '<span style="font-weight:700;">$1</span>')
-
-.replace(/<thin_red>(.*?)<\/thin_red>/g, '<span style="font-weight:300; color:red;">$1</span>')
+    .replace(/<thin_red>(.*?)<\/thin_red>/g, '<span style="font-weight:300; color:red;">$1</span>')
 .replace(/<gross_red>(.*?)<\/gross_red>/g, '<span style="font-weight:700; color:red;">$1</span>')
 
 .replace(/<thin_blue>(.*?)<\/thin_blue>/g, '<span style="font-weight:300; color:blue;">$1</span>')
@@ -166,6 +163,32 @@ if (bgColorMatch) {
 .replace(/<thin_green>(.*?)<\/thin_green>/g, '<span style="font-weight:300; color:green;">$1</span>')
 .replace(/<gross_green>(.*?)<\/gross_green>/g, '<span style="font-weight:700; color:green;">$1</span>')
 
+.replace(/<thin_orange>(.*?)<\/thin_orange>/g, '<span style="font-weight:300; color:orange;">$1</span>')
+.replace(/<gross_orange>(.*?)<\/gross_orange>/g, '<span style="font-weight:700; color:orange;">$1</span>')
+
+.replace(/<thin_yellow>(.*?)<\/thin_yellow>/g, '<span style="font-weight:300; color:yellow;">$1</span>')
+.replace(/<gross_yellow>(.*?)<\/gross_yellow>/g, '<span style="font-weight:700; color:yellow;">$1</span>')
+
+.replace(/<thin_pink>(.*?)<\/thin_pink>/g, '<span style="font-weight:300; color:pink;">$1</span>')
+.replace(/<gross_pink>(.*?)<\/gross_pink>/g, '<span style="font-weight:700; color:pink;">$1</span>')
+
+.replace(/<thin_brown>(.*?)<\/thin_brown>/g, '<span style="font-weight:300; color:brown;">$1</span>')
+.replace(/<gross_brown>(.*?)<\/gross_brown>/g, '<span style="font-weight:700; color:brown;">$1</span>')
+
+.replace(/<thin_cyan>(.*?)<\/thin_cyan>/g, '<span style="font-weight:300; color:cyan;">$1</span>')
+.replace(/<gross_cyan>(.*?)<\/gross_cyan>/g, '<span style="font-weight:700; color:cyan;">$1</span>')
+
+.replace(/<thin_gray>(.*?)<\/thin_gray>/g, '<span style="font-weight:300; color:gray;">$1</span>')
+.replace(/<gross_gray>(.*?)<\/gross_gray>/g, '<span style="font-weight:700; color:gray;">$1</span>')
+
+.replace(/<thin_purple>(.*?)<\/thin_purple>/g, '<span style="font-weight:300; color:purple;">$1</span>')
+.replace(/<gross_purple>(.*?)<\/gross_purple>/g, '<span style="font-weight:700; color:purple;">$1</span>')
+
+.replace(/<thin_black>(.*?)<\/thin_black>/g, '<span style="font-weight:300; color:black;">$1</span>')
+.replace(/<gross_black>(.*?)<\/gross_black>/g, '<span style="font-weight:700; color:black;">$1</span>')
+
+.replace(/<thin_white>(.*?)<\/thin_white>/g, '<span style="font-weight:300; color:white;">$1</span>')
+.replace(/<gross_white>(.*?)<\/gross_white>/g, '<span style="font-weight:700; color:white;">$1</span>')
     
     .replace(/<title>(.*?)<\/title>/g, '')
     .replace(/<background_color>(.*?)<\/background_color>/g, '')
@@ -263,6 +286,43 @@ if (bgColorMatch) {
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
   html += code
+.replace(/<thin_red>(.*?)<\/thin_red>/g, '<span style="font-weight:300; color:red;">$1</span>')
+.replace(/<gross_red>(.*?)<\/gross_red>/g, '<span style="font-weight:700; color:red;">$1</span>')
+
+.replace(/<thin_blue>(.*?)<\/thin_blue>/g, '<span style="font-weight:300; color:blue;">$1</span>')
+.replace(/<gross_blue>(.*?)<\/gross_blue>/g, '<span style="font-weight:700; color:blue;">$1</span>')
+
+.replace(/<thin_green>(.*?)<\/thin_green>/g, '<span style="font-weight:300; color:green;">$1</span>')
+.replace(/<gross_green>(.*?)<\/gross_green>/g, '<span style="font-weight:700; color:green;">$1</span>')
+
+.replace(/<thin_orange>(.*?)<\/thin_orange>/g, '<span style="font-weight:300; color:orange;">$1</span>')
+.replace(/<gross_orange>(.*?)<\/gross_orange>/g, '<span style="font-weight:700; color:orange;">$1</span>')
+
+.replace(/<thin_yellow>(.*?)<\/thin_yellow>/g, '<span style="font-weight:300; color:yellow;">$1</span>')
+.replace(/<gross_yellow>(.*?)<\/gross_yellow>/g, '<span style="font-weight:700; color:yellow;">$1</span>')
+
+.replace(/<thin_pink>(.*?)<\/thin_pink>/g, '<span style="font-weight:300; color:pink;">$1</span>')
+.replace(/<gross_pink>(.*?)<\/gross_pink>/g, '<span style="font-weight:700; color:pink;">$1</span>')
+
+.replace(/<thin_brown>(.*?)<\/thin_brown>/g, '<span style="font-weight:300; color:brown;">$1</span>')
+.replace(/<gross_brown>(.*?)<\/gross_brown>/g, '<span style="font-weight:700; color:brown;">$1</span>')
+
+.replace(/<thin_cyan>(.*?)<\/thin_cyan>/g, '<span style="font-weight:300; color:cyan;">$1</span>')
+.replace(/<gross_cyan>(.*?)<\/gross_cyan>/g, '<span style="font-weight:700; color:cyan;">$1</span>')
+
+.replace(/<thin_gray>(.*?)<\/thin_gray>/g, '<span style="font-weight:300; color:gray;">$1</span>')
+.replace(/<gross_gray>(.*?)<\/gross_gray>/g, '<span style="font-weight:700; color:gray;">$1</span>')
+
+.replace(/<thin_purple>(.*?)<\/thin_purple>/g, '<span style="font-weight:300; color:purple;">$1</span>')
+.replace(/<gross_purple>(.*?)<\/gross_purple>/g, '<span style="font-weight:700; color:purple;">$1</span>')
+
+.replace(/<thin_black>(.*?)<\/thin_black>/g, '<span style="font-weight:300; color:black;">$1</span>')
+.replace(/<gross_black>(.*?)<\/gross_black>/g, '<span style="font-weight:700; color:black;">$1</span>')
+
+.replace(/<thin_white>(.*?)<\/thin_white>/g, '<span style="font-weight:300; color:white;">$1</span>')
+.replace(/<gross_white>(.*?)<\/gross_white>/g, '<span style="font-weight:700; color:white;">$1</span>')
+
+    
     .replace(/<name_red>(.*?)<\/name_red>/g, '<h2 style="color:red;">$1</h2>')
     .replace(/<name_blue>(.*?)<\/name_blue>/g, '<h2 style="color:blue;">$1</h2>')
     .replace(/<name_green>(.*?)<\/name_green>/g, '<h2 style="color:green;">$1</h2>')
