@@ -1252,9 +1252,9 @@ document.addEventListener("DOMContentLoaded", function () {
 function stiahnutZip() {
   let code = document.getElementById('input').value;
   let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>tvoj ErikAI</title></head><body>';
-  let transformed = code
 
-    const bgColorMatch = code.match(/<background_color>(.*?)<\/background_color>/);
+  
+  const bgColorMatch = code.match(/<background_color>(.*?)<\/background_color>/);
 if (bgColorMatch) {
   document.getElementById("output").style.background = bgColorMatch[1];
   document.getElementById("output").style.padding = "1rem";
@@ -1265,6 +1265,10 @@ if (bgColorMatch) {
 
   const bgMatch = code.match(/<erikai_(.*?)>/);
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
+  
+  
+  let transformed = code
+
     
 
   .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
