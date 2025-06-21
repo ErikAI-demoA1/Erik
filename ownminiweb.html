@@ -182,50 +182,6 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
   </div>
 
 <!-- 📁 Výber a nahratie súborov -->
-<h3>Vyber fotky:</h3>
-<input type="file" id="photoInput" multiple accept=".jpg,.jpeg,.png">
-<h3>Vyber videá:</h3>
-<input type="file" id="videoInput" multiple accept=".mp4,.webm">
-<h3>Vyber zvuky:</h3>
-<input type="file" id="audioInput" multiple accept=".mp3,.wav">
-<br>
-<select id="mediaProject">
-  <option value="1">Projekt 1</option>
-  <option value="2">Projekt 2</option>
-  <option value="3">Projekt 3</option>
-</select>
-<button onclick="uploadMedia()">Nahrať a uložiť</button>
-
-  <script>
-    function uploadMedia() {
-  const proj = document.getElementById("mediaProject").value;
-  const photos = document.getElementById("photoInput").files;
-  const videos = document.getElementById("videoInput").files;
-  const audios = document.getElementById("audioInput").files;
-
-  const saveFiles = (files, prefix, extList) => {
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (!extList.includes(ext)) continue;
-      const reader = new FileReader();
-      reader.onload = function () {
-        const cleanName = file.name.replace(/\s+/g, "_");
-        localStorage.setItem(`proj${proj}_${cleanName}`, reader.result);
-        alert(`Uložené: proj${proj}_${cleanName}`);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  saveFiles(photos, "img", ["jpg", "jpeg", "png"]);
-  saveFiles(videos, "vid", ["mp4", "webm"]);
-  saveFiles(audios, "aud", ["mp3", "wav"]);
-
-  alert("✅ Médiá boli uložené.");
-    }
-  </script>
-
 
 
   <!-- Tlačidlá na uloženie a načítanie -->
@@ -288,18 +244,7 @@ if (bgColorMatch) {
 
   html += code
 
-    .replace(/<foto>(.*?)<\/foto>/g, (_, name) => {
-  const data = localStorage.getItem(`proj${projekt}_${name}`);
-  return data ? `<img src="${data}" width="200"/>` : `(foto ${name} nenájdené)`;
-})
-.replace(/<videoreal>(.*?)<\/videoreal>/g, (_, name) => {
-  const data = localStorage.getItem(`proj${projekt}_${name}`);
-  return data ? `<video controls width="300"><source src="${data}"></video>` : `(video ${name} nenájdené)`;
-})
-.replace(/<audio>(.*?)<\/audio>/g, (_, name) => {
-  const data = localStorage.getItem(`proj${projekt}_${name}`);
-  return data ? `<audio controls><source src="${data}"></audio>` : `(audio ${name} nenájdené)`;
-})
+    
     
     // VEĽMI TENKÉ (font-weight:100)
 .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
@@ -462,18 +407,7 @@ if (bgColorMatch) {
 
   html += code
 
-.replace(/<foto>(.*?)<\/foto>/g, (_, name) => {
-  const data = localStorage.getItem(`proj${projekt}_${name}`);
-  return data ? `<img src="${data}" width="200"/>` : `(foto ${name} nenájdené)`;
-})
-.replace(/<videoreal>(.*?)<\/videoreal>/g, (_, name) => {
-  const data = localStorage.getItem(`proj${projekt}_${name}`);
-  return data ? `<video controls width="300"><source src="${data}"></video>` : `(video ${name} nenájdené)`;
-})
-.replace(/<audio>(.*?)<\/audio>/g, (_, name) => {
-  const data = localStorage.getItem(`proj${projekt}_${name}`);
-  return data ? `<audio controls><source src="${data}"></audio>` : `(audio ${name} nenájdené)`;
-})
+
     
 // VEĽMI TENKÉ (font-weight:100)
 .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
