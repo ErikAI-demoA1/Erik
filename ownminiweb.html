@@ -1251,9 +1251,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
 <script>
 function stiahnutZip() {
-  const name = document.getElementById("appName").value || "MojaErikAIApp";
-  const code = document.getElementById("code").innerHTML;
-
+  let code = document.getElementById('input').value;
+  let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>tvoj ErikAI</title></head><body>';
   let transformed = code
 
   .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
