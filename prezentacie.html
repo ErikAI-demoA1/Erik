@@ -65,6 +65,29 @@
 <button onclick="startVoiceInput('presentationName')">🎙️ Názov</button>
 <!-- Mikrofón pre obsah snímky -->
 <button onclick="startVoiceInput('textarea')">🎤 Snímka</button>
+
+  <!-- Mikrofón pre snímku -->
+<button onclick="startRecognition('slideText')">🎙️ Snímka</button>
+
+<script>
+function startRecognition(targetId) {
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = "sk-SK"; // alebo 'cs-CZ' podľa potreby
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById(targetId).value += transcript;
+  };
+
+  recognition.onerror = function(event) {
+    alert("Chyba pri rozpoznávaní hlasu: " + event.error);
+  };
+
+  recognition.start();
+}
+</script>
 <script>
 function startVoiceInput(inputId) {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
