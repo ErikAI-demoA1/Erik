@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Translator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f8ff; }
+    textarea { width: 100%; height: 100px; }
+    select, button { padding: 10px; margin-top: 10px; }
+    #outputText { margin-top: 20px; padding: 10px; background: #fff; border: 1px solid #ccc; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>ErikAI Translator 🌍</h2>
+  <textarea id="inputText" placeholder="Napíš text na preklad"></textarea><br>
+  <label>Prelož do: </label>
+  <select id="targetLang">
+    <option value="en">Angličtina</option>
+    <option value="de">Nemčina</option>
+    <option value="fr">Francúzština</option>
+    <option value="hu">Maďarčina</option>
+    <option value="cs">Čeština</option>
+    <option value="sk">Slovenčina</option>
+  </select>
+  <button onclick="preloz()">Preložiť</button>  <p><strong>Preklad:</strong></p>
+  <div id="outputText">...</div>  <script>
+    async function preloz() {
+      const vstup = document.getElementById("inputText").value;
+      const ciel = document.getElementById("targetLang").value;
+      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(vstup)}&langpair=sk|${ciel}`);
+      const data = await response.json();
+      const vystup = data.responseData.translatedText;
+      document.getElementById("outputText").innerText = vystup;
+    }
+  </script></body>
+  </html>
