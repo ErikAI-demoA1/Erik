@@ -234,7 +234,7 @@ function nacitajProjekt() {
 
   recognition.onresult = function(event) {
     const result = event.results[0][0].transcript;
-    const textarea = document.querySelector('kodEditor');
+    const textarea = document.getElementById('input');
     textarea.value += result + " ";
   };
 
