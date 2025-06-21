@@ -181,13 +181,13 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
   <pre style="background:#fff; padding:10px; border-radius:6px;">Napíš si poznámku: &lt;notes&gt;</pre>
   </div>
 
-<!-- 📁 Import médií do ErikAI CoreLang -->
+<!-- 📁 Výber a nahratie súborov -->
 <h3>Vyber fotky:</h3>
-<input type="file" id="photoInput" multiple accept=".jpg,.jpeg,.png" />
+<input type="file" id="photoInput" multiple accept=".jpg,.jpeg,.png">
 <h3>Vyber videá:</h3>
-<input type="file" id="videoInput" multiple accept=".mp4,.webm" />
+<input type="file" id="videoInput" multiple accept=".mp4,.webm">
 <h3>Vyber zvuky:</h3>
-<input type="file" id="audioInput" multiple accept=".mp3,.wav" />
+<input type="file" id="audioInput" multiple accept=".mp3,.wav">
 <br>
 <select id="mediaProject">
   <option value="1">Projekt 1</option>
@@ -196,64 +196,37 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
 </select>
 <button onclick="uploadMedia()">Nahrať a uložiť</button>
 
-<script>
-  function uploadMedia() {
-    const proj = document.getElementById('mediaProject').value;
-    const photos = document.getElementById('photoInput').files;
-    const videos = document.getElementById('videoInput').files;
-    const audios = document.getElementById('audioInput').files;
-
-    const saveFiles = (files, prefix, extList) => {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const ext = file.name.split('.').pop().toLowerCase();
-        if (!extList.includes(ext)) continue;
-        const reader = new FileReader();
-        reader.onload = function () {
-          localStorage.setItem(`proj${proj}_${prefix}${i + 1}.${ext}`, reader.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-
-    saveFiles(photos, 'img', ['jpg', 'jpeg', 'png']);
-    saveFiles(videos, 'vid', ['mp4', 'webm']);
-    saveFiles(audios, 'aud', ['mp3', 'wav']);
-
-    alert("Médiá boli nahraté a uložené pre Projekt " + proj);
-  }
-</script>
-
-
   <script>
-function renderCoreLangMedia(content, proj) {
-  return content
-    .replace(/<foto>(.*?)<\/foto>/g, (_, name) => {
-      const data = localStorage.getItem(`proj${proj}_${name}`);
-      return data ? `<img src="${data}" width="200">` : `(foto ${name} nenájdené)`;
-    })
-    .replace(/<videoreal>(.*?)<\/videoreal>/g, (_, name) => {
-      const data = localStorage.getItem(`proj${proj}_${name}`);
-      return data ? `<video controls width="250"><source src="${data}"></video>` : `(video ${name} nenájdené)`;
-    })
-    .replace(/<audio>(.*?)<\/audio>/g, (_, name) => {
-      const data = localStorage.getItem(`proj${proj}_${name}`);
-      return data ? `<audio controls><source src="${data}"></audio>` : `(audio ${name} nenájdené)`;
-    });
-}
+    function uploadMedia() {
+  const proj = document.getElementById("mediaProject").value;
+  const photos = document.getElementById("photoInput").files;
+  const videos = document.getElementById("videoInput").files;
+  const audios = document.getElementById("audioInput").files;
 
-    const proj = document.getElementById("mediaProject").value;
-const rawHtml = compileErikAICoreLang(inputContent);  // alebo tvoj aktuálny parser
-const finalHtml = renderCoreLangMedia(rawHtml, proj);
-document.getElementById("vystup").innerHTML = finalHtml;
+  const saveFiles = (files, prefix, extList) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!extList.includes(ext)) continue;
+      const reader = new FileReader();
+      reader.onload = function () {
+        const cleanName = file.name.replace(/\s+/g, "_");
+        localStorage.setItem(`proj${proj}_${cleanName}`, reader.result);
+        alert(`Uložené: proj${proj}_${cleanName}`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-<!-- 💡 Použitie značiek -->
-<p>Príklady použitia v kóde:</p>
-<pre>
-&lt;foto&gt;erikai_img1.jpg&lt;/foto&gt;
-&lt;videoreal&gt;erikai_vid1.webm&lt;/videoreal&gt;
-&lt;audio&gt;erikai_aud1.mp3&lt;/audio&gt;
-</pre>
+  saveFiles(photos, "img", ["jpg", "jpeg", "png"]);
+  saveFiles(videos, "vid", ["mp4", "webm"]);
+  saveFiles(audios, "aud", ["mp3", "wav"]);
+
+  alert("✅ Médiá boli uložené.");
+    }
+  </script>
+
+
 
   <!-- Tlačidlá na uloženie a načítanie -->
 <!-- Výber projektu -->
@@ -315,18 +288,19 @@ if (bgColorMatch) {
 
   html += code
 
-    .replace(/<foto>(.*?)<\/foto>/g, (match, name) => {
-  const obj = ulozeneMedia.images.find(x => x.name === name.trim());
-  return obj ? `<img src="${obj.src}" style="max-width:100%;">` : `<span style="color:red;">(foto ${name} nenájdené)</span>`;
+    .replace(/<foto>(.*?)<\/foto>/g, (_, name) => {
+  const data = localStorage.getItem(`proj${projekt}_${name}`);
+  return data ? `<img src="${data}" width="200"/>` : `(foto ${name} nenájdené)`;
 })
-.replace(/<videoreal>(.*?)<\/videoreal>/g, (match, name) => {
-  const obj = ulozeneMedia.videos.find(x => x.name === name.trim());
-  return obj ? `<video controls src="${obj.src}" style="max-width:100%;"></video>` : `<span style="color:red;">(video ${name} nenájdené)</span>`;
+.replace(/<videoreal>(.*?)<\/videoreal>/g, (_, name) => {
+  const data = localStorage.getItem(`proj${projekt}_${name}`);
+  return data ? `<video controls width="300"><source src="${data}"></video>` : `(video ${name} nenájdené)`;
 })
-.replace(/<audio>(.*?)<\/audio>/g, (match, name) => {
-  const obj = ulozeneMedia.audios.find(x => x.name === name.trim());
-  return obj ? `<audio controls src="${obj.src}"></audio>` : `<span style="color:red;">(audio ${name} nenájdené)</span>`;
+.replace(/<audio>(.*?)<\/audio>/g, (_, name) => {
+  const data = localStorage.getItem(`proj${projekt}_${name}`);
+  return data ? `<audio controls><source src="${data}"></audio>` : `(audio ${name} nenájdené)`;
 })
+    
     // VEĽMI TENKÉ (font-weight:100)
 .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
 .replace(/<verythin_blue>(.*?)<\/verythin_blue>/g, '<span style="font-weight:100; color:blue;">$1</span>')
@@ -488,18 +462,19 @@ if (bgColorMatch) {
 
   html += code
 
-    .replace(/<foto>(.*?)<\/foto>/g, (match, name) => {
-  const obj = ulozeneMedia.images.find(x => x.name === name.trim());
-  return obj ? `<img src="${obj.src}" style="max-width:100%;">` : `<span style="color:red;">(foto ${name} nenájdené)</span>`;
+.replace(/<foto>(.*?)<\/foto>/g, (_, name) => {
+  const data = localStorage.getItem(`proj${projekt}_${name}`);
+  return data ? `<img src="${data}" width="200"/>` : `(foto ${name} nenájdené)`;
 })
-.replace(/<videoreal>(.*?)<\/videoreal>/g, (match, name) => {
-  const obj = ulozeneMedia.videos.find(x => x.name === name.trim());
-  return obj ? `<video controls src="${obj.src}" style="max-width:100%;"></video>` : `<span style="color:red;">(video ${name} nenájdené)</span>`;
+.replace(/<videoreal>(.*?)<\/videoreal>/g, (_, name) => {
+  const data = localStorage.getItem(`proj${projekt}_${name}`);
+  return data ? `<video controls width="300"><source src="${data}"></video>` : `(video ${name} nenájdené)`;
 })
-.replace(/<audio>(.*?)<\/audio>/g, (match, name) => {
-  const obj = ulozeneMedia.audios.find(x => x.name === name.trim());
-  return obj ? `<audio controls src="${obj.src}"></audio>` : `<span style="color:red;">(audio ${name} nenájdené)</span>`;
+.replace(/<audio>(.*?)<\/audio>/g, (_, name) => {
+  const data = localStorage.getItem(`proj${projekt}_${name}`);
+  return data ? `<audio controls><source src="${data}"></audio>` : `(audio ${name} nenájdené)`;
 })
+    
 // VEĽMI TENKÉ (font-weight:100)
 .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
 .replace(/<verythin_blue>(.*?)<\/verythin_blue>/g, '<span style="font-weight:100; color:blue;">$1</span>')
