@@ -60,7 +60,34 @@
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   
-  <h2>📄 ErikAI Prezentácie</h2><label>Vybrať Excel alebo CSV: <input type="file" id="csvImport"></label><br> <label>📁 Názov prezentácie: <input id="presentationName" value="Moja prezentácia"></label>
+  <h2>📄 ErikAI Prezentácie</h2>
+  <!-- Mikrofón pre názov prezentácie -->
+<button onclick="startVoiceInput('presentationName')">🎙️ Názov</button>
+<!-- Mikrofón pre obsah snímky -->
+<button onclick="startVoiceInput('slideText')">🎤 Snímka</button>
+
+<script>
+function startVoiceInput(inputId) {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'sk-SK';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById(inputId).value = transcript;
+        updateSlide(); // aby sa obsah ihneď zapísal
+    };
+
+    recognition.onerror = function(event) {
+        alert("Chyba pri rozpoznávaní hlasu: " + event.error);
+    };
+
+    recognition.start();
+}
+</script>
+  
+  <label>Vybrať Excel alebo CSV: <input type="file" id="csvImport"></label><br> <label>📁 Názov prezentácie: <input id="presentationName" value="Moja prezentácia"></label>
 
   <p id="slideCount">Snimka: 1 / 1</p>
   <textarea id="slideText"></textarea>  <div class="controls">
