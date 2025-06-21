@@ -218,7 +218,32 @@ function nacitajProjekt() {
   }
 }
 </script>
+<script>
+  function startSpeech() {
+  if (!('webkitSpeechRecognition' in window)) {
+    alert("Tento prehliadač nepodporuje rozpoznávanie reči.");
+    return;
+  }
 
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = "sk-SK"; // alebo "cs-CZ" / "en-US" podľa jazyka
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const result = event.results[0][0].transcript;
+    const textarea = document.querySelector('textarea');
+    textarea.value += result + " ";
+  };
+
+  recognition.onerror = function(event) {
+    alert("Chyba pri rozpoznávaní: " + event.error);
+  };
+}
+</script>
+  <button onclick="startSpeech()">🎤 Povedz kód (rozpoznávanie hlasu)</button>
 <textarea id="input" placeholder="Sem napíš kód..."></textarea><br>
 <button onclick="render()">Zobraziť stránku</button>
 <button onclick="download()">Stiahnuť moju stránku</button>
