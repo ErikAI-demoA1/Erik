@@ -28,7 +28,7 @@ self.addEventListener('install', e => {
         'mail.html',
         'mapy.html',
         'nastroje.html',
-        'ownminiweb.html',
+        'erikaicorelang.html',
         'pdfsk.html',
         'pocasie.html',
         'poznamky.html',
