@@ -126,6 +126,39 @@
 
   <textarea id="textArea" placeholder="Tu bude tvoj dokument alebo si napíš vlastný..."></textarea>
 
+  <!-- Mikrofón pre názov dokumentu -->
+<button onclick="rozpravaDoInputu('docName')">🎙️ Názov</button>
+
+<!-- Mikrofón pre obsah dokumentu -->
+<button onclick="rozpravaDoTextArea('textArea')">🎤 Text</button>
+
+<script>
+function rozpravaDoInputu(id) {
+  const input = document.getElementById(id);
+  const rec = new webkitSpeechRecognition();
+  rec.lang = 'sk-SK';
+  rec.onresult = (e) => {
+    input.value += e.results[0][0].transcript;
+  };
+  rec.start();
+}
+
+function rozpravaDoTextArea(id) {
+  const pole = document.getElementById(id);
+  const rec = new webkitSpeechRecognition();
+  rec.lang = 'sk-SK';
+  rec.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    const start = pole.selectionStart;
+    const end = pole.selectionEnd;
+    pole.value = pole.value.substring(0, start) + text + pole.value.substring(end);
+    pole.setSelectionRange(start + text.length, start + text.length);
+    pole.focus();
+  };
+  rec.start();
+}
+</script>
+
   <div>
     <button onclick="ulozDokument()">💾 Uložiť</button>
     <button onclick="nacitajDokument()">📂 Načítať</button>
