@@ -234,8 +234,7 @@ function nacitajProjekt() {
 
   recognition.onresult = function(event) {
     const result = event.results[0][0].transcript;
-    const textarea = document.querySelector('textarea')
-      [1];
+    const textarea = document.querySelector('textarea');
     textarea.value += result + " ";
   };
 
