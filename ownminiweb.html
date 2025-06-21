@@ -1255,6 +1255,19 @@ function stiahnutZip() {
   let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>tvoj ErikAI</title></head><body>';
   let transformed = code
 
+    const bgColorMatch = code.match(/<background_color>(.*?)<\/background_color>/);
+if (bgColorMatch) {
+  document.getElementById("output").style.background = bgColorMatch[1];
+  document.getElementById("output").style.padding = "1rem";
+  document.getElementById("output").style.borderRadius = "10px";
+} else {
+  document.getElementById("output").style.background = "white";
+}
+
+  const bgMatch = code.match(/<erikai_(.*?)>/);
+  if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
+    
+
   .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
 .replace(/<verythin_blue>(.*?)<\/verythin_blue>/g, '<span style="font-weight:100; color:blue;">$1</span>')
 .replace(/<verythin_green>(.*?)<\/verythin_green>/g, '<span style="font-weight:100; color:green;">$1</span>')
@@ -1450,7 +1463,7 @@ self.addEventListener('fetch', function(event) {
   zip.generateAsync({ type: "blob" }).then(function(content) {
     const a = document.createElement("a");
     a.href = URL.createObjectURL(content);
-    a.download = `${name}_PWA.zip`;
+    a.download = `ErikAI_PWA.zip`;
     a.click();
   });
 }
