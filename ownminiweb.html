@@ -1240,11 +1240,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
   </script>
 
-<input type="text" id="appName" placeholder="Názov tvojej PWA aplikácie" />
+  <input type="text" id="appName" placeholder="Názov tvojej PWA aplikácie" />
 <button onclick="stiahnutZip()">Stiahnuť ako PWA</button>
-  
+
+<div id="previewBox">Tu bude tvoj obsah...</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
 <script>
-  function stiahnutZip() {
+function stiahnutZip() {
   const name = document.getElementById("appName").value || "MojaErikAIApp";
   const preview = document.getElementById("previewBox").innerHTML;
 
@@ -1264,10 +1267,10 @@ ${preview}
     navigator.serviceWorker.register('service-worker.js')
       .then(() => console.log('Service Worker zaregistrovaný.'));
   }
-</script>
+<\/script>
 </body>
 </html>`;
-<script>
+
   const manifest = {
     name: name,
     short_name: name,
@@ -1297,7 +1300,7 @@ self.addEventListener('fetch', function(event) {
   zip.file("manifest.json", JSON.stringify(manifest, null, 2));
   zip.file("service-worker.js", serviceWorker);
 
-  // Ikona – môžeš neskôr spraviť výber alebo načítanie zo súboru
+  // Prázdna ikona (nahraditeľná neskôr)
   const emptyIconBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAFfQJ/qrgpRQAAAABJRU5ErkJggg==";
   zip.file("icon.png", emptyIconBase64, { base64: true });
 
@@ -1308,7 +1311,6 @@ self.addEventListener('fetch', function(event) {
     a.click();
   });
 }
-</script>
 </script>
   
 
