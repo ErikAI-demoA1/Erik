@@ -182,26 +182,36 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
   </div>
 
   <!-- Tlačidlá na uloženie a načítanie -->
+<!-- Výber projektu -->
+<select id="nazovProjektu">
+  <option value="projekt1">Projekt 1</option>
+  <option value="projekt2">Projekt 2</option>
+  <option value="projekt3">Projekt 3</option>
+</select>
+
+<!-- Tlačidlá -->
 <button onclick="ulozProjekt()">💾 Uložiť projekt</button>
 <button onclick="nacitajProjekt()">📂 Načítať projekt</button>
 
-<!-- Textové pole na kód -->
+<!-- Textové pole -->
 <textarea id="kodEditor" rows="10" style="width:100%;">Tu píš svoj ErikAI CoreLang kód...</textarea>
 
 <script>
 function ulozProjekt() {
+  const nazov = document.getElementById("nazovProjektu").value;
   const obsah = document.getElementById("kodEditor").value;
-  localStorage.setItem("erikai_project", obsah);
-  alert("Projekt bol uložený.");
+  localStorage.setItem("erikai_" + nazov, obsah);
+  alert("Projekt '" + nazov + "' bol uložený.");
 }
 
 function nacitajProjekt() {
-  const nacitany = localStorage.getItem("erikai_project");
+  const nazov = document.getElementById("nazovProjektu").value;
+  const nacitany = localStorage.getItem("erikai_" + nazov);
   if (nacitany) {
     document.getElementById("kodEditor").value = nacitany;
-    alert("Projekt bol načítaný.");
+    alert("Načítal sa projekt '" + nazov + "'.");
   } else {
-    alert("Nenašiel sa žiadny uložený projekt.");
+    alert("Projekt '" + nazov + "' sa nenašiel.");
   }
 }
 </script>
