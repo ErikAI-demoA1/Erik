@@ -71,6 +71,28 @@
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   
   <h1>🎥 ErikAI Video Editor</h1>
+<button onclick="startVoice('start')">🎤</button>
+<button onclick="startVoice('end')">🎤</button>
+<script>
+  function startVoice(targetId) {
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = 'sk-SK';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = function(event) {
+    let text = event.results[0][0].transcript;
+    text = text.replace(/[^\d]/g, ''); // Odstráň všetko okrem číslic
+    document.getElementById(targetId).value = text;
+  };
+
+  recognition.onerror = function(event) {
+    alert("Chyba pri rozpoznaní hlasu: " + event.error);
+  };
+
+  recognition.start();
+}
+</script>
   <p>Vyber si video, nastav úsek a urob strih ako profík – bez zložitostí.</p><input type="file" id="videoInput" accept="video/*"><br> <label>Od (sekundy):</label> <input type="number" id="startTime" value="0"> <label>Do (sekundy):</label> <input type="number" id="endTime" value="10"> <br> <button onclick="trimVideo()">✂️ Strihnúť video</button>
 
   <h3>🎦 Náhľada videa</h3>
