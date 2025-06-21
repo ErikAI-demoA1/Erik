@@ -65,7 +65,6 @@
 <button onclick="startVoiceInput('presentationName')">🎙️ Názov</button>
 <!-- Mikrofón pre obsah snímky -->
 <button onclick="startVoiceInput('textarea')">🎤 Snímka</button>
-
 <script>
 function startVoiceInput(inputId) {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -75,8 +74,16 @@ function startVoiceInput(inputId) {
 
     recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
-        document.getElementById(inputId).value = transcript;
-        updateSlide(); // aby sa obsah ihneď zapísal
+        const inputField = document.getElementById(inputId);
+
+        if (inputField) {
+            inputField.value = transcript;
+
+            // Ak ide o textarea pre slideText, hneď aktualizuj snímku
+            if (inputId === 'slideText') {
+                updateSlide(); // spustí funkciu, ktorá prepíše obsah snímky
+            }
+        }
     };
 
     recognition.onerror = function(event) {
@@ -86,6 +93,7 @@ function startVoiceInput(inputId) {
     recognition.start();
 }
 </script>
+
   
   <label>Vybrať Excel alebo CSV: <input type="file" id="csvImport"></label><br> <label>📁 Názov prezentácie: <input id="presentationName" value="Moja prezentácia"></label>
 
