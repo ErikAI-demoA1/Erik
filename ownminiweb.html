@@ -181,6 +181,31 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
   <pre style="background:#fff; padding:10px; border-radius:6px;">Napíš si poznámku: &lt;notes&gt;</pre>
   </div>
 
+  <!-- Tlačidlá na uloženie a načítanie -->
+<button onclick="ulozProjekt()">💾 Uložiť projekt</button>
+<button onclick="nacitajProjekt()">📂 Načítať projekt</button>
+
+<!-- Textové pole na kód -->
+<textarea id="kodEditor" rows="10" style="width:100%;">Tu píš svoj ErikAI CoreLang kód...</textarea>
+
+<script>
+function ulozProjekt() {
+  const obsah = document.getElementById("kodEditor").value;
+  localStorage.setItem("erikai_project", obsah);
+  alert("Projekt bol uložený.");
+}
+
+function nacitajProjekt() {
+  const nacitany = localStorage.getItem("erikai_project");
+  if (nacitany) {
+    document.getElementById("kodEditor").value = nacitany;
+    alert("Projekt bol načítaný.");
+  } else {
+    alert("Nenašiel sa žiadny uložený projekt.");
+  }
+}
+</script>
+
 <textarea id="input" placeholder="Sem napíš kód..."></textarea><br>
 <button onclick="render()">Zobraziť stránku</button>
 <button onclick="download()">Stiahnuť moju stránku</button>
