@@ -12,7 +12,33 @@
   </style>
 </head>
 <body>
-  <h2>☎️ ErikAI Kontakty</h2>  <form id="contactForm">
+  <h2>☎️ ErikAI Kontakty</h2>
+  <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+  <button onclick="hlasMeno()" style="background-color:#d32f2f; color:white;">🎤 Meno</button>
+  <button onclick="hlasTelefon()" style="background-color:#1976d2; color:white;">🎙️ Telefón</button>
+  </div>
+  <script>
+function hlasMeno() {
+  const rec = new webkitSpeechRecognition();
+  rec.lang = "sk-SK";
+  rec.onresult = function(event) {
+    document.getElementById("name").value = event.results[0][0].transcript;
+  };
+  rec.start();
+}
+
+function hlasTelefon() {
+  const rec = new webkitSpeechRecognition();
+  rec.lang = "sk-SK";
+  rec.onresult = function(event) {
+    let vyslovenyText = event.results[0][0].transcript;
+    // odstráni všetko okrem číslic
+    document.getElementById("phone").value = vyslovenyText.replace(/\D/g, '');
+  };
+  rec.start();
+}
+      </script>
+  <form id="contactForm">
     <input id="name" placeholder="Meno" required>
     <input id="phone" placeholder="Telefónne číslo" required>
     <button type="submit">+ Pridať kontakt</button>
