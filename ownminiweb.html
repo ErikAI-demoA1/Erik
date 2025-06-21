@@ -224,6 +224,29 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
   }
 </script>
 
+
+  <script>
+function renderCoreLangMedia(content, proj) {
+  return content
+    .replace(/<foto>(.*?)<\/foto>/g, (_, name) => {
+      const data = localStorage.getItem(`proj${proj}_${name}`);
+      return data ? `<img src="${data}" width="200">` : `(foto ${name} nenájdené)`;
+    })
+    .replace(/<videoreal>(.*?)<\/videoreal>/g, (_, name) => {
+      const data = localStorage.getItem(`proj${proj}_${name}`);
+      return data ? `<video controls width="250"><source src="${data}"></video>` : `(video ${name} nenájdené)`;
+    })
+    .replace(/<audio>(.*?)<\/audio>/g, (_, name) => {
+      const data = localStorage.getItem(`proj${proj}_${name}`);
+      return data ? `<audio controls><source src="${data}"></audio>` : `(audio ${name} nenájdené)`;
+    });
+}
+
+    const proj = document.getElementById("mediaProject").value;
+const rawHtml = compileErikAICoreLang(inputContent);  // alebo tvoj aktuálny parser
+const finalHtml = renderCoreLangMedia(rawHtml, proj);
+document.getElementById("vystup").innerHTML = finalHtml;
+
 <!-- 💡 Použitie značiek -->
 <p>Príklady použitia v kóde:</p>
 <pre>
