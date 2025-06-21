@@ -43,6 +43,24 @@
 <body>
 
   <h1>📲 ErikAI SMS</h1>
+  <button onclick="startSpeech('cislo')">🎙️ Číslo</button>
+<button onclick="startSpeech('sprava')">🎤 Správa</button>
+
+  <script>
+function startSpeech(fieldId) {
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = 'sk-SK';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = function(event) {
+    const result = event.results[0][0].transcript;
+    document.getElementById(fieldId).value = result;
+  };
+
+  recognition.start();
+}
+  </script>
 
   <form onsubmit="sendSMS(); return false;">
     <input type="text" id="cislo" placeholder="Telefónne číslo (napr. 0904123456)" required><br>
