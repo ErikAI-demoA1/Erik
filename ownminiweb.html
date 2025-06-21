@@ -243,6 +243,33 @@ function nacitajProjekt() {
   };
 }
 </script>
+
+  <script>
+function startSpeechHore() {
+  if (!('webkitSpeechRecognition' in window)) {
+    alert("Tento prehliadač nepodporuje rozpoznávanie hlasu.");
+    return;
+  }
+
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = "sk-SK";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const result = event.results[0][0].transcript;
+    const textarea = document.getElementById("kodEditor");
+    textarea.value += result + " ";
+  };
+
+  recognition.onerror = function(event) {
+    alert("Chyba pri rozpoznávaní: " + event.error);
+  };
+}
+  </script>
+  <button onclick="startSpeechHore()">🎤 Nadiktuj horný kód</button>
   <button onclick="startSpeech()">🎤 Povedz kód (rozpoznávanie hlasu)</button>
 <textarea id="input" placeholder="Sem napíš kód..."></textarea><br>
 <button onclick="render()">Zobraziť stránku</button>
