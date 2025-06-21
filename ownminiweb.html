@@ -1249,7 +1249,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 function stiahnutZip() {
   const name = document.getElementById("appName").value || "MojaErikAIApp";
-  const code = document.getElementById("previewBox").innerHTML;
+  const code = document.getElementById("code").innerHTML;
 
   let transformed = code
 
@@ -1401,7 +1401,7 @@ function stiahnutZip() {
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-${transformed}
+${code}
 
 <script>
   if ('serviceWorker' in navigator) {
