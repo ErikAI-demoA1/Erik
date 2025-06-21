@@ -61,6 +61,32 @@
 </head>
 <body>
   <h1>📝 ErikAI Poznámky</h1>
+  <!-- Mikrofón pre názov poznámky -->
+<button onclick="rozpoznavanieNazvu()">🎤 Názov</button>
+
+<!-- Mikrofón pre text poznámky -->
+<button onclick="rozpoznavanieTextu()">🎙️ Text</button>
+
+  <script>
+function rozpoznavanieNazvu() {
+  const rec = new webkitSpeechRecognition();
+  rec.lang = 'sk-SK';
+  rec.onresult = function(event) {
+    document.getElementById('nazov').value = event.results[0][0].transcript;
+  };
+  rec.start();
+}
+
+function rozpoznavanieTextu() {
+  const rec = new webkitSpeechRecognition();
+  rec.lang = 'sk-SK';
+  rec.onresult = function(event) {
+    document.getElementById('text').value += event.results[0][0].transcript + ' ';
+  };
+  rec.start();
+}
+  </script>
+  
   <p>🕓 Aktuálny čas: <span id="cas"></span></p>
 
   <input id="nazov" type="text" placeholder="Zadaj názov poznámky" />
