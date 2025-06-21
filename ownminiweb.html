@@ -181,6 +181,70 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
   <pre style="background:#fff; padding:10px; border-radius:6px;">Napíš si poznámku: &lt;notes&gt;</pre>
   </div>
 
+  <hr>
+<h3>🎵 Pridať svoje súbory</h3>
+
+<label>Vyber fotky: <input type="file" id="imageInput" multiple accept="image/*"></label><br>
+<label>Vyber videá: <input type="file" id="videoInput" multiple accept="video/*"></label><br>
+<label>Vyber zvuky: <input type="file" id="audioInput" multiple accept="audio/*"></label><br>
+<button onclick="ulozMedia()">Nahraj a ulož</button>
+
+  <script>
+let ulozeneMedia = {
+  images: [],
+  videos: [],
+  audios: [],
+};
+
+function ulozMedia() {
+  const imageFiles = document.getElementById('imageInput').files;
+  const videoFiles = document.getElementById('videoInput').files;
+  const audioFiles = document.getElementById('audioInput').files;
+
+  // Helper na konverziu
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file);
+  });
+
+  let promises = [];
+
+  for (let i = 0; i < imageFiles.length; i++) {
+    const name = `erikai_img${ulozeneMedia.images.length + 1}`;
+    promises.push(toBase64(imageFiles[i]).then(base64 => {
+      ulozeneMedia.images.push({ name, src: base64 });
+    }));
+  }
+
+  for (let i = 0; i < videoFiles.length; i++) {
+    const name = `erikai_vid${ulozeneMedia.videos.length + 1}`;
+    promises.push(toBase64(videoFiles[i]).then(base64 => {
+      ulozeneMedia.videos.push({ name, src: base64 });
+    }));
+  }
+
+  for (let i = 0; i < audioFiles.length; i++) {
+    const name = `erikai_aud${ulozeneMedia.audios.length + 1}`;
+    promises.push(toBase64(audioFiles[i]).then(base64 => {
+      ulozeneMedia.audios.push({ name, src: base64 });
+    }));
+  }
+
+  Promise.all(promises).then(() => {
+    alert("✅ Súbory boli nahraté!");
+    localStorage.setItem('erikaiMedia', JSON.stringify(ulozeneMedia));
+  });
+}
+
+// Načítaj pri štarte
+window.onload = () => {
+  const uloz = localStorage.getItem('erikaiMedia');
+  if (uloz) ulozeneMedia = JSON.parse(uloz);
+};
+  </script>
+
   <!-- Tlačidlá na uloženie a načítanie -->
 <!-- Výber projektu -->
 <select id="nazovProjektu">
@@ -240,6 +304,19 @@ if (bgColorMatch) {
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
   html += code
+
+    .replace(/<foto>(.*?)<\/foto>/g, (match, name) => {
+  const obj = ulozeneMedia.images.find(x => x.name === name.trim());
+  return obj ? `<img src="${obj.src}" style="max-width:100%;">` : `<span style="color:red;">(foto ${name} nenájdené)</span>`;
+})
+.replace(/<videoreal>(.*?)<\/videoreal>/g, (match, name) => {
+  const obj = ulozeneMedia.videos.find(x => x.name === name.trim());
+  return obj ? `<video controls src="${obj.src}" style="max-width:100%;"></video>` : `<span style="color:red;">(video ${name} nenájdené)</span>`;
+})
+.replace(/<audio>(.*?)<\/audio>/g, (match, name) => {
+  const obj = ulozeneMedia.audios.find(x => x.name === name.trim());
+  return obj ? `<audio controls src="${obj.src}"></audio>` : `<span style="color:red;">(audio ${name} nenájdené)</span>`;
+})
     // VEĽMI TENKÉ (font-weight:100)
 .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
 .replace(/<verythin_blue>(.*?)<\/verythin_blue>/g, '<span style="font-weight:100; color:blue;">$1</span>')
@@ -400,6 +477,19 @@ if (bgColorMatch) {
   if (bgMatch) html += `<div style="background-color:${bgMatch[1]}; padding:15px;">`;
 
   html += code
+
+    .replace(/<foto>(.*?)<\/foto>/g, (match, name) => {
+  const obj = ulozeneMedia.images.find(x => x.name === name.trim());
+  return obj ? `<img src="${obj.src}" style="max-width:100%;">` : `<span style="color:red;">(foto ${name} nenájdené)</span>`;
+})
+.replace(/<videoreal>(.*?)<\/videoreal>/g, (match, name) => {
+  const obj = ulozeneMedia.videos.find(x => x.name === name.trim());
+  return obj ? `<video controls src="${obj.src}" style="max-width:100%;"></video>` : `<span style="color:red;">(video ${name} nenájdené)</span>`;
+})
+.replace(/<audio>(.*?)<\/audio>/g, (match, name) => {
+  const obj = ulozeneMedia.audios.find(x => x.name === name.trim());
+  return obj ? `<audio controls src="${obj.src}"></audio>` : `<span style="color:red;">(audio ${name} nenájdené)</span>`;
+})
 // VEĽMI TENKÉ (font-weight:100)
 .replace(/<verythin_red>(.*?)<\/verythin_red>/g, '<span style="font-weight:100; color:red;">$1</span>')
 .replace(/<verythin_blue>(.*?)<\/verythin_blue>/g, '<span style="font-weight:100; color:blue;">$1</span>')
