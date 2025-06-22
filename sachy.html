@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,9 +42,7 @@
   <h2 id="turn">Na ťahu: Biely</h2>
   <div id="board" class="board"></div>
   <button onclick="newGame()">Nová hra</button>
-  <button onclick="undoMove()">Späť ťah</button>
-
-  <script>
+  <button onclick="undoMove()">Späť ťah</button>  <script>
     let board = document.getElementById("board");
     let turnDisplay = document.getElementById("turn");
     let boardState = [];
@@ -106,57 +103,56 @@
       }
     }
 
-    function isValidMove(piece, sr, sc, r, c) {
-      let dr = r - sr;
-      let dc = c - sc;
-      let target = boardState[r][c];
-
-      // Zákaz ísť na vlastnú figúrku
-      if (target && (whiteTurn === (target === target.toUpperCase()))) {
-        return false;
-      }
-
-      piece = piece.toLowerCase();
-
-      if (piece === "k") {
-        return Math.abs(dr) <= 1 && Math.abs(dc) <= 1;
-      }
-
-      if (piece === "q") {
-        if (dr === 0) return isClearRow(sr, sc, r, c);
-        if (dc === 0) return isClearColumn(sr, sc, r, c);
-        if (Math.abs(dr) === Math.abs(dc)) return isClearDiagonal(sr, sc, r, c);
-      }
-
-      return false;
-    }
-
     function isClearRow(sr, sc, r, c) {
-      let step = c > sc ? 1 : -1;
-      for (let i = sc + step; i !== c; i += step) {
-        if (boardState[sr][i]) return false;
+      for (let i = Math.min(sc, c) + 1; i < Math.max(sc, c); i++) {
+        if (boardState[sr][i] !== "") return false;
       }
       return true;
     }
 
     function isClearColumn(sr, sc, r, c) {
-      let step = r > sr ? 1 : -1;
-      for (let i = sr + step; i !== r; i += step) {
-        if (boardState[i][sc]) return false;
+      for (let i = Math.min(sr, r) + 1; i < Math.max(sr, r); i++) {
+        if (boardState[i][sc] !== "") return false;
       }
       return true;
     }
 
     function isClearDiagonal(sr, sc, r, c) {
-      let rowStep = r > sr ? 1 : -1;
-      let colStep = c > sc ? 1 : -1;
-      let i = sr + rowStep, j = sc + colStep;
-      while (i !== r && j !== c) {
-        if (boardState[i][j]) return false;
-        i += rowStep;
-        j += colStep;
+      let dr = r > sr ? 1 : -1;
+      let dc = c > sc ? 1 : -1;
+      for (let i = 1; i < Math.abs(r - sr); i++) {
+        if (boardState[sr + i * dr][sc + i * dc] !== "") return false;
       }
       return true;
+    }
+
+    function isValidMove(piece, sr, sc, r, c) {
+      let dr = r - sr;
+      let dc = c - sc;
+      let target = boardState[r][c];
+      let isWhite = piece === piece.toUpperCase();
+      let dir = isWhite ? -1 : 1;
+      piece = piece.toLowerCase();
+
+      if (target && (isWhite === (target === target.toUpperCase()))) return false;
+
+      if (piece === "k") return Math.abs(dr) <= 1 && Math.abs(dc) <= 1;
+      if (piece === "q") return (dr === 0 && isClearRow(sr, sc, r, c)) || (dc === 0 && isClearColumn(sr, sc, r, c)) || (Math.abs(dr) === Math.abs(dc) && isClearDiagonal(sr, sc, r, c));
+      if (piece === "r") return (dr === 0 && isClearRow(sr, sc, r, c)) || (dc === 0 && isClearColumn(sr, sc, r, c));
+      if (piece === "b") return Math.abs(dr) === Math.abs(dc) && isClearDiagonal(sr, sc, r, c);
+      if (piece === "n") return (Math.abs(dr) === 2 && Math.abs(dc) === 1) || (Math.abs(dr) === 1 && Math.abs(dc) === 2);
+      if (piece === "p") {
+        if (dc === 0 && target === "") {
+          if (dr === dir) return true;
+          if ((sr === 1 && !isWhite) || (sr === 6 && isWhite)) {
+            return dr === 2 * dir && boardState[sr + dir][sc] === "";
+          }
+        }
+        if (Math.abs(dc) === 1 && dr === dir && target !== "") return true;
+        return false;
+      }
+
+      return false;
     }
 
     function newGame() {
@@ -178,6 +174,5 @@
     }
 
     newGame();
-  </script>
-</body>
+  </script></body>
 </html>
