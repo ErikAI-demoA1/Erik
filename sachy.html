@@ -36,17 +36,20 @@
       padding: 10px 20px;
       font-size: 16px;
     }
-    .whitePiece {
-  color: red;
-}
-.blackPiece {
-  color: yellow;
-}
+    .whitePiece { color: red; }
+    .blackPiece { color: yellow; }
+    #status {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #00ccff;
+    }
   </style>
 </head>
 <body>
   <h1>♟ Klasické šachy – podľa pravidiel FIDE</h1>
   <h2 id="turn">Na ťahu: Biely</h2>
+  <h3 id="status"></h3>
   <div id="board" class="board"></div>
   <button onclick="newGame()">Nová hra</button>
   <button onclick="undoMove()">Späť ťah</button>
@@ -54,6 +57,7 @@
 <script>
 const board = document.getElementById("board");
 const turnDisplay = document.getElementById("turn");
+const statusDisplay = document.getElementById("status");
 
 const figures = {
   r: "♜", n: "♞", b: "♝", q: "♛", k: "♚", p: "♟",
@@ -76,7 +80,7 @@ let selected = null;
 let whiteTurn = true;
 let history = [];
 
-  function isKingInCheck(isWhite) {
+function isKingInCheck(isWhite) {
   let kingPos;
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
@@ -100,9 +104,9 @@ let history = [];
   }
 
   return false;
-  }
+}
 
-  function hasAnyValidMove(isWhite) {
+function hasAnyValidMove(isWhite) {
   for (let sr = 0; sr < 8; sr++) {
     for (let sc = 0; sc < 8; sc++) {
       let piece = boardState[sr][sc];
@@ -110,7 +114,6 @@ let history = [];
         for (let r = 0; r < 8; r++) {
           for (let c = 0; c < 8; c++) {
             if (isValidMove(piece, sr, sc, r, c)) {
-              // simulate move
               let temp = JSON.parse(JSON.stringify(boardState));
               temp[r][c] = piece;
               temp[sr][sc] = "";
@@ -126,7 +129,6 @@ let history = [];
   return false;
 }
 
-// helper simulácia pre testovanie
 function isKingInCheckSim(simBoard, isWhite) {
   let kingPos;
   for (let r = 0; r < 8; r++) {
@@ -165,9 +167,9 @@ function drawBoard() {
 
       if (piece) {
         if (piece === piece.toUpperCase()) {
-          cell.classList.add("whitePiece"); // biely hráč = červené
+          cell.classList.add("whitePiece");
         } else {
-          cell.classList.add("blackPiece"); // čierny hráč = žlté
+          cell.classList.add("blackPiece");
         }
       }
 
@@ -191,13 +193,15 @@ function onCellClick(r, c) {
         whiteTurn = !whiteTurn;
         turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
         if (isKingInCheck(!whiteTurn)) {
-  if (!hasAnyValidMove(!whiteTurn)) {
-    alert(`Šach-mat! Vyhral ${whiteTurn ? "Biely" : "Čierny"}!`);
-  } else {
-    alert("Šach!");
-  }
-} else if (!hasAnyValidMove(!whiteTurn)) {
-  alert("Pat! Remíza.");
+          if (!hasAnyValidMove(!whiteTurn)) {
+            statusDisplay.textContent = `Šach-mat! Vyhral ${whiteTurn ? "Biely" : "Čierny"}!`;
+          } else {
+            statusDisplay.textContent = "Šach!";
+          }
+        } else if (!hasAnyValidMove(!whiteTurn)) {
+          statusDisplay.textContent = "Pat! Remíza.";
+        } else {
+          statusDisplay.textContent = "";
         }
       } else {
         boardState = backup;
@@ -209,8 +213,6 @@ function onCellClick(r, c) {
     selected = [r, c];
   }
 }
-
-  
 
 function isClearRow(sr, sc, r, c) {
   for (let i = Math.min(sc, c) + 1; i < Math.max(sc, c); i++) {
@@ -286,6 +288,7 @@ function newGame() {
   selected = null;
   history = [];
   turnDisplay.textContent = "Na ťahu: Biely";
+  statusDisplay.textContent = "";
   drawBoard();
 }
 
@@ -294,6 +297,7 @@ function undoMove() {
     boardState = history.pop();
     whiteTurn = !whiteTurn;
     turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
+    statusDisplay.textContent = "";
     drawBoard();
   }
 }
