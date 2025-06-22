@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,9 +36,7 @@
     <div class="hand minute" id="minuteHand"></div>
     <div class="hand second" id="secondHand"></div>
     <div class="center"></div>
-  </div>
-
-  <p>
+  </div>  <p>
     <label for="alarmTime">Nastav budík:</label>
     <select id="alarmTime"></select>
     <input type="checkbox" id="daily"> Každý deň
@@ -47,9 +44,7 @@
   <p>
     <button onclick="activateAlarm()">Aktivuj</button>
     <button onclick="cancelAlarm()">Zrušiť</button>
-  </p>
-
-  <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
+  </p>  <ul id="zoznamBudikov"></ul><audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
 
   <script>
     const hourHand = document.getElementById('hourHand');
@@ -58,9 +53,20 @@
     const alarmSelect = document.getElementById('alarmTime');
     const alarmSound = document.getElementById('alarmSound');
     const daily = document.getElementById('daily');
+    const zoznam = document.getElementById('zoznamBudikov');
 
-    let alarmTime = null;
+    let alarmTimes = [];
     let alarmActive = false;
+
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    function showNotification(time) {
+      if (Notification.permission === 'granted') {
+        new Notification(`🔔 ErikAI Budík zvoní o ${time}`);
+      }
+    }
 
     function updateClock() {
       const now = new Date();
@@ -73,16 +79,19 @@
       secondHand.style.transform = `translate(-50%, -100%) rotate(${s * 6}deg)`;
 
       const current = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-      if (alarmActive && alarmTime === current) {
+      if (alarmActive && alarmTimes.includes(current)) {
         alarmSound.play();
-        alert(`🔔 Zvoní budík: ${alarmTime}`);
-        if (!daily.checked) cancelAlarm();
+        showNotification(current);
+        alert(`🔔 Zvoní budík: ${current}`);
+        if (!daily.checked) {
+          alarmTimes = alarmTimes.filter(t => t !== current);
+        }
       }
     }
 
     function fillTimes() {
       for (let h = 0; h < 24; h++) {
-        for (let m = 0; m < 60; m += 5) {
+        for (let m = 0; m < 60; m++) {
           const t = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
           const option = document.createElement('option');
           option.value = t;
@@ -92,78 +101,76 @@
       }
     }
 
+    function refreshZoznam() {
+      zoznam.innerHTML = "";
+      alarmTimes.forEach(t => {
+        const li = document.createElement("li");
+        li.textContent = `⏰ ${t}`;
+        zoznam.appendChild(li);
+      });
+    }
+
     function activateAlarm() {
-      alarmTime = alarmSelect.value;
-      alarmActive = true;
-      alert(`Budík nastavený na ${alarmTime}`);
+      const selected = alarmSelect.value;
+      if (!alarmTimes.includes(selected)) {
+        alarmTimes.push(selected);
+        alarmActive = true;
+        alert(`Budík pridaný na ${selected}`);
+        refreshZoznam();
+      } else {
+        alert(`Tento čas už je nastavený.`);
+      }
     }
 
     function cancelAlarm() {
-      alarmTime = null;
+      alarmTimes = [];
       alarmActive = false;
       alarmSound.pause();
       alarmSound.currentTime = 0;
-      alert("Budík zrušený");
+      refreshZoznam();
+      alert("Všetky budíky boli zrušené");
     }
 
     fillTimes();
     setInterval(updateClock, 1000);
-  </script>
+  </script><button onclick="toggleTheme()">🌃 Zmeniť režim</button>
 
-<button onclick="toggleTheme()">🌓 Zmeniť režim</button>
-
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-  }
-</script>
-
-<style>
-  body.dark-mode {
-    background-color: #121212;
-    color: white;
-  }
-</style>
-
-<p id="cas" style="font-size: 18px;"></p>
-
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>  <style>
+    body.dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+  </style>  <p id="cas" style="font-size: 18px;"></p>
   <script>
     function aktualizujCas() {
       const teraz = new Date();
       const moznosti = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
       };
       const casText = teraz.toLocaleDateString('sk-SK', moznosti);
       document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
     }
     setInterval(aktualizujCas, 1000);
     aktualizujCas();
+  </script>  <div id="google_translate_element"></div>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'sk',
+        includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
   </script>
-
-  <div id="google_translate_element"></div>
-<script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'sk',
-      includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  
-  
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>  <p style="font-size: 14px; color: gray; margin-top: 20px;">
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br>
+    To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/<br>
+    © 2025 Erik Mohylák – All rights reserved.
   </p>
-  
 </body>
 </html>
