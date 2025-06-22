@@ -34,6 +34,49 @@
 </head>
 <body>
   <h1>ErikAI Translator 🌍</h1> 
+  <select id="projektSlot">
+  <option value="0">Vyber projekt (1–10)</option>
+  <option value="1">Projekt 1</option>
+  <option value="2">Projekt 2</option>
+    <option value="3">Projekt 3</option>
+  <option value="4">Projekt 4</option>
+  <option value="5">Projekt 5</option>
+  <option value="6">Projekt 6</option>
+    <option value="7">Projekt 7</option>
+  <option value="8">Projekt 8</option>
+    <option value="9">Projekt 9</option>
+  <option value="10">Projekt 10</option>
+</select>
+
+<button onclick="ulozProjekt()">💾 Uložiť</button>
+<button onclick="nacitajProjekt()">📂 Načítať</button>
+  <script>
+  function ulozProjekt() {
+  const slot = document.getElementById("projektSlot").value;
+  if (slot === "0") return alert("Vyber si projektový slot 1 až 10.");
+
+  const data = {
+    text: document.getElementById("vstup").value,
+    jazykZ: document.getElementById("jazyk_z").value,
+    jazykDo: document.getElementById("jazyk_do").value
+  };
+  localStorage.setItem("erikaiProjekt_" + slot, JSON.stringify(data));
+  alert("Projekt " + slot + " bol uložený!");
+}
+
+function nacitajProjekt() {
+  const slot = document.getElementById("projektSlot").value;
+  if (slot === "0") return alert("Vyber si projektový slot 1 až 10.");
+
+  const data = JSON.parse(localStorage.getItem("erikaiProjekt_" + slot));
+  if (!data) return alert("Žiadny projekt v tomto slote.");
+
+  document.getElementById("vstup").value = data.text;
+  document.getElementById("jazyk_z").value = data.jazykZ;
+  document.getElementById("jazyk_do").value = data.jazykDo;
+  alert("Projekt " + slot + " načítaný!");
+}
+</script>
   <button id="start-record">🎤 Nahrať</button>
 <script>
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
