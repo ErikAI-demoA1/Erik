@@ -13,7 +13,7 @@ ErikAI OS je aj PWA Aplikácia (je úplne offline aplikácia)
 
 🔷 Stručná charakteristika
 
-> ErikAI OS je kompletný operačný AI systém pre web a Android, vytvorený z 40 navzájom prepojených stránok, ktoré fungujú ako inteligentné príkazy, aplikácie, nástroje a platformy. Nevyžaduje programovanie zo strany používateľa – všetko funguje cez jednoduché značky alebo kliknutia.
+> ErikAI OS je kompletný operačný AI systém pre web a Android, vytvorený z 41 navzájom prepojených stránok, ktoré fungujú ako inteligentné príkazy, aplikácie, nástroje a platformy. Nevyžaduje programovanie zo strany používateľa – všetko funguje cez jednoduché značky alebo kliknutia.
 
 
 
@@ -22,9 +22,9 @@ ErikAI OS je aj PWA Aplikácia (je úplne offline aplikácia)
 
 🧩 Štruktúra ErikAI OS
 
-📄 40 stránok (modulov)
+📄 41 stránok (modulov)
 
-32 nástrojov (originálnych, multifunkčných)
+33 nástrojov (originálnych, multifunkčných)
 
 3 základné statické stránky
 
@@ -81,9 +81,9 @@ Jednoduché použitie bez učenia – prehľadné, okamžité spustenie
 
 📊 Výkon projektu
 
-880 riadkov kódu (jadro jazyka)
+2300 riadkov kódu (jadro jazyka)
 
-Celkovo cca 10000 riadkov na celý OS
+Celkovo cca 15500 riadkov na celý OS
 
 Spustiteľný na akomkoľvek zariadení s prehliadačom (aj offline PWA)
 
@@ -94,7 +94,7 @@ ErikAI OS je ľahko rozšíriteľný o nové AI nástroje
 ---
 
 ErikAI CoreLang je intuitívny značkovací a príkazový jazyk navrhnutý špeciálne pre ErikAI OS.
-Podporuje inteligentné komponenty ako <vyhladaj>, <hodiny>, <calendar>, <openApp> a viac než 40+ značiek.
+Podporuje inteligentné komponenty ako <vyhladaj>, <hodiny>, <calendar>, <openApp> a viac než 126+ značiek.
 Vytvorený pre jednoduchosť, rýchlosť a maximálnu použiteľnosť bez nutnosti tradičného programovania.
 
 ---
