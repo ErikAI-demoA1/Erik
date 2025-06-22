@@ -4,13 +4,27 @@
   <meta charset="UTF-8">
   <title>Piškvorky 5x5</title>
   <style>
-    table { border-collapse: collapse; margin: 20px auto; }
-    td {
-      width: 60px; height: 60px;
-      text-align: center; font-size: 40px;
-      border: 2px solid black; cursor: pointer;
+    body {
+      text-align: center;
+      font-family: sans-serif;
     }
-    h2, button { text-align: center; display: block; margin: 10px auto; }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+    td {
+      width: 60px;
+      height: 60px;
+      border: 2px solid black;
+      font-size: 30px;
+      cursor: pointer;
+      text-align: center;
+      vertical-align: middle;
+    }
+    button {
+      margin: 10px;
+      padding: 5px 15px;
+    }
   </style>
 </head>
 <body>
@@ -19,22 +33,25 @@
   <table id="hra"></table>
 
   <script>
+    const hraci = ["X", "O", "△"];
+    let indexHraca = 0;
+    let hrac = hraci[indexHraca];
     const velkost = 5;
-    let hrac = "X";
     let polia = Array(velkost * velkost).fill("");
     let koniec = false;
 
     function vytvorPlochu() {
-      const tbl = document.getElementById("hra");
-      tbl.innerHTML = "";
+      const hra = document.getElementById("hra");
+      hra.innerHTML = "";
       for (let r = 0; r < velkost; r++) {
-        const tr = document.createElement("tr");
+        const riadok = document.createElement("tr");
         for (let s = 0; s < velkost; s++) {
-          const td = document.createElement("td");
-          td.onclick = () => klik(r * velkost + s);
-          tr.appendChild(td);
+          const bunka = document.createElement("td");
+          bunka.addEventListener("click", () => klik(r * velkost + s));
+          bunka.innerText = polia[r * velkost + s];
+          riadok.appendChild(bunka);
         }
-        tbl.appendChild(tr);
+        hra.appendChild(riadok);
       }
     }
 
@@ -42,39 +59,73 @@
       if (polia[index] || koniec) return;
       polia[index] = hrac;
       document.getElementsByTagName("td")[index].innerText = hrac;
+
       if (vyhra(hrac)) {
         document.getElementById("stav").innerText = `${hrac} vyhral!`;
         koniec = true;
       } else {
-        hrac = hrac === "X" ? "O" : "△";
-        if (hrac === "△" && !polia.includes("")) hrac = "X"; // ak plné, zasa X
+        indexHraca = (indexHraca + 1) % hraci.length;
+        hrac = hraci[indexHraca];
         document.getElementById("stav").innerText = `Na rade: ${hrac}`;
       }
     }
 
-    function vyhra(h) {
-      // Zjednodušene kontrolujeme len riadky a stĺpce pre 3 rovnaké
+    function vyhra(hrac) {
+      // overíme riadky, stĺpce, diagonály – stačí 4 rovnaké znaky
+      const win = 4;
       for (let r = 0; r < velkost; r++) {
-        for (let s = 0; s <= velkost - 3; s++) {
-          const i = r * velkost + s;
-          if (polia[i] === h && polia[i+1] === h && polia[i+2] === h) return true;
+        for (let s = 0; s <= velkost - win; s++) {
+          if (hraciRiadok(r, s, hrac)) return true;
         }
       }
       for (let s = 0; s < velkost; s++) {
-        for (let r = 0; r <= velkost - 3; r++) {
-          const i = r * velkost + s;
-          if (polia[i] === h && polia[i+velkost] === h && polia[i+2*velkost] === h) return true;
+        for (let r = 0; r <= velkost - win; r++) {
+          if (hraciStlpec(r, s, hrac)) return true;
+        }
+      }
+      for (let r = 0; r <= velkost - win; r++) {
+        for (let s = 0; s <= velkost - win; s++) {
+          if (hraciDiagonal(r, s, hrac) || hraciOpacnaDiagonal(r, s, hrac)) return true;
         }
       }
       return false;
     }
 
+    function hraciRiadok(r, s, h) {
+      for (let i = 0; i < 4; i++) {
+        if (polia[r * velkost + (s + i)] !== h) return false;
+      }
+      return true;
+    }
+
+    function hraciStlpec(r, s, h) {
+      for (let i = 0; i < 4; i++) {
+        if (polia[(r + i) * velkost + s] !== h) return false;
+      }
+      return true;
+    }
+
+    function hraciDiagonal(r, s, h) {
+      for (let i = 0; i < 4; i++) {
+        if (polia[(r + i) * velkost + (s + i)] !== h) return false;
+      }
+      return true;
+    }
+
+    function hraciOpacnaDiagonal(r, s, h) {
+      for (let i = 0; i < 4; i++) {
+        if (polia[(r + i) * velkost + (s + 3 - i)] !== h) return false;
+      }
+      return true;
+    }
+
     function resetuj() {
-      polia.fill("");
+      polia = Array(velkost * velkost).fill("");
       koniec = false;
-      hrac = "X";
+      indexHraca = 0;
+      hrac = hraci[indexHraca];
       vytvorPlochu();
-      document.getElementById("stav").innerText = "Na rade: X";
+      document.getElementById("stav").innerText = `Na rade: ${hrac}`;
     }
 
     vytvorPlochu();
