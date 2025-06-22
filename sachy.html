@@ -11,21 +11,30 @@
       text-align: center;
       padding: 20px;
     }
+
     h1 {
       margin-bottom: 10px;
     }
+
     .btn {
       margin: 6px;
       padding: 10px 20px;
       font-size: 16px;
     }
+
     #board {
       width: 320px;
+      height: 320px; /* ✅ toto chýbalo! */
       margin: 20px auto;
+    }
+
+    .chessboard-63f37 {
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
     }
   </style>
 
-  <!-- Šachová knižnica a štýly -->
+  <!-- Šachové knižnice -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/css/chessboard.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
@@ -37,8 +46,7 @@
   <button class="btn" onclick="startVsAI()">Hra proti AI</button>
   <button class="btn" onclick="resetGame()">Začať znova</button>
 
-  <!-- 🔧 TU SA ZOBRAZÍ ŠACHOVNICA -->
-  <div id="board"></div>
+  <div id="board"></div> <!-- ✅ Tu sa vykreslí šachovnica -->
 
   <p>© 2025 Erik Mohylák – All rights reserved.</p>
 
@@ -81,13 +89,15 @@
     }
 
     function resetGame() {
-      if (!game) return;
+      if (!game || !board) return;
       game.reset();
       board.position('start');
     }
 
-    // Spusti hru pre 2 hráčov automaticky po načítaní
-    startTwoPlayer();
+    // ✅ Spusti 2 hráčov po načítaní
+    $(document).ready(function () {
+      startTwoPlayer();
+    });
   </script>
 </body>
 </html>
