@@ -190,6 +190,15 @@ function onCellClick(r, c) {
         history.push(backup);
         whiteTurn = !whiteTurn;
         turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
+        if (isKingInCheck(!whiteTurn)) {
+  if (!hasAnyValidMove(!whiteTurn)) {
+    alert(`Šach-mat! Vyhral ${whiteTurn ? "Biely" : "Čierny"}!`);
+  } else {
+    alert("Šach!");
+  }
+} else if (!hasAnyValidMove(!whiteTurn)) {
+  alert("Pat! Remíza.");
+        }
       } else {
         boardState = backup;
       }
@@ -200,15 +209,7 @@ function onCellClick(r, c) {
     selected = [r, c];
   }
 }
-if (isKingInCheck(!whiteTurn)) {
-  if (!hasAnyValidMove(!whiteTurn)) {
-    alert(`Šach-mat! Vyhral ${whiteTurn ? "Biely" : "Čierny"}!`);
-  } else {
-    alert("Šach!");
-  }
-} else if (!hasAnyValidMove(!whiteTurn)) {
-  alert("Pat! Remíza.");
-}
+
   
 
 function isClearRow(sr, sc, r, c) {
