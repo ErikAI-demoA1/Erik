@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +40,10 @@
 </head>
 <body>
   <h1>♟ Klasické šachy – podľa pravidiel FIDE</h1>
-  <h2 id="turn">Na ťahu: Biely</h2>  <div id="board" class="board"></div><button onclick="newGame()">Nová hra</button> <button onclick="undoMove()">Späť ťah</button>
+  <h2 id="turn">Na ťahu: Biely</h2>
+  <div id="board" class="board"></div>
+  <button onclick="newGame()">Nová hra</button>
+  <button onclick="undoMove()">Späť ťah</button>
 
   <script>
     let board = document.getElementById("board");
@@ -103,15 +107,56 @@
     }
 
     function isValidMove(piece, sr, sc, r, c) {
-      // Zjednodušené pohyby pre kráľa a dámu
       let dr = r - sr;
       let dc = c - sc;
+      let target = boardState[r][c];
+
+      // Zákaz ísť na vlastnú figúrku
+      if (target && (whiteTurn === (target === target.toUpperCase()))) {
+        return false;
+      }
+
       piece = piece.toLowerCase();
 
-      if (piece === "k") return Math.abs(dr) <= 1 && Math.abs(dc) <= 1;
-      if (piece === "q") return (dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc));
+      if (piece === "k") {
+        return Math.abs(dr) <= 1 && Math.abs(dc) <= 1;
+      }
+
+      if (piece === "q") {
+        if (dr === 0) return isClearRow(sr, sc, r, c);
+        if (dc === 0) return isClearColumn(sr, sc, r, c);
+        if (Math.abs(dr) === Math.abs(dc)) return isClearDiagonal(sr, sc, r, c);
+      }
 
       return false;
+    }
+
+    function isClearRow(sr, sc, r, c) {
+      let step = c > sc ? 1 : -1;
+      for (let i = sc + step; i !== c; i += step) {
+        if (boardState[sr][i]) return false;
+      }
+      return true;
+    }
+
+    function isClearColumn(sr, sc, r, c) {
+      let step = r > sr ? 1 : -1;
+      for (let i = sr + step; i !== r; i += step) {
+        if (boardState[i][sc]) return false;
+      }
+      return true;
+    }
+
+    function isClearDiagonal(sr, sc, r, c) {
+      let rowStep = r > sr ? 1 : -1;
+      let colStep = c > sc ? 1 : -1;
+      let i = sr + rowStep, j = sc + colStep;
+      while (i !== r && j !== c) {
+        if (boardState[i][j]) return false;
+        i += rowStep;
+        j += colStep;
+      }
+      return true;
     }
 
     function newGame() {
@@ -133,5 +178,6 @@
     }
 
     newGame();
-  </script></body>
+  </script>
+</body>
 </html>
