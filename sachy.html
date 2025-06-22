@@ -191,7 +191,7 @@ function onCellClick(r, c) {
       if (!isInCheck(whiteTurn)) {
         history.push(backup);
         whiteTurn = !whiteTurn;
-        turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
+        turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely(červený)" : "Čierny(žltý)"}`;
         if (isKingInCheck(!whiteTurn)) {
           if (!hasAnyValidMove(!whiteTurn)) {
             statusDisplay.textContent = `Šach-mat! Vyhral ${whiteTurn ? "Biely" : "Čierny"}!`;
