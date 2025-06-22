@@ -74,6 +74,70 @@ function startSpeech(fieldId) {
 <label for="spravaSelect">💬 Vyber uloženú správu:</label>
 <select id="spravaSelect" onchange="loadSaved('sprava', this.value)"></select>
 
+  <div style="margin-top: 10px;">
+  📱 Vyber uložené číslo:
+  <select id="cisloSelect" onchange="loadSaved('cislo', this.value)">
+    <option value="">-- Vyber --</option>
+  </select>
+  💬 Vyber uloženú správu:
+  <select id="spravaSelect" onchange="loadSaved('sprava', this.value)">
+    <option value="">-- Vyber --</option>
+  </select>
+  <br><br>
+  <button onclick="ulozData()" style="background-color:#ffcc00; padding:5px 15px;">💾 Uložiť číslo a správu</button>
+  </div>
+
+  <script>
+function ulozData() {
+  let cislo = document.getElementById('cislo').value;
+  let sprava = document.getElementById('sprava').value;
+
+  if (!cislo || !sprava) {
+    alert("Najprv zadaj číslo a správu, ktoré chceš uložiť.");
+    return;
+  }
+
+  saveToStorage('cislo', cislo);
+  saveToStorage('sprava', sprava);
+  alert("Uložené!");
+}
+
+function saveToStorage(type, value) {
+  let data = JSON.parse(localStorage.getItem('saved_' + type)) || [];
+  data.unshift(value); // vloží na začiatok
+  data = [...new Set(data)].slice(0, 10); // odstráni duplikáty, ponechá max 10
+  localStorage.setItem('saved_' + type, JSON.stringify(data));
+  loadSelectOptions(type);
+}
+
+function loadSelectOptions(type) {
+  const select = document.getElementById(type + 'Select');
+  if (!select) return;
+  select.innerHTML = '<option value="">-- Vyber --</option>';
+  let data = JSON.parse(localStorage.getItem('saved_' + type)) || [];
+  data.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    select.appendChild(opt);
+  });
+}
+
+function loadSaved(type, value) {
+  if (value) {
+    document.getElementById(type).value = value;
+  }
+}
+
+window.onload = function () {
+  loadSelectOptions('cislo');
+  loadSelectOptions('sprava');
+};
+  </script>
+
+
+  
+
   <script>
 function saveToStorage(type, value) {
     let data = JSON.parse(localStorage.getItem('saved_' + type)) || [];
