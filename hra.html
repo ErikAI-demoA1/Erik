@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Piškvorky</title>
+  <style>
+    table { border-collapse: collapse; margin: 20px auto; }
+    td {
+      width: 60px; height: 60px;
+      text-align: center; font-size: 40px;
+      border: 2px solid black; cursor: pointer;
+    }
+    h2 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h2 id="stav">Na rade: X</h2>
+  <table>
+    <tr><td onclick="klik(0)"></td><td onclick="klik(1)"></td><td onclick="klik(2)"></td></tr>
+    <tr><td onclick="klik(3)"></td><td onclick="klik(4)"></td><td onclick="klik(5)"></td></tr>
+    <tr><td onclick="klik(6)"></td><td onclick="klik(7)"></td><td onclick="klik(8)"></td></tr>
+  </table>
+
+  <script>
+    let hrac = "X";
+    let polia = Array(9).fill("");
+    let koniec = false;
+
+    function klik(index) {
+      if (polia[index] !== "" || koniec) return;
+      polia[index] = hrac;
+      document.getElementsByTagName("td")[index].innerText = hrac;
+      if (vyhra(hrac)) {
+        document.getElementById("stav").innerText = `${hrac} vyhral!`;
+        koniec = true;
+      } else {
+        hrac = hrac === "X" ? "O" : "X";
+        document.getElementById("stav").innerText = `Na rade: ${hrac}`;
+      }
+    }
+
+    function vyhra(h) {
+      const v = [
+        [0,1,2],[3,4,5],[6,7,8], // riadky
+        [0,3,6],[1,4,7],[2,5,8], // stĺpce
+        [0,4,8],[2,4,6]          // diagonály
+      ];
+      return v.some(r => r.every(i => polia[i] === h));
+    }
+  </script>
+</body>
+</html>
