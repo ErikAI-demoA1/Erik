@@ -89,14 +89,22 @@
       const currentTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
       alarms.forEach((alarm, index) => {
         if (alarm.time === currentTime) {
-          alarmSound.play();
-          alert(`🔔 Zvoní budík: ${alarm.time}`);
-          if (!alarm.repeat) {
-            removeAlarm(index);
-          }
+  // Prehrať zvuk
+  alarmSound.play().catch(e => console.log("Nepodarilo sa prehrať zvuk:", e));
+
+  // Zobraziť notifikáciu (ak povolené)
+  if (Notification.permission === "granted") {
+    new Notification("⏰ ErikAI Budík", {
+      body: `Zvoní budík: ${alarm.time}`,
+      icon: "icon-192.png"
+    });
+  }
+
+  // Odstrániť ak nie je opakujúci
+  if (!alarm.repeat) {
+    removeAlarm(index);
+  }
         }
-      });
-    }
 
     function fillTimes() {
       for (let h = 0; h < 24; h++) {
