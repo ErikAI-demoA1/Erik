@@ -156,6 +156,23 @@ function diktojSpravu() {
   </form>
 
   
+  <label for="to">📫 Komu (e-mail):</label>
+<select id="toSelect" onchange="loadSelected('to')">
+  <option value="">-- Vyber e-mail --</option>
+</select>
+<input type="email" id="to" required placeholder="napr. meno@gmail.com">
+
+<label for="subject">📝 Predmet:</label>
+<select id="subjectSelect" onchange="loadSelected('subject')">
+  <option value="">-- Vyber predmet --</option>
+</select>
+<input type="text" id="subject" placeholder="Napr. Otázka ohľadom ErikAI">
+
+<label for="body">💬 Správa:</label>
+<select id="bodySelect" onchange="loadSelected('body')">
+  <option value="">-- Vyber správu --</option>
+</select>
+<textarea id="body" rows="6" placeholder="Sem napíš svoju správu..."></textarea>
 <button onclick="saveField('to')">💾 Ulož e-mail</button>
 <button onclick="saveField('subject')">💾 Ulož predmet</button>
 <button onclick="saveField('body')">💾 Ulož správu</button>
