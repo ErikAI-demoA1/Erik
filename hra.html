@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>Piškvorky</title>
+  <title>Piškvorky 5x5</title>
   <style>
     table { border-collapse: collapse; margin: 20px auto; }
     td {
@@ -10,43 +10,74 @@
       text-align: center; font-size: 40px;
       border: 2px solid black; cursor: pointer;
     }
-    h2 { text-align: center; }
+    h2, button { text-align: center; display: block; margin: 10px auto; }
   </style>
 </head>
 <body>
   <h2 id="stav">Na rade: X</h2>
-  <table>
-    <tr><td onclick="klik(0)"></td><td onclick="klik(1)"></td><td onclick="klik(2)"></td></tr>
-    <tr><td onclick="klik(3)"></td><td onclick="klik(4)"></td><td onclick="klik(5)"></td></tr>
-    <tr><td onclick="klik(6)"></td><td onclick="klik(7)"></td><td onclick="klik(8)"></td></tr>
-  </table>
+  <button onclick="resetuj()">Začať znova</button>
+  <table id="hra"></table>
 
   <script>
+    const velkost = 5;
     let hrac = "X";
-    let polia = Array(9).fill("");
+    let polia = Array(velkost * velkost).fill("");
     let koniec = false;
 
+    function vytvorPlochu() {
+      const tbl = document.getElementById("hra");
+      tbl.innerHTML = "";
+      for (let r = 0; r < velkost; r++) {
+        const tr = document.createElement("tr");
+        for (let s = 0; s < velkost; s++) {
+          const td = document.createElement("td");
+          td.onclick = () => klik(r * velkost + s);
+          tr.appendChild(td);
+        }
+        tbl.appendChild(tr);
+      }
+    }
+
     function klik(index) {
-      if (polia[index] !== "" || koniec) return;
+      if (polia[index] || koniec) return;
       polia[index] = hrac;
       document.getElementsByTagName("td")[index].innerText = hrac;
       if (vyhra(hrac)) {
         document.getElementById("stav").innerText = `${hrac} vyhral!`;
         koniec = true;
       } else {
-        hrac = hrac === "X" ? "O" : "X";
+        hrac = hrac === "X" ? "O" : "△";
+        if (hrac === "△" && !polia.includes("")) hrac = "X"; // ak plné, zasa X
         document.getElementById("stav").innerText = `Na rade: ${hrac}`;
       }
     }
 
     function vyhra(h) {
-      const v = [
-        [0,1,2],[3,4,5],[6,7,8], // riadky
-        [0,3,6],[1,4,7],[2,5,8], // stĺpce
-        [0,4,8],[2,4,6]          // diagonály
-      ];
-      return v.some(r => r.every(i => polia[i] === h));
+      // Zjednodušene kontrolujeme len riadky a stĺpce pre 3 rovnaké
+      for (let r = 0; r < velkost; r++) {
+        for (let s = 0; s <= velkost - 3; s++) {
+          const i = r * velkost + s;
+          if (polia[i] === h && polia[i+1] === h && polia[i+2] === h) return true;
+        }
+      }
+      for (let s = 0; s < velkost; s++) {
+        for (let r = 0; r <= velkost - 3; r++) {
+          const i = r * velkost + s;
+          if (polia[i] === h && polia[i+velkost] === h && polia[i+2*velkost] === h) return true;
+        }
+      }
+      return false;
     }
+
+    function resetuj() {
+      polia.fill("");
+      koniec = false;
+      hrac = "X";
+      vytvorPlochu();
+      document.getElementById("stav").innerText = "Na rade: X";
+    }
+
+    vytvorPlochu();
   </script>
 </body>
 </html>
