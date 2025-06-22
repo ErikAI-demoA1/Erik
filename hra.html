@@ -1,15 +1,18 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>Piškvorky 5x5</title>
+  <title>Piškvorky 5x5 - ErikAI OS</title>
   <style>
     body {
       text-align: center;
       font-family: sans-serif;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      margin-top: 20px;
     }
     table {
-      margin: 0 auto;
+      margin: 20px auto;
       border-collapse: collapse;
     }
     td {
@@ -20,25 +23,59 @@
       cursor: pointer;
       text-align: center;
       vertical-align: middle;
+      transition: all 0.2s ease;
+    }
+    td:hover {
+      background-color: #e0e0e0;
     }
     button {
       margin: 10px;
-      padding: 5px 15px;
+      padding: 8px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .menu {
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
-  <h2 id="stav">Na rade: X</h2>
-  <button onclick="resetuj()">Začať znova</button>
-  <table id="hra"></table>
-
-  <script>
+  <h1>🎮 Piškvorky 5x5 – ErikAI OS</h1>  <div id="menu" class="menu">
+    <p>Zvoľ režim hry:</p>
+    <button onclick="startGame(2)">Hra 2 hráči</button>
+    <button onclick="startGame(3)">Hra 3 hráči</button>
+    <button onclick="startBotGame()">Hra proti botovi</button>
+  </div>  <div id="game" style="display:none;">
+    <h2 id="stav">Na rade: X</h2>
+    <div id="skore"></div>
+    <button onclick="resetuj()">Začať znova</button>
+    <table id="hra"></table>
+  </div>  <script>
     const hraci = ["X", "O", "△"];
+    let pocetHracov = 2;
     let indexHraca = 0;
     let hrac = hraci[indexHraca];
     const velkost = 5;
-    let polia = Array(velkost * velkost).fill("");
+    let polia = [];
     let koniec = false;
+    let botHrac = null;
+    let skore = { X: 0, O: 0, "△": 0 };
+
+    function startGame(pocet) {
+      pocetHracov = pocet;
+      botHrac = null;
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      resetuj();
+    }
+
+    function startBotGame() {
+      pocetHracov = 2;
+      botHrac = "O"; // Bot bude O
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      resetuj();
+    }
 
     function vytvorPlochu() {
       const hra = document.getElementById("hra");
@@ -62,12 +99,24 @@
 
       if (vyhra(hrac)) {
         document.getElementById("stav").innerText = `${hrac} vyhral!`;
+        skore[hrac]++;
+        zobrazSkore();
         koniec = true;
       } else {
-        indexHraca = (indexHraca + 1) % hraci.length;
+        indexHraca = (indexHraca + 1) % pocetHracov;
         hrac = hraci[indexHraca];
         document.getElementById("stav").innerText = `Na rade: ${hrac}`;
+        if (botHrac === hrac) {
+          setTimeout(botTah, 500);
+        }
       }
+    }
+
+    function botTah() {
+      const prazdne = polia.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+      if (prazdne.length === 0) return;
+      const nahodnyIndex = prazdne[Math.floor(Math.random() * prazdne.length)];
+      klik(nahodnyIndex);
     }
 
     function vyhra(hrac) {
@@ -96,21 +145,18 @@
       }
       return true;
     }
-
     function hraciStlpec(r, s, h) {
       for (let i = 0; i < 4; i++) {
         if (polia[(r + i) * velkost + s] !== h) return false;
       }
       return true;
     }
-
     function hraciDiagonal(r, s, h) {
       for (let i = 0; i < 4; i++) {
         if (polia[(r + i) * velkost + (s + i)] !== h) return false;
       }
       return true;
     }
-
     function hraciOpacnaDiagonal(r, s, h) {
       for (let i = 0; i < 4; i++) {
         if (polia[(r + i) * velkost + (s + 3 - i)] !== h) return false;
@@ -118,16 +164,21 @@
       return true;
     }
 
+    function zobrazSkore() {
+      document.getElementById("skore").innerText = `Skóre – X: ${skore.X}, O: ${skore.O}, △: ${skore["△"]}`;
+    }
+
     function resetuj() {
       polia = Array(velkost * velkost).fill("");
       koniec = false;
       indexHraca = 0;
       hrac = hraci[indexHraca];
-      vytvorPlochu();
       document.getElementById("stav").innerText = `Na rade: ${hrac}`;
+      vytvorPlochu();
+      zobrazSkore();
+      if (botHrac === hrac) {
+        setTimeout(botTah, 500);
+      }
     }
-
-    vytvorPlochu();
-  </script>
-</body>
+  </script></body>
 </html>
