@@ -36,6 +36,12 @@
       padding: 10px 20px;
       font-size: 16px;
     }
+    .whitePiece {
+  color: red;
+}
+.blackPiece {
+  color: yellow;
+}
   </style>
 </head>
 <body>
@@ -76,7 +82,18 @@ function drawBoard() {
     for (let c = 0; c < 8; c++) {
       const cell = document.createElement("div");
       cell.classList.add("cell", (r + c) % 2 === 0 ? "white" : "black");
-      cell.textContent = figures[boardState[r][c]] || "";
+
+      const piece = boardState[r][c];
+      cell.textContent = figures[piece] || "";
+
+      if (piece) {
+        if (piece === piece.toUpperCase()) {
+          cell.classList.add("whitePiece"); // biely hráč = červené
+        } else {
+          cell.classList.add("blackPiece"); // čierny hráč = žlté
+        }
+      }
+
       cell.onclick = () => onCellClick(r, c);
       board.appendChild(cell);
     }
