@@ -68,6 +68,56 @@ function startSpeech(fieldId) {
     <button type="submit">📤 Odoslať SMS</button>
   </form>
 
+  <label for="cisloSelect">📱 Vyber uložené číslo:</label>
+<select id="cisloSelect" onchange="loadSaved('cislo', this.value)"></select>
+
+<label for="spravaSelect">💬 Vyber uloženú správu:</label>
+<select id="spravaSelect" onchange="loadSaved('sprava', this.value)"></select>
+
+  <script>
+function saveToStorage(type, value) {
+    let data = JSON.parse(localStorage.getItem('saved_' + type)) || [];
+    data.unshift(value); // Pridá na začiatok
+    data = [...new Set(data)].slice(0, 10); // Unikátne, max 10
+    localStorage.setItem('saved_' + type, JSON.stringify(data));
+    loadSelectOptions(type);
+}
+
+function loadSelectOptions(type) {
+    const select = document.getElementById(type + 'Select');
+    select.innerHTML = '<option value="">-- Vyber --</option>';
+    let data = JSON.parse(localStorage.getItem('saved_' + type)) || [];
+    data.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        select.appendChild(opt);
+    });
+}
+
+function loadSaved(type, value) {
+    if (value) {
+        document.getElementById(type).value = value;
+    }
+}
+
+// Uloženie po odoslaní SMS:
+function sendSMS() {
+    var cislo = document.getElementById("cislo").value;
+    var sprava = document.getElementById("sprava").value;
+    if (cislo && sprava) {
+        saveToStorage('cislo', cislo);
+        saveToStorage('sprava', sprava);
+        var smsLink = "sms:" + encodeURIComponent(cislo) + "?body=" + encodeURIComponent(sprava);
+        window.location.href = smsLink;
+    }
+}
+window.onload = function () {
+    loadSelectOptions('cislo');
+    loadSelectOptions('sprava');
+};
+  </script>
+
   <div class="warning">
     ⚠️ <strong>Upozornenie:</strong><br>
     Táto funkcia neodosiela SMS automaticky. Po kliknutí sa otvorí tvoja predvolená SMS aplikácia, kde manuálne potvrdíš odoslanie.<br><br>
