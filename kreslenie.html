@@ -66,6 +66,26 @@
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <h1>🎨 ErikAI Kreslenie</h1>
+  Šírka: <input type="number" id="canvasWidth" value="300" min="50" max="1000">
+Výška: <input type="number" id="canvasHeight" value="400" min="50" max="1000">
+<button onclick="nastavCanvas()">Zmeniť rozmery</button>
+  <script>
+  function nastavCanvas() {
+  const sirka = parseInt(document.getElementById("canvasWidth").value);
+  const vyska = parseInt(document.getElementById("canvasHeight").value);
+  if (!isNaN(sirka) && !isNaN(vyska) && sirka > 0 && vyska > 0) {
+    const obraz = ctx.getImageData(0, 0, canvas.width, canvas.height); // zachovanie
+    canvas.width = sirka;
+    canvas.height = vyska;
+    ctx.putImageData(obraz, 0, 0); // vloží starý výtvor (ak sa zmestí)
+  }
+}
+
+    window.onload = () => {
+  canvas.width = Math.min(window.innerWidth * 0.8, 600);
+  canvas.height = Math.min(window.innerHeight * 0.6, 600);
+};
+  </script>
   <p>Kresli si priamo v prehliadači. Upravuj farbu, hrúbku a ulož svoj výtvor ako obrázok.</p>
 
   <label>Farba:
