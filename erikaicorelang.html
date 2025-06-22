@@ -176,6 +176,7 @@ Ak sa nič nezobrazí, použi odkaz manuálne.
     <li><b>&lt;erikaiopenapkweb&gt;</b> – Otvárač ErikAI pre Android (.apk)</li>
     <li><b>&lt;ownmusic&gt;</b> – Hudobný prehrávač</li>
     <li><b>&lt;owntube&gt;</b> – ErikAI vlastné video (OwnTube)</li>
+    <li><b>&lt;translate&gt;</b> – ErikAI prekladač (Translate)</li>
   </ul>
   <p>👉 Každú z týchto značiek môžeš použiť v texte, a ErikAI ich automaticky zmení na funkčný nástroj. Príklad:</p>
   <pre style="background:#fff; padding:10px; border-radius:6px;">Napíš si poznámku: &lt;notes&gt;</pre>
@@ -1445,7 +1446,9 @@ if (bgColorMatch) {
   .replace(/<erikaichatweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai-chat.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<erikaiopenapkweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/weberikai.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<ownmusic>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hudba.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<translate>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/translate.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
   
   if (bgMatch) html += '</div>';
 
@@ -1612,7 +1615,9 @@ if (bgColorMatch) {
   .replace(/<erikaichatweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai-chat.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
     .replace(/<erikaiopenapkweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/weberikai.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<ownmusic>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hudba.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<translate>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/translate.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
 
   if (bgMatch) html += '</div>';
   html += '</body></html>';
@@ -2140,6 +2145,23 @@ document.addEventListener("DOMContentLoaded", function () {
 });
   </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarTags = document.getElementsByTagName("translate");
+  for (let el of calendarTags) {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://erikai-demoa1.github.io/ErikAI/translate.html";
+    iframe.width = "100%";
+    iframe.height = "700px";
+    iframe.style.border = "1px solid #ccc";
+    iframe.style.borderRadius = "10px";
+    iframe.loading = "lazy";
+    el.replaceWith(iframe);
+  }
+});
+</script>
+  
+
 
 
   <input type="text" id="appName" placeholder="Názov tvojej PWA aplikácie" />
@@ -2306,7 +2328,9 @@ if (bgColorMatch) {
   .replace(/<erikaichatweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai-chat.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
     .replace(/<erikaiopenapkweb>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/weberikai.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
   .replace(/<ownmusic>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/hudba.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
-  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  .replace(/<owntube>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/erikai_own_tube.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>')
+  .replace(/<translate>/g, '<iframe src="https://erikai-demoa1.github.io/ErikAI/translate.html" width="100%" height="700px" style="border:1px solid #ccc; border-radius:10px;" loading="lazy"></iframe>');
+  
   
   
 
