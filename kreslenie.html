@@ -20,26 +20,21 @@
     input[type=color], input[type=range], button {
       margin: 5px;
     }
+    body.dark-mode {
+      background-color: #121212;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
 
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-  }
-</script>
-
-<style>
-  body.dark-mode {
-    background-color: #121212;
-    color: white;
-  }
-</style>
-
-<p id="cas" style="font-size: 18px;"></p>
-
+  <p id="cas" style="font-size: 18px;"></p>
   <script>
     function aktualizujCas() {
       const teraz = new Date();
@@ -52,25 +47,24 @@
         minute: '2-digit',
         second: '2-digit'
       };
-      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
-      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${teraz.toLocaleDateString('sk-SK', moznosti)}`;
     }
     setInterval(aktualizujCas, 1000);
     aktualizujCas();
   </script>
 
   <div id="google_translate_element"></div>
-<script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'sk',
-      includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'sk',
+        includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
   <h1>🎨 ErikAI Kreslenie</h1>
   <p>Kresli si priamo v prehliadači. Upravuj farbu, hrúbku a ulož svoj výtvor ako obrázok.</p>
 
@@ -81,62 +75,34 @@
     <input type="range" id="brushSize" min="1" max="30" value="5" />
   </label>
   <br>
+  <label><input type="radio" name="tool" value="draw" checked> Kresliť</label>
+  <label><input type="radio" name="tool" value="erase"> Guma</label>
+  <br>
   <button onclick="clearCanvas()">Vyčistiť</button>
   <button onclick="saveCanvas()">Uložiť ako PNG</button>
+  <p style="font-size: 13px; color: #ccc;">👉 Po kliknutí sa obrázok uloží ako fotka (PNG)</p>
 
   <br><br>
   <canvas id="drawingCanvas" width="300" height="400"></canvas>
 
+  <br>
   <select id="drawingSelector" onchange="loadDrawing(this.value)">
-  <option value="">-- Vyber uložený výtvor --</option>
+    <option value="">-- Vyber uložený výtvor --</option>
   </select>
-<script>
-  function updateDrawingSelector() {
-  const select = document.getElementById('drawingSelector');
-  select.innerHTML = '<option value="">-- Vyber uložený výtvor --</option>';
-  const drawings = JSON.parse(localStorage.getItem('erikai_drawings')) || [];
-  drawings.forEach((_, index) => {
-    const option = document.createElement('option');
-    option.value = index;
-    option.textContent = `Výtvor ${index + 1}`;
-    select.appendChild(option);
-  });
-}
 
-function loadDrawing(index) {
-  const drawings = JSON.parse(localStorage.getItem('erikai_drawings')) || [];
-  if (drawings[index]) {
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    img.src = drawings[index];
-  }
-}
-</script>
-
-  <label><input type="radio" name="tool" value="draw" checked> Kresliť</label>
-<label><input type="radio" name="tool" value="erase"> Guma</label>
-<script>
-let tool = "draw";
-
-document.querySelectorAll('input[name="tool"]').forEach(el => {
-  el.addEventListener('change', () => {
-    tool = el.value;
-  });
-});
-
-function drawLine(x1, y1, x2, y2) {
-  ctx.strokeStyle = (tool === 'erase') ? '#ffffff' : colorPicker.value;
-  ctx.lineWidth = brushSize.value;
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
-}
-</script>
   <script>
     const canvas = document.getElementById("drawingCanvas");
     const ctx = canvas.getContext("2d");
+    const colorPicker = document.getElementById("colorPicker");
+    const brushSize = document.getElementById("brushSize");
+    let tool = "draw";
     let drawing = false;
+
+    document.querySelectorAll('input[name="tool"]').forEach(el => {
+      el.addEventListener('change', () => {
+        tool = el.value;
+      });
+    });
 
     function getPosition(e) {
       if (e.touches) {
@@ -166,9 +132,9 @@ function drawLine(x1, y1, x2, y2) {
       if (!drawing) return;
       e.preventDefault();
       const pos = getPosition(e);
-      ctx.lineWidth = document.getElementById("brushSize").value;
+      ctx.lineWidth = brushSize.value;
       ctx.lineCap = "round";
-      ctx.strokeStyle = document.getElementById("colorPicker").value;
+      ctx.strokeStyle = (tool === "erase") ? "#ffffff" : colorPicker.value;
 
       ctx.lineTo(pos.x, pos.y);
       ctx.stroke();
@@ -185,7 +151,35 @@ function drawLine(x1, y1, x2, y2) {
       link.download = "erikai_kresba.png";
       link.href = canvas.toDataURL();
       link.click();
+
+      let drawings = JSON.parse(localStorage.getItem("erikai_drawings")) || [];
+      drawings.push(link.href);
+      localStorage.setItem("erikai_drawings", JSON.stringify(drawings));
+      updateDrawingSelector();
     }
+
+    function loadDrawing(index) {
+      const drawings = JSON.parse(localStorage.getItem("erikai_drawings")) || [];
+      if (drawings[index]) {
+        const img = new Image();
+        img.onload = () => ctx.drawImage(img, 0, 0);
+        img.src = drawings[index];
+      }
+    }
+
+    function updateDrawingSelector() {
+      const select = document.getElementById('drawingSelector');
+      select.innerHTML = '<option value="">-- Vyber uložený výtvor --</option>';
+      const drawings = JSON.parse(localStorage.getItem('erikai_drawings')) || [];
+      drawings.slice(-10).forEach((_, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `Výtvor ${index + 1}`;
+        select.appendChild(option);
+      });
+    }
+
+    updateDrawingSelector();
 
     // Mouse
     canvas.addEventListener("mousedown", startDraw);
@@ -193,17 +187,17 @@ function drawLine(x1, y1, x2, y2) {
     canvas.addEventListener("mouseout", endDraw);
     canvas.addEventListener("mousemove", draw);
 
-    // Touch (mobil)
+    // Touch
     canvas.addEventListener("touchstart", startDraw);
     canvas.addEventListener("touchend", endDraw);
     canvas.addEventListener("touchcancel", endDraw);
     canvas.addEventListener("touchmove", draw);
   </script>
-  
+
   <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br/>
+    To view a copy of this license, visit <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:gray;" target="_blank">creativecommons.org</a><br/>
+    © 2025 Erik Mohylák – All rights reserved.
   </p>
 </body>
 </html>
