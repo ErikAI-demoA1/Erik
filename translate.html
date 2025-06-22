@@ -53,28 +53,40 @@
   <script>
   function ulozProjekt() {
   const slot = document.getElementById("projektSlot").value;
-  if (slot === "0") return alert("Vyber si projektový slot 1 až 10.");
+  if (slot === "0") {
+    alert("Vyber si projektový slot 1 až 10.");
+    return;
+  }
 
   const data = {
     text: document.getElementById("vstup").value,
-    jazykZ: document.getElementById("jazyk_z").value,
-    jazykDo: document.getElementById("jazyk_do").value
+    jazykDo: document.getElementById("language").value
   };
-  localStorage.setItem("erikaiProjekt_" + slot, JSON.stringify(data));
-  alert("Projekt " + slot + " bol uložený!");
+
+  try {
+    localStorage.setItem("erikaiProjekt_" + slot, JSON.stringify(data));
+    alert("✅ Projekt " + slot + " bol úspešne uložený!");
+  } catch (e) {
+    alert("❌ Chyba pri ukladaní: " + e.message);
+  }
 }
 
 function nacitajProjekt() {
   const slot = document.getElementById("projektSlot").value;
-  if (slot === "0") return alert("Vyber si projektový slot 1 až 10.");
+  if (slot === "0") {
+    alert("Vyber si projektový slot 1 až 10.");
+    return;
+  }
 
   const data = JSON.parse(localStorage.getItem("erikaiProjekt_" + slot));
-  if (!data) return alert("Žiadny projekt v tomto slote.");
+  if (!data) {
+    alert("⚠️ V tomto slote nie je nič uložené.");
+    return;
+  }
 
   document.getElementById("vstup").value = data.text;
-  document.getElementById("jazyk_z").value = data.jazykZ;
-  document.getElementById("jazyk_do").value = data.jazykDo;
-  alert("Projekt " + slot + " načítaný!");
+  document.getElementById("language").value = data.jazykDo;
+  alert("📂 Projekt " + slot + " bol načítaný.");
 }
 </script>
   <button id="start-record">🎤 Nahrať</button>
