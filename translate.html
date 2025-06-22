@@ -89,6 +89,51 @@ function nacitajProjekt() {
   alert("📂 Projekt " + slot + " bol načítaný.");
 }
 </script>
+  <button onclick="detekujJazyk()" title="Zisti jazyk textu">
+  🔍 Zisti jazyk
+  </button>
+  <script>
+  function detekujJazyk() {
+  const text = document.getElementById("vstup").value;
+  if (!text) {
+    alert("Najprv napíš alebo vlož text.");
+    return;
+  }
+
+  fetch("https://libretranslate.de/detect", {
+    method: "POST",
+    body: JSON.stringify({ q: text }),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.json())
+  .then(data => {
+    const jazyk = data[0].language;
+    if (jazyk) {
+      const meno = prelozKodNaNazov(jazyk); // funkcia dolu
+      if (confirm(`Text je v jazyku: ${meno.toUpperCase()}. Chceš ho preložiť?`)) {
+        document.getElementById("language").value = "sk"; // alebo automatika
+        document.getElementById("preloz").click();
+      }
+    }
+  });
+}
+
+// Pomocná funkcia na zmenu kódu jazyka na názov (napr. 'fr' → 'francúzština')
+function prelozKodNaNazov(kod) {
+  const preklady = {
+    en: "angličtina",
+    fr: "francúzština",
+    es: "španielčina",
+    de: "nemčina",
+    ru: "ruština",
+    zh: "čínština",
+    sk: "slovenčina",
+    cs: "čeština",
+    // pridaj ďalšie podľa potreby
+  };
+  return preklady[kod] || kod;
+}
+  </script>
   <button id="start-record">🎤 Nahrať</button>
 <script>
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
