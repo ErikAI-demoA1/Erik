@@ -79,6 +79,62 @@
 
   <div id="qrcode"></div>
 
+  <button onclick="ulozitQR()">💾 Uložiť QR kód</button>
+<select id="ulozeneQRs" onchange="zobrazUlozenyQR()">
+  <option value="">-- Vyber uložený QR --</option>
+</select>
+<script>
+  function ulozitQR() {
+  const text = document.getElementById("text").value.trim();
+  if (!text) {
+    alert("Najprv zadaj text na uloženie!");
+    return;
+  }
+
+  let ulozene = JSON.parse(localStorage.getItem("qrZoznam")) || [];
+
+  // Vynechaj duplicitné
+  if (ulozene.includes(text)) {
+    alert("Tento QR kód je už uložený.");
+    return;
+  }
+
+  // Obmedz na 10
+  if (ulozene.length >= 10) {
+    ulozene.shift(); // Odstráni najstarší
+  }
+
+  ulozene.push(text);
+  localStorage.setItem("qrZoznam", JSON.stringify(ulozene));
+  nacitajQRZoznam();
+  alert("Uložené!");
+}
+
+function nacitajQRZoznam() {
+  const select = document.getElementById("ulozeneQRs");
+  select.innerHTML = `<option value="">-- Vyber uložený QR --</option>`;
+  const ulozene = JSON.parse(localStorage.getItem("qrZoznam")) || [];
+  ulozene.forEach((t, i) => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = `QR #${i+1}: ${t.substring(0, 20)}${t.length > 20 ? "..." : ""}`;
+    select.appendChild(opt);
+  });
+}
+
+function zobrazUlozenyQR() {
+  const val = document.getElementById("ulozeneQRs").value;
+  if (val) {
+    document.getElementById("text").value = val;
+    generateQR(); // vygeneruje znova QR
+  }
+}
+
+  window.onload = function () {
+  nacitajQRZoznam();
+};
+</script>
+
   <script>
     let canvas;
 
