@@ -87,6 +87,52 @@
   <br><br>
   <canvas id="drawingCanvas" width="300" height="400"></canvas>
 
+  <select id="drawingSelector" onchange="loadDrawing(this.value)">
+  <option value="">-- Vyber uložený výtvor --</option>
+  </select>
+<script>
+  function updateDrawingSelector() {
+  const select = document.getElementById('drawingSelector');
+  select.innerHTML = '<option value="">-- Vyber uložený výtvor --</option>';
+  const drawings = JSON.parse(localStorage.getItem('erikai_drawings')) || [];
+  drawings.forEach((_, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = `Výtvor ${index + 1}`;
+    select.appendChild(option);
+  });
+}
+
+function loadDrawing(index) {
+  const drawings = JSON.parse(localStorage.getItem('erikai_drawings')) || [];
+  if (drawings[index]) {
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0);
+    img.src = drawings[index];
+  }
+}
+</script>
+
+  <label><input type="radio" name="tool" value="draw" checked> Kresliť</label>
+<label><input type="radio" name="tool" value="erase"> Guma</label>
+<script>
+let tool = "draw";
+
+document.querySelectorAll('input[name="tool"]').forEach(el => {
+  el.addEventListener('change', () => {
+    tool = el.value;
+  });
+});
+
+function drawLine(x1, y1, x2, y2) {
+  ctx.strokeStyle = (tool === 'erase') ? '#ffffff' : colorPicker.value;
+  ctx.lineWidth = brushSize.value;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+}
+</script>
   <script>
     const canvas = document.getElementById("drawingCanvas");
     const ctx = canvas.getContext("2d");
