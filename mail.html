@@ -155,6 +155,45 @@ function diktojSpravu() {
     <button type="submit">✉️ Odoslať e-mail</button>
   </form>
 
+  
+<button onclick="saveField('to')">💾 Ulož e-mail</button>
+<button onclick="saveField('subject')">💾 Ulož predmet</button>
+<button onclick="saveField('body')">💾 Ulož správu</button>
+
+  <script>
+function saveField(fieldId) {
+  const value = document.getElementById(fieldId).value.trim();
+  if (!value) return;
+  let stored = JSON.parse(localStorage.getItem(fieldId)) || [];
+  if (!stored.includes(value)) {
+    stored.unshift(value);
+    if (stored.length > 10) stored.pop(); // max 10 položiek
+    localStorage.setItem(fieldId, JSON.stringify(stored));
+    updateSelect(fieldId);
+  }
+}
+
+function updateSelect(fieldId) {
+  const select = document.getElementById(fieldId + 'Select');
+  select.innerHTML = `<option value="">-- Vyber ${fieldId} --</option>`;
+  const stored = JSON.parse(localStorage.getItem(fieldId)) || [];
+  stored.forEach(item => {
+    const option = document.createElement('option');
+    option.value = item;
+    option.textContent = item;
+    select.appendChild(option);
+  });
+}
+
+function loadSelected(fieldId) {
+  const select = document.getElementById(fieldId + 'Select');
+  document.getElementById(fieldId).value = select.value;
+}
+
+// Načítaj všetky výbery po načítaní
+['to', 'subject', 'body'].forEach(updateSelect);
+  </script>
+  
   <div class="info">
     ⚠️ <strong>Upozornenie:</strong><br>
     Táto funkcia neodosiela e-mail automaticky. Po kliknutí sa otvorí tvoja e-mailová aplikácia (napr. Gmail, Outlook), kde manuálne potvrdíš odoslanie.<br>
