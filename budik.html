@@ -106,6 +106,7 @@
   }
         }
 }); // ← Táto zátvorka chýbala
+    }
 
     function fillTimes() {
       for (let h = 0; h < 24; h++) {
@@ -166,8 +167,16 @@
       document.body.classList.toggle('dark-mode');
     }
 
-    setInterval(updateClock, 1000);
-    setInterval(aktualizujCas, 1000);
+    window.onload = () => {
+  fillTimes();
+  aktualizujCas();
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+};
+
+setInterval(updateClock, 1000);
+setInterval(aktualizujCas, 1000);
     aktualizujCas();
     fillTimes();
   </script>
