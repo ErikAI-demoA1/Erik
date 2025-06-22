@@ -1,7 +1,8 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Klasické šachy – podľa pravidiel FIDE</title>
   <style>
     body {
@@ -42,137 +43,157 @@
   <h2 id="turn">Na ťahu: Biely</h2>
   <div id="board" class="board"></div>
   <button onclick="newGame()">Nová hra</button>
-  <button onclick="undoMove()">Späť ťah</button>  <script>
-    let board = document.getElementById("board");
-    let turnDisplay = document.getElementById("turn");
-    let boardState = [];
-    let selected = null;
-    let whiteTurn = true;
-    let history = [];
+  <button onclick="undoMove()">Späť ťah</button>
 
-    const figures = {
-      r: "♜", n: "♞", b: "♝", q: "♛", k: "♚", p: "♟",
-      R: "♖", N: "♘", B: "♗", Q: "♕", K: "♔", P: "♙"
-    };
+<script>
+const board = document.getElementById("board");
+const turnDisplay = document.getElementById("turn");
 
-    const startPosition = [
-      ["r","n","b","q","k","b","n","r"],
-      ["p","p","p","p","p","p","p","p"],
-      ["","","","","","","",""],
-      ["","","","","","","",""],
-      ["","","","","","","",""],
-      ["","","","","","","",""],
-      ["P","P","P","P","P","P","P","P"],
-      ["R","N","B","Q","K","B","N","R"]
-    ];
+const figures = {
+  r: "♜", n: "♞", b: "♝", q: "♛", k: "♚", p: "♟",
+  R: "♖", N: "♘", B: "♗", Q: "♕", K: "♔", P: "♙"
+};
 
-    function drawBoard() {
-      board.innerHTML = "";
-      for (let row = 0; row < 8; row++) {
-        for (let col = 0; col < 8; col++) {
-          let cell = document.createElement("div");
-          cell.classList.add("cell");
-          cell.classList.add((row + col) % 2 === 0 ? "white" : "black");
-          cell.textContent = figures[boardState[row][col]] || "";
-          cell.onclick = () => onCellClick(row, col);
-          board.appendChild(cell);
-        }
-      }
+const startPosition = [
+  ["r","n","b","q","k","b","n","r"],
+  ["p","p","p","p","p","p","p","p"],
+  ["","","","","","","",""],
+  ["","","","","","","",""],
+  ["","","","","","","",""],
+  ["","","","","","","",""],
+  ["P","P","P","P","P","P","P","P"],
+  ["R","N","B","Q","K","B","N","R"]
+];
+
+let boardState = [];
+let selected = null;
+let whiteTurn = true;
+let history = [];
+
+function drawBoard() {
+  board.innerHTML = "";
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell", (r + c) % 2 === 0 ? "white" : "black");
+      cell.textContent = figures[boardState[r][c]] || "";
+      cell.onclick = () => onCellClick(r, c);
+      board.appendChild(cell);
     }
+  }
+}
 
-    function onCellClick(r, c) {
-      let piece = boardState[r][c];
-      if (selected) {
-        let [sr, sc] = selected;
-        let movingPiece = boardState[sr][sc];
-        if (isValidMove(movingPiece, sr, sc, r, c)) {
-          history.push(JSON.parse(JSON.stringify(boardState)));
-          boardState[r][c] = movingPiece;
-          boardState[sr][sc] = "";
-          selected = null;
-          whiteTurn = !whiteTurn;
-          turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
-          drawBoard();
-        } else {
-          selected = null;
-        }
-      } else {
-        if (piece && ((whiteTurn && piece === piece.toUpperCase()) || (!whiteTurn && piece === piece.toLowerCase()))) {
-          selected = [r, c];
-        }
-      }
-    }
-
-    function isClearRow(sr, sc, r, c) {
-      for (let i = Math.min(sc, c) + 1; i < Math.max(sc, c); i++) {
-        if (boardState[sr][i] !== "") return false;
-      }
-      return true;
-    }
-
-    function isClearColumn(sr, sc, r, c) {
-      for (let i = Math.min(sr, r) + 1; i < Math.max(sr, r); i++) {
-        if (boardState[i][sc] !== "") return false;
-      }
-      return true;
-    }
-
-    function isClearDiagonal(sr, sc, r, c) {
-      let dr = r > sr ? 1 : -1;
-      let dc = c > sc ? 1 : -1;
-      for (let i = 1; i < Math.abs(r - sr); i++) {
-        if (boardState[sr + i * dr][sc + i * dc] !== "") return false;
-      }
-      return true;
-    }
-
-    function isValidMove(piece, sr, sc, r, c) {
-      let dr = r - sr;
-      let dc = c - sc;
-      let target = boardState[r][c];
-      let isWhite = piece === piece.toUpperCase();
-      let dir = isWhite ? -1 : 1;
-      piece = piece.toLowerCase();
-
-      if (target && (isWhite === (target === target.toUpperCase()))) return false;
-
-      if (piece === "k") return Math.abs(dr) <= 1 && Math.abs(dc) <= 1;
-      if (piece === "q") return (dr === 0 && isClearRow(sr, sc, r, c)) || (dc === 0 && isClearColumn(sr, sc, r, c)) || (Math.abs(dr) === Math.abs(dc) && isClearDiagonal(sr, sc, r, c));
-      if (piece === "r") return (dr === 0 && isClearRow(sr, sc, r, c)) || (dc === 0 && isClearColumn(sr, sc, r, c));
-      if (piece === "b") return Math.abs(dr) === Math.abs(dc) && isClearDiagonal(sr, sc, r, c);
-      if (piece === "n") return (Math.abs(dr) === 2 && Math.abs(dc) === 1) || (Math.abs(dr) === 1 && Math.abs(dc) === 2);
-      if (piece === "p") {
-        if (dc === 0 && target === "") {
-          if (dr === dir) return true;
-          if ((sr === 1 && !isWhite) || (sr === 6 && isWhite)) {
-            return dr === 2 * dir && boardState[sr + dir][sc] === "";
-          }
-        }
-        if (Math.abs(dc) === 1 && dr === dir && target !== "") return true;
-        return false;
-      }
-
-      return false;
-    }
-
-    function newGame() {
-      boardState = JSON.parse(JSON.stringify(startPosition));
-      whiteTurn = true;
-      selected = null;
-      history = [];
-      turnDisplay.textContent = "Na ťahu: Biely";
-      drawBoard();
-    }
-
-    function undoMove() {
-      if (history.length > 0) {
-        boardState = history.pop();
+function onCellClick(r, c) {
+  const piece = boardState[r][c];
+  if (selected) {
+    const [sr, sc] = selected;
+    const movingPiece = boardState[sr][sc];
+    if (isValidMove(movingPiece, sr, sc, r, c)) {
+      const backup = JSON.parse(JSON.stringify(boardState));
+      boardState[r][c] = movingPiece;
+      boardState[sr][sc] = "";
+      if (!isInCheck(whiteTurn)) {
+        history.push(backup);
         whiteTurn = !whiteTurn;
         turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
-        drawBoard();
+      } else {
+        boardState = backup;
       }
     }
+    selected = null;
+    drawBoard();
+  } else if (piece && (whiteTurn === (piece === piece.toUpperCase()))) {
+    selected = [r, c];
+  }
+}
 
-    newGame();
-  </script></body>
+function isClearRow(sr, sc, r, c) {
+  for (let i = Math.min(sc, c) + 1; i < Math.max(sc, c); i++) {
+    if (boardState[sr][i] !== "") return false;
+  }
+  return true;
+}
+
+function isClearColumn(sr, sc, r, c) {
+  for (let i = Math.min(sr, r) + 1; i < Math.max(sr, r); i++) {
+    if (boardState[i][sc] !== "") return false;
+  }
+  return true;
+}
+
+function isClearDiagonal(sr, sc, r, c) {
+  let dr = r > sr ? 1 : -1;
+  let dc = c > sc ? 1 : -1;
+  for (let i = 1; i < Math.abs(r - sr); i++) {
+    if (boardState[sr + i * dr][sc + i * dc] !== "") return false;
+  }
+  return true;
+}
+
+function isValidMove(piece, sr, sc, r, c) {
+  let dr = r - sr, dc = c - sc;
+  let target = boardState[r][c];
+  let isWhite = piece === piece.toUpperCase();
+  let dir = isWhite ? -1 : 1;
+  piece = piece.toLowerCase();
+
+  if (target && (isWhite === (target === target.toUpperCase()))) return false;
+
+  if (piece === "k") return Math.abs(dr) <= 1 && Math.abs(dc) <= 1;
+  if (piece === "q") return (dr === 0 && isClearRow(sr, sc, r, c)) || (dc === 0 && isClearColumn(sr, sc, r, c)) || (Math.abs(dr) === Math.abs(dc) && isClearDiagonal(sr, sc, r, c));
+  if (piece === "r") return (dr === 0 && isClearRow(sr, sc, r, c)) || (dc === 0 && isClearColumn(sr, sc, r, c));
+  if (piece === "b") return Math.abs(dr) === Math.abs(dc) && isClearDiagonal(sr, sc, r, c);
+  if (piece === "n") return (Math.abs(dr) === 2 && Math.abs(dc) === 1) || (Math.abs(dr) === 1 && Math.abs(dc) === 2);
+  if (piece === "p") {
+    if (dc === 0 && target === "") {
+      if (dr === dir) return true;
+      if ((sr === 6 && isWhite) || (sr === 1 && !isWhite)) return dr === 2 * dir && boardState[sr + dir][sc] === "";
+    }
+    if (Math.abs(dc) === 1 && dr === dir && target !== "") return true;
+    return false;
+  }
+
+  return false;
+}
+
+function isInCheck(isWhite) {
+  let kingPos = [-1, -1];
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      if (boardState[r][c] === (isWhite ? "K" : "k")) kingPos = [r, c];
+    }
+  }
+
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      let p = boardState[r][c];
+      if (p && (isWhite !== (p === p.toUpperCase())) && isValidMove(p, r, c, kingPos[0], kingPos[1])) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function newGame() {
+  boardState = JSON.parse(JSON.stringify(startPosition));
+  whiteTurn = true;
+  selected = null;
+  history = [];
+  turnDisplay.textContent = "Na ťahu: Biely";
+  drawBoard();
+}
+
+function undoMove() {
+  if (history.length > 0) {
+    boardState = history.pop();
+    whiteTurn = !whiteTurn;
+    turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
+    drawBoard();
+  }
+}
+
+newGame();
+</script>
+</body>
 </html>
