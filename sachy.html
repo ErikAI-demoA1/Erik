@@ -2,37 +2,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>♟ Klasické šachy - podľa pravidiel FIDE</title>
+  <title>Klasické šachy – podľa pravidiel FIDE</title>
   <style>
     body {
-      background-color: #000;
+      background-color: #111;
       color: white;
       font-family: sans-serif;
       text-align: center;
     }
     h1 {
       color: red;
-      font-size: 2em;
+      font-size: 28px;
     }
-    #board {
+    .board {
       display: grid;
       grid-template-columns: repeat(8, 50px);
-      grid-template-rows: repeat(8, 50px);
-      margin: 0 auto;
-      border: 2px solid white;
+      justify-content: center;
+      margin: 20px auto;
     }
     .cell {
       width: 50px;
       height: 50px;
-      font-size: 36px;
+      font-size: 32px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      cursor: pointer;
+      justify-content: center;
     }
-    .white { background-color: #eee; color: black; }
-    .black { background-color: #444; color: white; }
-    .selected { outline: 2px solid yellow; }
+    .white { background: #eee; color: black; }
+    .black { background: #555; color: white; }
     button {
       margin: 10px;
       padding: 10px 20px;
@@ -42,105 +39,99 @@
 </head>
 <body>
   <h1>♟ Klasické šachy – podľa pravidiel FIDE</h1>
-  <h2 id="status">Na ťahu: Biely</h2>
-  <div id="board"></div>
-  <button onclick="startGame()">Nová hra</button>
-  <button onclick="undoMove()">Späť ťah</button>  <script>
-    const boardEl = document.getElementById("board");
-    const statusEl = document.getElementById("status");
-    let board = [];
+  <h2 id="turn">Na ťahu: Biely</h2>  <div id="board" class="board"></div><button onclick="newGame()">Nová hra</button> <button onclick="undoMove()">Späť ťah</button>
+
+  <script>
+    let board = document.getElementById("board");
+    let turnDisplay = document.getElementById("turn");
+    let boardState = [];
     let selected = null;
-    let turn = "w";
+    let whiteTurn = true;
     let history = [];
 
-    const pieces = {
+    const figures = {
       r: "♜", n: "♞", b: "♝", q: "♛", k: "♚", p: "♟",
       R: "♖", N: "♘", B: "♗", Q: "♕", K: "♔", P: "♙"
     };
 
-    function initialBoard() {
-      return [
-        ["r","n","b","q","k","b","n","r"],
-        ["p","p","p","p","p","p","p","p"],
-        ["","","","","","","",""],
-        ["","","","","","","",""],
-        ["","","","","","","",""],
-        ["","","","","","","",""],
-        ["P","P","P","P","P","P","P","P"],
-        ["R","N","B","Q","K","B","N","R"]
-      ];
-    }
+    const startPosition = [
+      ["r","n","b","q","k","b","n","r"],
+      ["p","p","p","p","p","p","p","p"],
+      ["","","","","","","",""],
+      ["","","","","","","",""],
+      ["","","","","","","",""],
+      ["","","","","","","",""],
+      ["P","P","P","P","P","P","P","P"],
+      ["R","N","B","Q","K","B","N","R"]
+    ];
 
     function drawBoard() {
-      boardEl.innerHTML = "";
-      for (let y = 0; y < 8; y++) {
-        for (let x = 0; x < 8; x++) {
-          const cell = document.createElement("div");
+      board.innerHTML = "";
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          let cell = document.createElement("div");
           cell.classList.add("cell");
-          cell.classList.add((x + y) % 2 === 0 ? "white" : "black");
-          cell.textContent = pieces[board[y][x]] || "";
-          cell.dataset.x = x;
-          cell.dataset.y = y;
-          if (selected && selected.x == x && selected.y == y) cell.classList.add("selected");
-          cell.onclick = () => cellClicked(x, y);
-          boardEl.appendChild(cell);
+          cell.classList.add((row + col) % 2 === 0 ? "white" : "black");
+          cell.textContent = figures[boardState[row][col]] || "";
+          cell.onclick = () => onCellClick(row, col);
+          board.appendChild(cell);
         }
       }
     }
 
-    function cellClicked(x, y) {
-      const piece = board[y][x];
+    function onCellClick(r, c) {
+      let piece = boardState[r][c];
       if (selected) {
-        const from = selected;
-        const to = {x, y};
-        if (from.x === to.x && from.y === to.y) {
+        let [sr, sc] = selected;
+        let movingPiece = boardState[sr][sc];
+        if (isValidMove(movingPiece, sr, sc, r, c)) {
+          history.push(JSON.parse(JSON.stringify(boardState)));
+          boardState[r][c] = movingPiece;
+          boardState[sr][sc] = "";
           selected = null;
-        } else if (isValidMove(from, to)) {
-          history.push(JSON.parse(JSON.stringify(board)));
-          board[to.y][to.x] = board[from.y][from.x];
-          board[from.y][from.x] = "";
-          turn = turn === "w" ? "b" : "w";
-          selected = null;
+          whiteTurn = !whiteTurn;
+          turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
+          drawBoard();
         } else {
           selected = null;
         }
-      } else if (piece && ((turn === "w" && piece === piece.toUpperCase()) || (turn === "b" && piece === piece.toLowerCase()))) {
-        selected = {x, y};
+      } else {
+        if (piece && ((whiteTurn && piece === piece.toUpperCase()) || (!whiteTurn && piece === piece.toLowerCase()))) {
+          selected = [r, c];
+        }
       }
-      drawBoard();
-      statusEl.textContent = `Na ťahu: ${turn === "w" ? "Biely" : "Čierny"}`;
     }
 
-    function isValidMove(from, to) {
-      const dx = to.x - from.x;
-      const dy = to.y - from.y;
-      const piece = board[from.y][from.x];
-      if (!piece) return false;
-      const isWhite = piece === piece.toUpperCase();
-      const target = board[to.y][to.x];
-      if (target && (target === target.toUpperCase()) === isWhite) return false;
-      return true; // základné pravidlo, neskôr pridáme detailné
+    function isValidMove(piece, sr, sc, r, c) {
+      // Zjednodušené pohyby pre kráľa a dámu
+      let dr = r - sr;
+      let dc = c - sc;
+      piece = piece.toLowerCase();
+
+      if (piece === "k") return Math.abs(dr) <= 1 && Math.abs(dc) <= 1;
+      if (piece === "q") return (dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc));
+
+      return false;
     }
 
-    function startGame() {
-      board = initialBoard();
+    function newGame() {
+      boardState = JSON.parse(JSON.stringify(startPosition));
+      whiteTurn = true;
       selected = null;
-      turn = "w";
       history = [];
+      turnDisplay.textContent = "Na ťahu: Biely";
       drawBoard();
-      statusEl.textContent = "Na ťahu: Biely";
     }
 
     function undoMove() {
       if (history.length > 0) {
-        board = history.pop();
-        turn = turn === "w" ? "b" : "w";
-        selected = null;
+        boardState = history.pop();
+        whiteTurn = !whiteTurn;
+        turnDisplay.textContent = `Na ťahu: ${whiteTurn ? "Biely" : "Čierny"}`;
         drawBoard();
-        statusEl.textContent = `Na ťahu: ${turn === "w" ? "Biely" : "Čierny"}`;
       }
     }
 
-    startGame();
+    newGame();
   </script></body>
 </html>
