@@ -76,6 +76,83 @@ let selected = null;
 let whiteTurn = true;
 let history = [];
 
+  function isKingInCheck(isWhite) {
+  let kingPos;
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      let piece = boardState[r][c];
+      if (piece === (isWhite ? "K" : "k")) {
+        kingPos = [r, c];
+        break;
+      }
+    }
+  }
+
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      let piece = boardState[r][c];
+      if (piece && (isWhite !== (piece === piece.toUpperCase()))) {
+        if (isValidMove(piece, r, c, kingPos[0], kingPos[1])) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+  }
+
+  function hasAnyValidMove(isWhite) {
+  for (let sr = 0; sr < 8; sr++) {
+    for (let sc = 0; sc < 8; sc++) {
+      let piece = boardState[sr][sc];
+      if (piece && (isWhite === (piece === piece.toUpperCase()))) {
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            if (isValidMove(piece, sr, sc, r, c)) {
+              // simulate move
+              let temp = JSON.parse(JSON.stringify(boardState));
+              temp[r][c] = piece;
+              temp[sr][sc] = "";
+              if (!isKingInCheckSim(temp, isWhite)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+// helper simulácia pre testovanie
+function isKingInCheckSim(simBoard, isWhite) {
+  let kingPos;
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      let piece = simBoard[r][c];
+      if (piece === (isWhite ? "K" : "k")) {
+        kingPos = [r, c];
+        break;
+      }
+    }
+  }
+
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      let piece = simBoard[r][c];
+      if (piece && (isWhite !== (piece === piece.toUpperCase()))) {
+        if (isValidMove(piece, r, c, kingPos[0], kingPos[1])) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
 function drawBoard() {
   board.innerHTML = "";
   for (let r = 0; r < 8; r++) {
@@ -123,6 +200,16 @@ function onCellClick(r, c) {
     selected = [r, c];
   }
 }
+if (isKingInCheck(!whiteTurn)) {
+  if (!hasAnyValidMove(!whiteTurn)) {
+    alert(`Šach-mat! Vyhral ${whiteTurn ? "Biely" : "Čierny"}!`);
+  } else {
+    alert("Šach!");
+  }
+} else if (!hasAnyValidMove(!whiteTurn)) {
+  alert("Pat! Remíza.");
+}
+  
 
 function isClearRow(sr, sc, r, c) {
   for (let i = Math.min(sc, c) + 1; i < Math.max(sc, c); i++) {
