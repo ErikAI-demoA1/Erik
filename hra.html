@@ -40,6 +40,33 @@
   </style>
 </head>
 <body>
+    <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
+
+<script>
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+  }
+</script>
+
+<style>
+  body.dark-mode {
+    background-color: #121212;
+    color: white;
+  }
+</style>
+
+  <div id="google_translate_element"></div>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'sk',
+      includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+   
   <h1>ErikAI Piškvorky – verzia 5x5 pre 3 hráčov</h1>
   <p><strong>Pravidlo výhry:</strong> Hráč, ktorý ako prvý spojí <u>4 rovnaké symboly</u> za sebou (vodorovne, zvislo alebo diagonálne), vyhráva hru.</p>
   <h1>🎮 Piškvorky 5x5 – ErikAI OS</h1>  <div id="menu" class="menu">
