@@ -44,6 +44,7 @@ self.addEventListener('install', e => {
         'weberikai.html',
         'zaznam_nahravok.html',
         'zoznam_straniek.html',
+        'translate.html',
         'APP_Dowloand/Erik1.jpg',
         'APP_Dowloand/Erik2.jpg',
         'APP_Dowloand/Erik3.jpg',
