@@ -81,7 +81,7 @@ Jednoduché použitie bez učenia – prehľadné, okamžité spustenie
 
 📊 Výkon projektu
 
-2300 riadkov kódu (jadro jazyka)
+2410 riadkov kódu (jadro jazyka)
 
 Celkovo cca 15500 riadkov na celý OS
 
