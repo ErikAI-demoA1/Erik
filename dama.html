@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ErikAI Dáma</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #2d6a4f;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(8, 60px);
+      grid-template-rows: repeat(8, 60px);
+      border: 2px solid #333;
+    }
+    .cell {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .light {
+      background-color: #eee;
+    }
+    .dark {
+      background-color: #666;
+    }
+    .piece {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+    }
+    .blue {
+      background-color: #3a86ff;
+    }
+    .green {
+      background-color: #06d6a0;
+    }
+    .selected {
+      outline: 3px solid yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>ErikAI Dáma</h1>
+  <div class="board" id="board"></div>  <script>
+    const board = document.getElementById("board");
+    const SIZE = 8;
+    let selected = null;
+    let currentPlayer = "blue";
+
+    function createBoard() {
+      board.innerHTML = "";
+      for (let row = 0; row < SIZE; row++) {
+        for (let col = 0; col < SIZE; col++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cell.classList.add((row + col) % 2 === 0 ? "light" : "dark");
+          cell.dataset.row = row;
+          cell.dataset.col = col;
+
+          if (row < 3 && (row + col) % 2 === 1) {
+            const piece = document.createElement("div");
+            piece.classList.add("piece", "green");
+            cell.appendChild(piece);
+          } else if (row > 4 && (row + col) % 2 === 1) {
+            const piece = document.createElement("div");
+            piece.classList.add("piece", "blue");
+            cell.appendChild(piece);
+          }
+
+          cell.addEventListener("click", () => onCellClick(cell));
+          board.appendChild(cell);
+        }
+      }
+    }
+
+    function onCellClick(cell) {
+      const piece = cell.querySelector(".piece");
+      if (selected) {
+        movePiece(cell);
+      } else if (piece && piece.classList.contains(currentPlayer)) {
+        selected = piece;
+        piece.classList.add("selected");
+      }
+    }
+
+    function movePiece(targetCell) {
+      const fromRow = parseInt(selected.parentElement.dataset.row);
+      const fromCol = parseInt(selected.parentElement.dataset.col);
+      const toRow = parseInt(targetCell.dataset.row);
+      const toCol = parseInt(targetCell.dataset.col);
+
+      const dir = currentPlayer === "blue" ? -1 : 1;
+
+      if (
+        Math.abs(toCol - fromCol) === 1 &&
+        toRow - fromRow === dir &&
+        !targetCell.querySelector(".piece")
+      ) {
+        targetCell.appendChild(selected);
+        selected.classList.remove("selected");
+        selected = null;
+        currentPlayer = currentPlayer === "blue" ? "green" : "blue";
+      } else {
+        selected.classList.remove("selected");
+        selected = null;
+      }
+    }
+
+    createBoard();
+  </script></body>
+</html>
