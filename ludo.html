@@ -98,13 +98,77 @@
     }
 
     function rollDice() {
-      const playerSelect = document.getElementById("playerCount");
-      const count = parseInt(playerSelect.value);
-      if (players.length !== count) setupPlayers(count);
-      diceRoll = Math.floor(Math.random() * 6) + 1;
-      const color = players[currentPlayer].color;
-      info.innerText = `Hráč ${currentPlayer + 1} (${color}) hodil: ${diceRoll}. Klikni na pole, kam chceš ísť.`;
+  const playerSelect = document.getElementById("playerCount");
+  const count = parseInt(playerSelect.value);
+  if (players.length !== count) setupPlayers(count);
+  diceRoll = Math.floor(Math.random() * 6) + 1;
+  const color = players[currentPlayer].color;
+  info.innerText = `Hráč ${currentPlayer + 1} (${color}) hodil: ${diceRoll}.`;
+
+  // Pohyb automaticky o diceRoll políčok
+  moveAutomatically(currentPlayer, diceRoll);
+}
+
+function moveAutomatically(playerIndex, steps) {
+  const player = players[playerIndex];
+  if (player.pos === -1) {
+    info.innerText += " Figúrka už bola vyradená.";
+    nextTurn();
+    return;
+  }
+
+  let targetPos = player.pos;
+  let x = targetPos % 25;
+  let y = Math.floor(targetPos / 25);
+
+  for (let i = 0; i < steps; i++) {
+    if (x < 24) {
+      x++;
+    } else if (y < 24) {
+      x = 0;
+      y++;
+    } else {
+      x = 0;
+      y = 0;
     }
+  }
+
+  const newPos = y * 25 + x;
+
+  // Vyhodenie figúrky, ak existuje
+  const cell = board.children[newPos];
+  if (cell.children.length > 0) {
+    const otherFig = cell.children[0];
+    const otherPlayerIndex = parseInt(otherFig.dataset.player);
+    if (otherPlayerIndex !== playerIndex) {
+      players[otherPlayerIndex].pos = -1;
+      cell.innerHTML = "";
+    } else {
+      info.innerText += " Nemôžeš sa pohnúť na vlastnú figúrku.";
+      return;
+    }
+  }
+
+  // Zmazanie pôvodnej pozície
+  board.children[player.pos].innerHTML = "";
+
+  // Nová pozícia
+  const fig = document.createElement("div");
+  fig.className = "triangle";
+  fig.style.borderBottomColor = player.color;
+  fig.dataset.player = playerIndex;
+  cell.appendChild(fig);
+  player.pos = newPos;
+
+  nextTurn();
+}
+
+function nextTurn() {
+  diceRoll = 0;
+  currentPlayer = (currentPlayer + 1) % players.length;
+  const nextColor = players[currentPlayer].color;
+  info.innerText += ` → Hráč ${currentPlayer + 1} (${nextColor}) na ťahu.`;
+}
 
     function setupPlayers(count) {
       players = [];
