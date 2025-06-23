@@ -1,7 +1,8 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ErikAI Ludo – Mega režim</title>
   <style>
     body {
@@ -62,7 +63,9 @@
     <button onclick="rollDice()">Hod kockou 🎲</button>
   </div>
   <div class="player-info" id="info"></div>
-  <div class="board" id="board"></div>  <script>
+  <div class="board" id="board"></div>
+
+  <script>
     const board = document.getElementById("board");
     const info = document.getElementById("info");
     const colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "cyan", "lime", "magenta", "brown", "navy", "black", "gray", "gold", "darkgreen", "darkorange", "violet", "teal", "indigo"];
@@ -70,16 +73,39 @@
     let currentPlayer = 0;
     let diceRoll = 0;
     let players = [];
+    const boardSize = 25;
 
-    // Create 25x25 grid
-    for (let y = 0; y < 25; y++) {
-      for (let x = 0; x < 25; x++) {
+    // Vytvor hraciu plochu
+    for (let y = 0; y < boardSize; y++) {
+      for (let x = 0; x < boardSize; x++) {
         const cell = document.createElement("div");
         cell.className = "cell";
         cell.dataset.x = x;
         cell.dataset.y = y;
         cell.addEventListener("click", () => cellClicked(cell));
         board.appendChild(cell);
+      }
+    }
+
+    function getCell(x, y) {
+      if (x < 0 || y < 0 || x >= boardSize || y >= boardSize) return null;
+      return board.querySelector(`.cell[data-x='${x}'][data-y='${y}']`);
+    }
+
+    function setupPlayers(count) {
+      players = [];
+      board.querySelectorAll(".cell").forEach(cell => cell.innerHTML = "");
+      for (let i = 0; i < count; i++) {
+        const color = colors[i];
+        const x = i % boardSize;
+        const y = Math.floor(i / boardSize);
+        const cell = getCell(x, y);
+        const fig = document.createElement("div");
+        fig.className = "triangle";
+        fig.style.borderBottomColor = color;
+        fig.dataset.player = i;
+        cell.appendChild(fig);
+        players.push({ color, x, y, active: true });
       }
     }
 
@@ -92,37 +118,52 @@
       info.innerText = `Hráč ${currentPlayer + 1} (${color}) hodil: ${diceRoll}. Klikni na pole, kam chceš ísť.`;
     }
 
-    function setupPlayers(count) {
-      players = [];
-      board.querySelectorAll(".cell").forEach(cell => cell.innerHTML = "");
-      for (let i = 0; i < count; i++) {
-        const color = colors[i];
-        const cell = board.querySelectorAll(".cell")[i * 31];
-        const fig = document.createElement("div");
-        fig.className = "triangle";
-        fig.style.borderBottomColor = color;
-        fig.dataset.player = i;
-        cell.appendChild(fig);
-        players.push({ color, pos: i * 31 });
-      }
-    }
-
     function cellClicked(cell) {
       if (!diceRoll) return;
-      const targetIndex = Array.from(board.children).indexOf(cell);
-      const player = players[currentPlayer];
-      const oldCell = board.children[player.pos];
-      oldCell.innerHTML = "";
-      const fig = document.createElement("div");
-      fig.className = "triangle";
-      fig.style.borderBottomColor = player.color;
-      fig.dataset.player = currentPlayer;
-      cell.appendChild(fig);
-      player.pos = targetIndex;
 
-      diceRoll = 0;
-      currentPlayer = (currentPlayer + 1) % players.length;
-      info.innerText = `Hráč ${currentPlayer + 1} (${players[currentPlayer].color}) na ťahu.`;
+      const targetX = parseInt(cell.dataset.x);
+      const targetY = parseInt(cell.dataset.y);
+      const player = players[currentPlayer];
+      if (!player.active) return;
+
+      const dx = Math.abs(player.x - targetX);
+      const dy = Math.abs(player.y - targetY);
+
+      // Povolený presný ťah so súčtom krokov == diceRoll a len v 8 smeroch
+      const isDiagonal = dx === dy && dx !== 0;
+      const isStraight = (dx === 0 && dy !== 0) || (dy === 0 && dx !== 0);
+      const validMove = (isDiagonal || isStraight) && (dx + dy === diceRoll);
+
+      if (validMove) {
+        // Vymaž starú pozíciu
+        const oldCell = getCell(player.x, player.y);
+        oldCell.innerHTML = "";
+
+        // Zisti, či tam nie je iný hráč (vyhodenie)
+        for (let i = 0; i < players.length; i++) {
+          if (i !== currentPlayer && players[i].x === targetX && players[i].y === targetY && players[i].active) {
+            players[i].active = false;
+            getCell(players[i].x, players[i].y).innerHTML = "";
+          }
+        }
+
+        // Presuň figúrku
+        const newFig = document.createElement("div");
+        newFig.className = "triangle";
+        newFig.style.borderBottomColor = player.color;
+        newFig.dataset.player = currentPlayer;
+        cell.appendChild(newFig);
+        player.x = targetX;
+        player.y = targetY;
+
+        diceRoll = 0;
+        do {
+          currentPlayer = (currentPlayer + 1) % players.length;
+        } while (!players[currentPlayer].active);
+
+        info.innerText = `Hráč ${currentPlayer + 1} (${players[currentPlayer].color}) na ťahu.`;
+      }
     }
-  </script></body>
+  </script>
+</body>
 </html>
