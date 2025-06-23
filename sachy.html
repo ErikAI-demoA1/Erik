@@ -99,17 +99,7 @@
   }
 </style>
 
-  <div id="google_translate_element"></div>
-<script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'sk',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
+  
   <select id="jazykovyVyber" onchange="prelozStranku(this.value)">
   <option value="">Vyber jazyk</option>
   <option value="af">Afrikaans</option>
@@ -218,10 +208,21 @@
   <option value="zu">Zulu</option>
   </select>
 
-  <script>
+  <script type="text/javascript">
 function prelozStranku(jazyk) {
-  var url = "https://translate.google.com/translate?hl=" + jazyk + "&sl=sk&u=" + window.location.href;
-  window.location.href = url;
+  if (!jazyk) return;
+
+  var gtFrame = document.querySelector('iframe.goog-te-banner-frame');
+  if (gtFrame) {
+    location.reload(); // jednoduché riešenie: reload pri opakovanej zmene
+    return;
+  }
+
+  var url = window.location.href;
+  var translateUrl = "https://translate.google.com/translate?hl=" + jazyk +
+    "&sl=sk&tl=" + jazyk + "&u=" + encodeURIComponent(url);
+
+  window.location.href = translateUrl;
 }
   </script>
   
