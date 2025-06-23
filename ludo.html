@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI Ludo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f3f3f3;
+    }
+    h1 {
+      margin-top: 20px;
+      color: #2b7a78;
+    }
+    .controls {
+      margin: 20px;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(15, 40px);
+      grid-template-rows: repeat(15, 40px);
+      gap: 2px;
+      margin: 0 auto;
+      max-width: 640px;
+    }
+    .cell {
+      width: 40px;
+      height: 40px;
+      background-color: white;
+      border: 1px solid #ccc;
+    }
+    .home {
+      background-color: #ddd;
+    }
+    .piece {
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-bottom: 30px solid red;
+      margin: auto;
+    }
+    .dice {
+      margin-top: 20px;
+      font-size: 28px;
+      padding: 10px 20px;
+      background: #2b7a78;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    select {
+      padding: 6px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>ErikAI Ludo – Mega režim</h1>
+
+<div class="controls">
+  <label for="mode">Počet hráčov:</label>
+  <select id="mode">
+    <option value="4">4 hráči</option>
+    <option value="8">8 hráčov</option>
+    <option value="12">12 hráčov</option>
+  </select>
+  <button onclick="rollDice()" class="dice">Hod kockou 🎲</button>
+  <p id="diceResult"></p>
+</div>
+
+<div class="board" id="board">
+  <!-- Dynamicky sa naplní -->
+</div>
+
+<script>
+  const boardSize = 15;
+  const board = document.getElementById("board");
+
+  function createBoard() {
+    board.innerHTML = "";
+    for (let i = 0; i < boardSize * boardSize; i++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      board.appendChild(cell);
+    }
+  }
+
+  function rollDice() {
+    const result = Math.floor(Math.random() * 6) + 1;
+    document.getElementById("diceResult").textContent = `Hodil si: ${result}`;
+  }
+
+  createBoard();
+</script>
+
+</body>
+</html>
