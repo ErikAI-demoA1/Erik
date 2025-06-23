@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Ludo</title>
+  <title>ErikAI Ludo – Mega režim</title>
   <style>
     body {
       font-family: sans-serif;
@@ -29,9 +28,9 @@
       height: 40px;
       background-color: white;
       border: 1px solid #ccc;
-    }
-    .home {
-      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .piece {
       width: 0;
@@ -39,7 +38,6 @@
       border-left: 18px solid transparent;
       border-right: 18px solid transparent;
       border-bottom: 30px solid red;
-      margin: auto;
     }
     .dice {
       margin-top: 20px;
@@ -57,11 +55,7 @@
     }
   </style>
 </head>
-<body>
-
-<h1>ErikAI Ludo – Mega režim</h1>
-
-<div class="controls">
+<body><h1>ErikAI Ludo – Mega režim</h1><div class="controls">
   <label for="mode">Počet hráčov:</label>
   <select id="mode">
     <option value="4">4 hráči</option>
@@ -70,21 +64,36 @@
   </select>
   <button onclick="rollDice()" class="dice">Hod kockou 🎲</button>
   <p id="diceResult"></p>
-</div>
-
-<div class="board" id="board">
-  <!-- Dynamicky sa naplní -->
-</div>
-
-<script>
+</div><div class="board" id="board"></div><script>
   const boardSize = 15;
   const board = document.getElementById("board");
+  const colors = [
+    "red", "blue", "green", "yellow", "purple", "orange",
+    "cyan", "magenta", "brown", "pink", "lime", "gray"
+  ];
 
   function createBoard() {
     board.innerHTML = "";
+    const players = parseInt(document.getElementById("mode").value);
+
     for (let i = 0; i < boardSize * boardSize; i++) {
       const cell = document.createElement("div");
       cell.className = "cell";
+
+      // Figúrky podľa počtu hráčov (rozmiestnené do rohov a stredov strán)
+      if (i === 0 && players >= 1) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[0]}"></div>`;
+      if (i === boardSize - 1 && players >= 2) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[1]}"></div>`;
+      if (i === boardSize * (boardSize - 1) && players >= 3) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[2]}"></div>`;
+      if (i === boardSize * boardSize - 1 && players >= 4) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[3]}"></div>`;
+      if (players >= 5 && i === Math.floor(boardSize / 2)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[4]}"></div>`;
+      if (players >= 6 && i === boardSize * (Math.floor(boardSize / 2))) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[5]}"></div>`;
+      if (players >= 7 && i === boardSize * (boardSize - 1) + Math.floor(boardSize / 2)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[6]}"></div>`;
+      if (players >= 8 && i === boardSize - Math.floor(boardSize / 2)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[7]}"></div>`;
+      if (players >= 9 && i === boardSize * 7 + 0) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[8]}"></div>`;
+      if (players >= 10 && i === boardSize * 7 + (boardSize - 1)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[9]}"></div>`;
+      if (players >= 11 && i === boardSize + 7) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[10]}"></div>`;
+      if (players >= 12 && i === boardSize * (boardSize - 2) + 7) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[11]}"></div>`;
+
       board.appendChild(cell);
     }
   }
@@ -94,8 +103,7 @@
     document.getElementById("diceResult").textContent = `Hodil si: ${result}`;
   }
 
+  document.getElementById("mode").addEventListener("change", createBoard);
   createBoard();
-</script>
-
-</body>
+</script></body>
 </html>
