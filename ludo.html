@@ -1,48 +1,17 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Ludo – Mega režim</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f9f9f9;
-      text-align: center;
-    }
-    h1 {
-      color: #2b6e6e;
-    }
-    #board {
-      display: grid;
-      grid-template-columns: repeat(15, 30px);
-      grid-template-rows: repeat(15, 30px);
-      gap: 1px;
-      margin: 1rem auto;
-      width: fit-content;
-    }
-    .cell {
-      width: 30px;
-      height: 30px;
-      background: white;
-      border: 1px solid #ccc;
-    }
-    .token {
-      width: 0;
-      height: 0;
-      border-left: 14px solid transparent;
-      border-right: 14px solid transparent;
-      border-bottom: 28px solid red;
-      margin: auto;
-    }
-    #controls {
-      margin-bottom: 1rem;
-    }
+    body { font-family: sans-serif; background: #f2f2f2; text-align: center; }
+    h1 { color: #006666; margin-top: 1rem; }
+    select, button { padding: 0.5rem; font-size: 1rem; margin: 0.5rem; }
+    canvas { background: white; border: 1px solid #ccc; display: block; margin: 1rem auto; }
   </style>
 </head>
 <body>
   <h1>ErikAI Ludo – Mega režim</h1>
-  <div id="controls">
+  <div>
     Počet hráčov:
     <select id="playerCount">
       <option value="4">4 hráči</option>
@@ -50,88 +19,97 @@
       <option value="12">12 hráčov</option>
     </select>
     <button onclick="rollDice()">Hod kockou 🎲</button>
-    <div id="status"></div>
   </div>
-  <div id="board"></div>
-
-  <script>
-    const board = document.getElementById('board');
-    const statusDiv = document.getElementById('status');
-    const colors = ["red", "blue", "green", "yellow", "orange", "purple", "cyan", "magenta", "pink", "gray", "lime", "brown"];
-
+  <p id="status"></p>
+  <canvas id="gameBoard" width="600" height="600"></canvas>  <script>
+    const canvas = document.getElementById('gameBoard');
+    const ctx = canvas.getContext('2d');
+    const status = document.getElementById('status');
+    const playerColors = [
+      'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'cyan', 'magenta',
+      'lime', 'pink', 'gray', 'brown'
+    ];
     let players = [];
-    let currentPlayer = 0;
-    let dice = 0;
+    let activePlayer = 0;
+    let diceRoll = 0;
 
-    function createBoard() {
-      board.innerHTML = "";
-      for (let i = 0; i < 15 * 15; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        board.appendChild(cell);
-      }
-    }
-
-    function placeTokens(playerCount) {
+    function resetGame(count) {
       players = [];
-      const positions = [
-        0, 14, 210, 224, 7, 105, 119, 217, 14, 196, 28, 196
+      const pos = [
+        [0, 0], [11, 0], [0, 11], [11, 11],
+        [5, 0], [11, 5], [5, 11], [0, 5],
+        [3, 3], [8, 3], [8, 8], [3, 8]
       ];
-      for (let i = 0; i < playerCount; i++) {
-        players.push({
-          position: positions[i],
-          color: colors[i % colors.length]
-        });
+      for (let i = 0; i < count; i++) {
+        players.push({ color: playerColors[i], x: pos[i][0], y: pos[i][1], alive: true });
       }
-      drawTokens();
-      updateStatus();
+      activePlayer = 0;
+      drawBoard();
     }
 
-    function drawTokens() {
-      const cells = document.querySelectorAll('.cell');
-      cells.forEach(c => c.innerHTML = "");
-      players.forEach(player => {
-        const token = document.createElement('div');
-        token.className = 'token';
-        token.style.borderBottomColor = player.color;
-        cells[player.position].appendChild(token);
-      });
-    }
-
-    function updateStatus() {
-      statusDiv.innerText = `Na ťahu: Hráč ${currentPlayer + 1} (${players[currentPlayer].color})` + (dice ? ` | Hodil si: ${dice}` : '');
+    function drawBoard() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cellSize = 50;
+      ctx.strokeStyle = '#ccc';
+      for (let i = 0; i < 12; i++) {
+        for (let j = 0; j < 12; j++) {
+          ctx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
+        }
+      }
+      for (const p of players) {
+        if (p.alive) {
+          ctx.beginPath();
+          ctx.moveTo(p.x * cellSize + 25, p.y * cellSize);
+          ctx.lineTo(p.x * cellSize, p.y * cellSize + 50);
+          ctx.lineTo(p.x * cellSize + 50, p.y * cellSize + 50);
+          ctx.closePath();
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        }
+      }
     }
 
     function rollDice() {
-      dice = Math.floor(Math.random() * 6) + 1;
-      moveCurrentPlayer();
+      diceRoll = Math.floor(Math.random() * 6) + 1;
+      status.textContent = `Hráč ${activePlayer + 1} (${players[activePlayer].color}) hodil: ${diceRoll}. Klikni na pole, kam chceš ísť.`;
+      canvas.onclick = movePlayer;
     }
 
-    function moveCurrentPlayer() {
-      const player = players[currentPlayer];
-      player.position = (player.position + dice) % 225;
+    function movePlayer(event) {
+      const cellSize = 50;
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((event.clientX - rect.left) / cellSize);
+      const y = Math.floor((event.clientY - rect.top) / cellSize);
 
-      // Check for collision (vyhodenie)
-      players.forEach((other, index) => {
-        if (index !== currentPlayer && other.position === player.position) {
-          other.position = 0; // reset
+      const p = players[activePlayer];
+      const dist = Math.abs(p.x - x) + Math.abs(p.y - y);
+      if (dist === diceRoll) {
+        const victim = players.find((other, i) => i !== activePlayer && other.x === x && other.y === y && other.alive);
+        if (victim) {
+          victim.alive = false;
+          status.textContent += ` Vyhodil si hráča ${players.indexOf(victim) + 1} (${victim.color})!`;
         }
-      });
-
-      drawTokens();
-      dice = 0;
-      currentPlayer = (currentPlayer + 1) % players.length;
-      updateStatus();
+        p.x = x;
+        p.y = y;
+        drawBoard();
+        nextTurn();
+      } else {
+        alert('Musíš ísť presne o toľko polí, koľko si hodil.');
+      }
     }
 
-    document.getElementById('playerCount').addEventListener('change', e => {
-      createBoard();
-      placeTokens(Number(e.target.value));
+    function nextTurn() {
+      do {
+        activePlayer = (activePlayer + 1) % players.length;
+      } while (!players[activePlayer].alive);
+      status.textContent += ` Na rade je hráč ${activePlayer + 1} (${players[activePlayer].color}).`;
+      canvas.onclick = null;
+    }
+
+    document.getElementById('playerCount').addEventListener('change', (e) => {
+      resetGame(parseInt(e.target.value));
     });
 
-    // Initial
-    createBoard();
-    placeTokens(4);
-  </script>
-</body>
+    resetGame(4);
+  </script></body>
 </html>
