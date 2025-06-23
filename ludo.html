@@ -93,20 +93,29 @@
     }
 
     function setupPlayers(count) {
-      players = [];
-      board.querySelectorAll(".cell").forEach(cell => cell.innerHTML = "");
-      for (let i = 0; i < count; i++) {
-        const color = colors[i];
-        const x = i % boardSize;
-        const y = Math.floor(i / boardSize);
-        const cell = getCell(x, y);
-        const fig = document.createElement("div");
-        fig.className = "triangle";
-        fig.style.borderBottomColor = color;
-        fig.dataset.player = i;
-        cell.appendChild(fig);
-        players.push({ color, x, y, active: true });
-      }
+  players = [];
+  board.querySelectorAll(".cell").forEach(cell => cell.innerHTML = "");
+
+  const allCells = Array.from(board.querySelectorAll(".cell"));
+  const usedIndexes = new Set();
+
+  for (let i = 0; i < count; i++) {
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * allCells.length);
+    } while (usedIndexes.has(randomIndex));
+    usedIndexes.add(randomIndex);
+
+    const cell = allCells[randomIndex];
+    const color = colors[i];
+    const fig = document.createElement("div");
+    fig.className = "triangle";
+    fig.style.borderBottomColor = color;
+    fig.dataset.player = i;
+    cell.appendChild(fig);
+
+    players.push({ color, pos: randomIndex });
+  }
     }
 
     function rollDice() {
