@@ -2,116 +2,136 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Ludo – Mega režim</title>
   <style>
     body {
       font-family: sans-serif;
+      background: #f9f9f9;
       text-align: center;
-      background-color: #f3f3f3;
-      margin: 0;
-      padding: 0;
     }
     h1 {
-      margin-top: 20px;
-      color: #2b7a78;
+      color: #2b6e6e;
     }
-    .controls {
-      margin: 20px;
-    }
-    .board {
+    #board {
       display: grid;
-      grid-template-columns: repeat(18, 30px);
-      grid-template-rows: repeat(18, 30px);
+      grid-template-columns: repeat(15, 30px);
+      grid-template-rows: repeat(15, 30px);
       gap: 1px;
-      margin: 0 auto;
+      margin: 1rem auto;
       width: fit-content;
     }
     .cell {
       width: 30px;
       height: 30px;
-      background-color: white;
+      background: white;
       border: 1px solid #ccc;
     }
-    .piece {
+    .token {
       width: 0;
       height: 0;
       border-left: 14px solid transparent;
       border-right: 14px solid transparent;
-      border-bottom: 24px solid red;
+      border-bottom: 28px solid red;
       margin: auto;
+    }
+    #controls {
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
+  <h1>ErikAI Ludo – Mega režim</h1>
+  <div id="controls">
+    Počet hráčov:
+    <select id="playerCount">
+      <option value="4">4 hráči</option>
+      <option value="8">8 hráčov</option>
+      <option value="12">12 hráčov</option>
+    </select>
+    <button onclick="rollDice()">Hod kockou 🎲</button>
+    <div id="status"></div>
+  </div>
+  <div id="board"></div>
 
-<h1>ErikAI Ludo – Mega režim</h1>
+  <script>
+    const board = document.getElementById('board');
+    const statusDiv = document.getElementById('status');
+    const colors = ["red", "blue", "green", "yellow", "orange", "purple", "cyan", "magenta", "pink", "gray", "lime", "brown"];
 
-<div class="controls">
-  <label for="mode">Počet hráčov:</label>
-  <select id="mode" onchange="placePlayers()">
-    <option value="4">4 hráči</option>
-    <option value="8">8 hráčov</option>
-    <option value="12">12 hráčov</option>
-  </select>
-  <button onclick="rollDice()" class="dice">Hod kockou 🎲</button>
-  <p id="diceResult"></p>
-</div>
+    let players = [];
+    let currentPlayer = 0;
+    let dice = 0;
 
-<div class="board" id="board">
-  <!-- Hracia plocha sa tu vygeneruje -->
-</div>
-
-<script>
-  const board = document.getElementById("board");
-  const boardSize = 18;
-  const colors = [
-    "red", "blue", "green", "yellow",
-    "orange", "purple", "cyan", "magenta",
-    "brown", "lime", "pink", "gray"
-  ];
-  let cells = [];
-
-  function createBoard() {
-    board.innerHTML = "";
-    cells = [];
-    for (let i = 0; i < boardSize * boardSize; i++) {
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      board.appendChild(cell);
-      cells.push(cell);
+    function createBoard() {
+      board.innerHTML = "";
+      for (let i = 0; i < 15 * 15; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        board.appendChild(cell);
+      }
     }
-  }
 
-  function rollDice() {
-    const result = Math.floor(Math.random() * 6) + 1;
-    document.getElementById("diceResult").textContent = `Hodil si: ${result}`;
-  }
+    function placeTokens(playerCount) {
+      players = [];
+      const positions = [
+        0, 14, 210, 224, 7, 105, 119, 217, 14, 196, 28, 196
+      ];
+      for (let i = 0; i < playerCount; i++) {
+        players.push({
+          position: positions[i],
+          color: colors[i % colors.length]
+        });
+      }
+      drawTokens();
+      updateStatus();
+    }
 
-  function placePlayers() {
+    function drawTokens() {
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(c => c.innerHTML = "");
+      players.forEach(player => {
+        const token = document.createElement('div');
+        token.className = 'token';
+        token.style.borderBottomColor = player.color;
+        cells[player.position].appendChild(token);
+      });
+    }
+
+    function updateStatus() {
+      statusDiv.innerText = `Na ťahu: Hráč ${currentPlayer + 1} (${players[currentPlayer].color})` + (dice ? ` | Hodil si: ${dice}` : '');
+    }
+
+    function rollDice() {
+      dice = Math.floor(Math.random() * 6) + 1;
+      moveCurrentPlayer();
+    }
+
+    function moveCurrentPlayer() {
+      const player = players[currentPlayer];
+      player.position = (player.position + dice) % 225;
+
+      // Check for collision (vyhodenie)
+      players.forEach((other, index) => {
+        if (index !== currentPlayer && other.position === player.position) {
+          other.position = 0; // reset
+        }
+      });
+
+      drawTokens();
+      dice = 0;
+      currentPlayer = (currentPlayer + 1) % players.length;
+      updateStatus();
+    }
+
+    document.getElementById('playerCount').addEventListener('change', e => {
+      createBoard();
+      placeTokens(Number(e.target.value));
+    });
+
+    // Initial
     createBoard();
-    const count = parseInt(document.getElementById("mode").value);
-    const positions = [
-      [0, 0], [0, boardSize - 1], [boardSize - 1, 0], [boardSize - 1, boardSize - 1],
-      [0, Math.floor(boardSize / 2)], [Math.floor(boardSize / 2), 0],
-      [Math.floor(boardSize / 2), boardSize - 1], [boardSize - 1, Math.floor(boardSize / 2)],
-      [Math.floor(boardSize / 4), Math.floor(boardSize / 4)],
-      [Math.floor(boardSize / 4), boardSize - Math.floor(boardSize / 4)],
-      [boardSize - Math.floor(boardSize / 4), Math.floor(boardSize / 4)],
-      [boardSize - Math.floor(boardSize / 4), boardSize - Math.floor(boardSize / 4)],
-    ];
-
-    for (let i = 0; i < count; i++) {
-      const [row, col] = positions[i];
-      const index = row * boardSize + col;
-      const piece = document.createElement("div");
-      piece.className = "piece";
-      piece.style.borderBottomColor = colors[i];
-      cells[index].appendChild(piece);
-    }
-  }
-
-  placePlayers(); // prvotné vykreslenie
-</script>
-
+    placeTokens(4);
+  </script>
 </body>
 </html>
