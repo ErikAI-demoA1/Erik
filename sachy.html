@@ -98,10 +98,8 @@
     color: white;
   }
 </style>
-
-  
-  <select id="jazykovyVyber" onchange="prelozStranku(this.value)">
-  <option value="">Vyber jazyk</option>
+<select id="jazykovyVyber" onchange="prelozStranku(this.value)">
+  <option value="">🌍 Vyber jazyk</option>
   <option value="af">Afrikaans</option>
   <option value="sq">Albanian</option>
   <option value="am">Amharic</option>
@@ -115,10 +113,8 @@
   <option value="bg">Bulgarian</option>
   <option value="ca">Catalan</option>
   <option value="ceb">Cebuano</option>
-  <option value="ny">Chichewa</option>
   <option value="zh-CN">Chinese (Simplified)</option>
   <option value="zh-TW">Chinese (Traditional)</option>
-  <option value="co">Corsican</option>
   <option value="hr">Croatian</option>
   <option value="cs">Czech</option>
   <option value="da">Danish</option>
@@ -128,7 +124,6 @@
   <option value="et">Estonian</option>
   <option value="fi">Finnish</option>
   <option value="fr">French</option>
-  <option value="fy">Frisian</option>
   <option value="gl">Galician</option>
   <option value="ka">Georgian</option>
   <option value="de">German</option>
@@ -137,7 +132,7 @@
   <option value="ht">Haitian Creole</option>
   <option value="ha">Hausa</option>
   <option value="haw">Hawaiian</option>
-  <option value="iw">Hebrew</option>
+  <option value="he">Hebrew</option>
   <option value="hi">Hindi</option>
   <option value="hmn">Hmong</option>
   <option value="hu">Hungarian</option>
@@ -152,7 +147,7 @@
   <option value="kk">Kazakh</option>
   <option value="km">Khmer</option>
   <option value="ko">Korean</option>
-  <option value="ku">Kurdish (Kurmanji)</option>
+  <option value="ku">Kurdish</option>
   <option value="ky">Kyrgyz</option>
   <option value="lo">Lao</option>
   <option value="la">Latin</option>
@@ -167,9 +162,10 @@
   <option value="mi">Maori</option>
   <option value="mr">Marathi</option>
   <option value="mn">Mongolian</option>
-  <option value="my">Myanmar (Burmese)</option>
+  <option value="my">Myanmar</option>
   <option value="ne">Nepali</option>
   <option value="no">Norwegian</option>
+  <option value="ny">Nyanja</option>
   <option value="ps">Pashto</option>
   <option value="fa">Persian</option>
   <option value="pl">Polish</option>
@@ -191,7 +187,7 @@
   <option value="su">Sundanese</option>
   <option value="sw">Swahili</option>
   <option value="sv">Swedish</option>
-  <option value="tl">Tagalog (Filipino)</option>
+  <option value="tl">Tagalog</option>
   <option value="tg">Tajik</option>
   <option value="ta">Tamil</option>
   <option value="te">Telugu</option>
@@ -206,27 +202,18 @@
   <option value="yi">Yiddish</option>
   <option value="yo">Yoruba</option>
   <option value="zu">Zulu</option>
-  </select>
+</select>
 
-  <script type="text/javascript">
-function prelozStranku(jazyk) {
-  if (!jazyk) return;
-
-  var gtFrame = document.querySelector('iframe.goog-te-banner-frame');
-  if (gtFrame) {
-    location.reload(); // jednoduché riešenie: reload pri opakovanej zmene
-    return;
+<script>
+  function prelozStranku(jazyk) {
+    if (jazyk !== "") {
+      const currentUrl = window.location.href;
+      window.location.href = `https://translate.google.com/translate?sl=auto&tl=${jazyk}&u=${encodeURIComponent(currentUrl)}`;
+    }
   }
-
-  var url = window.location.href;
-  var translateUrl = "https://translate.google.com/translate?hl=" + jazyk +
-    "&sl=sk&tl=" + jazyk + "&u=" + encodeURIComponent(url);
-
-  window.location.href = translateUrl;
-}
-  </script>
+</script>
   
-  <p style="color: orange; font-size: 14px;">
+    <p style="color: orange; font-size: 14px;">
   ⚠️ Táto šachová verzia neobsahuje rošádu ani špeciálny pešiakový ťah (napr. en passant).🧠 V tejto verzii šachu platí: **Pešiak sa nepremení na inú figúru, ani na dámu, ani na koňa. Ak sa pešiak dostane na koniec šachovnice, zostáva pešiakom.Zostáva stáť na mieste – ďalej sa už nemôže pohnúť.🎯 Tento princíp zjednodušuje hru a zároveň posilňuje férovosť a stratégiu – hráč musí rozmýšľať dopredu s tým, čo má. .Ale Je však plne hrateľná podľa pravidiel FIDE!
   </p>
   <p style="color:gray; font-size:12px; text-align:center;">
