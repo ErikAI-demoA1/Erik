@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
   <title>ErikAI Ludo – Mega režim</title>
@@ -7,6 +8,8 @@
       font-family: sans-serif;
       text-align: center;
       background-color: #f3f3f3;
+      margin: 0;
+      padding: 0;
     }
     h1 {
       margin-top: 20px;
@@ -17,84 +20,65 @@
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(15, 40px);
-      grid-template-rows: repeat(15, 40px);
-      gap: 2px;
+      grid-template-columns: repeat(18, 30px);
+      grid-template-rows: repeat(18, 30px);
+      gap: 1px;
       margin: 0 auto;
-      max-width: 640px;
+      width: fit-content;
     }
     .cell {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       background-color: white;
       border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .piece {
       width: 0;
       height: 0;
-      border-left: 18px solid transparent;
-      border-right: 18px solid transparent;
-      border-bottom: 30px solid red;
-    }
-    .dice {
-      margin-top: 20px;
-      font-size: 28px;
-      padding: 10px 20px;
-      background: #2b7a78;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    select {
-      padding: 6px;
-      font-size: 16px;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-bottom: 24px solid red;
+      margin: auto;
     }
   </style>
 </head>
-<body><h1>ErikAI Ludo – Mega režim</h1><div class="controls">
+<body>
+
+<h1>ErikAI Ludo – Mega režim</h1>
+
+<div class="controls">
   <label for="mode">Počet hráčov:</label>
-  <select id="mode">
+  <select id="mode" onchange="placePlayers()">
     <option value="4">4 hráči</option>
     <option value="8">8 hráčov</option>
     <option value="12">12 hráčov</option>
   </select>
   <button onclick="rollDice()" class="dice">Hod kockou 🎲</button>
   <p id="diceResult"></p>
-</div><div class="board" id="board"></div><script>
-  const boardSize = 15;
+</div>
+
+<div class="board" id="board">
+  <!-- Hracia plocha sa tu vygeneruje -->
+</div>
+
+<script>
   const board = document.getElementById("board");
+  const boardSize = 18;
   const colors = [
-    "red", "blue", "green", "yellow", "purple", "orange",
-    "cyan", "magenta", "brown", "pink", "lime", "gray"
+    "red", "blue", "green", "yellow",
+    "orange", "purple", "cyan", "magenta",
+    "brown", "lime", "pink", "gray"
   ];
+  let cells = [];
 
   function createBoard() {
     board.innerHTML = "";
-    const players = parseInt(document.getElementById("mode").value);
-
+    cells = [];
     for (let i = 0; i < boardSize * boardSize; i++) {
       const cell = document.createElement("div");
       cell.className = "cell";
-
-      // Figúrky podľa počtu hráčov (rozmiestnené do rohov a stredov strán)
-      if (i === 0 && players >= 1) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[0]}"></div>`;
-      if (i === boardSize - 1 && players >= 2) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[1]}"></div>`;
-      if (i === boardSize * (boardSize - 1) && players >= 3) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[2]}"></div>`;
-      if (i === boardSize * boardSize - 1 && players >= 4) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[3]}"></div>`;
-      if (players >= 5 && i === Math.floor(boardSize / 2)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[4]}"></div>`;
-      if (players >= 6 && i === boardSize * (Math.floor(boardSize / 2))) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[5]}"></div>`;
-      if (players >= 7 && i === boardSize * (boardSize - 1) + Math.floor(boardSize / 2)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[6]}"></div>`;
-      if (players >= 8 && i === boardSize - Math.floor(boardSize / 2)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[7]}"></div>`;
-      if (players >= 9 && i === boardSize * 7 + 0) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[8]}"></div>`;
-      if (players >= 10 && i === boardSize * 7 + (boardSize - 1)) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[9]}"></div>`;
-      if (players >= 11 && i === boardSize + 7) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[10]}"></div>`;
-      if (players >= 12 && i === boardSize * (boardSize - 2) + 7) cell.innerHTML = `<div class="piece" style="border-bottom-color:${colors[11]}"></div>`;
-
       board.appendChild(cell);
+      cells.push(cell);
     }
   }
 
@@ -103,7 +87,31 @@
     document.getElementById("diceResult").textContent = `Hodil si: ${result}`;
   }
 
-  document.getElementById("mode").addEventListener("change", createBoard);
-  createBoard();
-</script></body>
+  function placePlayers() {
+    createBoard();
+    const count = parseInt(document.getElementById("mode").value);
+    const positions = [
+      [0, 0], [0, boardSize - 1], [boardSize - 1, 0], [boardSize - 1, boardSize - 1],
+      [0, Math.floor(boardSize / 2)], [Math.floor(boardSize / 2), 0],
+      [Math.floor(boardSize / 2), boardSize - 1], [boardSize - 1, Math.floor(boardSize / 2)],
+      [Math.floor(boardSize / 4), Math.floor(boardSize / 4)],
+      [Math.floor(boardSize / 4), boardSize - Math.floor(boardSize / 4)],
+      [boardSize - Math.floor(boardSize / 4), Math.floor(boardSize / 4)],
+      [boardSize - Math.floor(boardSize / 4), boardSize - Math.floor(boardSize / 4)],
+    ];
+
+    for (let i = 0; i < count; i++) {
+      const [row, col] = positions[i];
+      const index = row * boardSize + col;
+      const piece = document.createElement("div");
+      piece.className = "piece";
+      piece.style.borderBottomColor = colors[i];
+      cells[index].appendChild(piece);
+    }
+  }
+
+  placePlayers(); // prvotné vykreslenie
+</script>
+
+</body>
 </html>
