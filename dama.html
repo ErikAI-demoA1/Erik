@@ -12,20 +12,21 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 10px;
     }
     h1 {
       color: #2d6a4f;
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(8, 60px);
-      grid-template-rows: repeat(8, 60px);
+      grid-template-columns: repeat(8, 45px);
+      grid-template-rows: repeat(8, 45px);
       border: 2px solid #333;
+      margin-bottom: 10px;
     }
     .cell {
-      width: 60px;
-      height: 60px;
+      width: 45px;
+      height: 45px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -37,8 +38,8 @@
       background-color: #666;
     }
     .piece {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       border-radius: 5px;
     }
     .blue {
@@ -47,14 +48,28 @@
     .green {
       background-color: #06d6a0;
     }
+    .blue.queen {
+      background: linear-gradient(to bottom right, #3a86ff, red);
+    }
+    .green.queen {
+      background: linear-gradient(to bottom right, #06d6a0, yellow);
+    }
     .selected {
-      outline: 3px solid yellow;
+      outline: 2px solid yellow;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>ErikAI Dáma</h1>
-  <div class="board" id="board"></div>  
+  <div class="board" id="board"></div>
+  <button onclick="createBoard()">Hrať znova</button>
+
   <script>
     const board = document.getElementById("board");
     const SIZE = 8;
@@ -63,6 +78,8 @@
 
     function createBoard() {
       board.innerHTML = "";
+      selected = null;
+      currentPlayer = "blue";
       for (let row = 0; row < SIZE; row++) {
         for (let col = 0; col < SIZE; col++) {
           const cell = document.createElement("div");
@@ -102,52 +119,59 @@
       const fromCol = parseInt(selected.parentElement.dataset.col);
       const toRow = parseInt(targetCell.dataset.row);
       const toCol = parseInt(targetCell.dataset.col);
-
       const dir = currentPlayer === "blue" ? -1 : 1;
 
-      if (
-        Math.abs(toCol - fromCol) === 1 &&
-        toRow - fromRow === dir &&
-        !targetCell.querySelector(".piece")
-      ) {
-        targetCell.appendChild(selected);
-        selected.classList.remove("selected");
-        selected = null;
-        currentPlayer = currentPlayer === "blue" ? "green" : "blue";
-      } else if (
-        Math.abs(toCol - fromCol) === 2 &&
-        toRow - fromRow === dir * 2 &&
-        !targetCell.querySelector(".piece") &&
-        isEnemyPiece(fromRow + dir, fromCol + (toCol - fromCol) / 2)
-      ) {
-        targetCell.appendChild(selected);
-        removePiece(fromRow + dir, fromCol + (toCol - fromCol) / 2);
-        selected.classList.remove("selected");
-        selected = null;
-        currentPlayer = currentPlayer === "blue" ? "green" : "blue";
-      } else {
-        selected.classList.remove("selected");
-        selected = null;
+      const isQueen = selected.classList.contains("queen");
+      const rowDiff = toRow - fromRow;
+      const colDiff = toCol - fromCol;
+
+      if (!targetCell.querySelector(".piece")) {
+        if (Math.abs(rowDiff) === 1 && Math.abs(colDiff) === 1 && (isQueen || rowDiff === dir)) {
+          targetCell.appendChild(selected);
+          checkQueen(toRow);
+          endTurn();
+        } else if (
+          Math.abs(rowDiff) === 2 && Math.abs(colDiff) === 2 &&
+          isEnemyPiece(fromRow + rowDiff / 2, fromCol + colDiff / 2)
+        ) {
+          targetCell.appendChild(selected);
+          removePiece(fromRow + rowDiff / 2, fromCol + colDiff / 2);
+          checkQueen(toRow);
+          endTurn();
+        }
       }
+      if (selected) selected.classList.remove("selected");
+      selected = null;
     }
 
     function isEnemyPiece(row, col) {
-      const cell = board.querySelector(
-        `[data-row="${row}"][data-col="${col}"]`
-      );
+      const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
       return (
-        cell && cell.querySelector(".piece") && !cell.querySelector(".piece").classList.contains(currentPlayer)
+        cell &&
+        cell.querySelector(".piece") &&
+        !cell.querySelector(".piece").classList.contains(currentPlayer)
       );
     }
 
     function removePiece(row, col) {
-      const cell = board.querySelector(
-        `[data-row="${row}"][data-col="${col}"]`
-      );
+      const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
       const piece = cell.querySelector(".piece");
-      if (piece) {
-        cell.removeChild(piece);
+      if (piece) cell.removeChild(piece);
+    }
+
+    function checkQueen(row) {
+      if (currentPlayer === "blue" && row === 0) {
+        selected.classList.add("queen");
       }
+      if (currentPlayer === "green" && row === 7) {
+        selected.classList.add("queen");
+      }
+    }
+
+    function endTurn() {
+      selected.classList.remove("selected");
+      selected = null;
+      currentPlayer = currentPlayer === "blue" ? "green" : "blue";
     }
 
     createBoard();
