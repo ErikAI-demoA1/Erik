@@ -49,6 +49,27 @@
 <body>
   <h1>♟ ErikAI- Šachy Pro originál </h1>
 
+  <p id="cas" style="font-size: 18px;"></p>
+
+  <script>
+    function aktualizujCas() {
+      const teraz = new Date();
+      const moznosti = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
+      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+    }
+    setInterval(aktualizujCas, 1000);
+    aktualizujCas();
+  </script>
+
   <button onclick="toggleTheme()">🌓 Zmeniť režim</button>
 
 <script>
