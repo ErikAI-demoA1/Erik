@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -53,7 +54,8 @@
 </head>
 <body>
   <h1>ErikAI Dáma</h1>
-  <div class="board" id="board"></div>  <script>
+  <div class="board" id="board"></div>  
+  <script>
     const board = document.getElementById("board");
     const SIZE = 8;
     let selected = null;
@@ -112,12 +114,43 @@
         selected.classList.remove("selected");
         selected = null;
         currentPlayer = currentPlayer === "blue" ? "green" : "blue";
+      } else if (
+        Math.abs(toCol - fromCol) === 2 &&
+        toRow - fromRow === dir * 2 &&
+        !targetCell.querySelector(".piece") &&
+        isEnemyPiece(fromRow + dir, fromCol + (toCol - fromCol) / 2)
+      ) {
+        targetCell.appendChild(selected);
+        removePiece(fromRow + dir, fromCol + (toCol - fromCol) / 2);
+        selected.classList.remove("selected");
+        selected = null;
+        currentPlayer = currentPlayer === "blue" ? "green" : "blue";
       } else {
         selected.classList.remove("selected");
         selected = null;
       }
     }
 
+    function isEnemyPiece(row, col) {
+      const cell = board.querySelector(
+        `[data-row="${row}"][data-col="${col}"]`
+      );
+      return (
+        cell && cell.querySelector(".piece") && !cell.querySelector(".piece").classList.contains(currentPlayer)
+      );
+    }
+
+    function removePiece(row, col) {
+      const cell = board.querySelector(
+        `[data-row="${row}"][data-col="${col}"]`
+      );
+      const piece = cell.querySelector(".piece");
+      if (piece) {
+        cell.removeChild(piece);
+      }
+    }
+
     createBoard();
-  </script></body>
+  </script>
+</body>
 </html>
