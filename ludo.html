@@ -21,8 +21,8 @@
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(30, 28px);
-      grid-template-rows: repeat(30, 28px);
+      grid-template-columns: repeat(40, 28px);
+      grid-template-rows: repeat(40, 28px);
       margin: 0 auto;
       border: 2px solid #999;
       width: fit-content;
@@ -237,7 +237,7 @@
       <option>18 hráčov</option>
       <option>19 hráčov</option>
       <option>20 hráčov</option>
-      <option selected>70 hráčov</option>
+      <option selected>100 hráčov</option>
     </select>
     <button onclick="rollDice()">Hod kockou 🎲</button>
   </div>
@@ -251,15 +251,15 @@
   <script>
     const board = document.getElementById("board");
     const info = document.getElementById("info");
-    const colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "cyan", "lime", "magenta", "brown", "navy", "black", "gray", "gold", "darkgreen", "darkorange", "violet", "teal", "indigo", "crimson", "deepskyblue", "forestgreen", "darkred", "chartreuse", "hotpink", "slateblue", "coral", "khaki", "steelblue","maroon", "olive", "skyblue", "orchid", "turquoise", "salmon", "plum", "chocolate", "lightgreen", "firebrick", "mediumblue", "darkcyan", "aquamarine", "darkmagenta", "lavender", "lightcoral", "dodgerblue", "mediumorchid", "sienna", "thistle", "springgreen", "tomato", "darkkhaki", "peachpuff", "rosybrown", "mediumslateblue", "seagreen", "mistyrose", "cadetblue", "goldenrod", "slategrey", "powderblue", "limegreen", "mediumvioletred", "lightblue", "indianred", "palegreen", "lightpink", "darkblue", "mediumseagreen"];
+    const colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "cyan", "lime", "magenta", "brown", "navy", "black", "gray", "gold", "darkgreen", "darkorange", "violet", "teal", "indigo", "crimson", "deepskyblue", "forestgreen", "darkred", "chartreuse", "hotpink", "slateblue", "coral", "khaki", "steelblue","maroon", "olive", "skyblue", "orchid", "turquoise", "salmon", "plum", "chocolate", "lightgreen", "firebrick", "mediumblue", "darkcyan", "aquamarine", "darkmagenta", "lavender", "lightcoral", "dodgerblue", "mediumorchid", "sienna", "thistle", "springgreen", "tomato", "darkkhaki", "peachpuff", "rosybrown", "mediumslateblue", "seagreen", "mistyrose", "cadetblue", "goldenrod", "slategrey", "powderblue", "limegreen", "mediumvioletred", "lightblue", "indianred", "palegreen", "lightpink", "darkblue", "mediumseagreen", "mediumturquoise", "peru", "palevioletred", "burlywood", "darkolivegreen", "lightseagreen", "gainsboro", "blanchedalmond", "mediumaquamarine", "darkgoldenrod", "lightsteelblue", "navajowhite", "darkslategray", "papayawhip", "rosybrown", "oldlace", "mediumspringgreen", "lightsalmon", "darkslateblue", "lightyellow", "seashell", "honeydew", "azure", "lavenderblush", "moccasin", "wheat", "lemonchiffon", "snow", "floralwhite", "mintcream"];
 
     let currentPlayer = 0;
     let diceRoll = 0;
     let players = [];
 
     // Vytvorenie 25x25 gridu
-    for (let y = 0; y < 30; y++) {
-      for (let x = 0; x < 30; x++) {
+    for (let y = 0; y < 40; y++) {
+      for (let x = 0; x < 40; x++) {
         const cell = document.createElement("div");
         cell.className = "cell";
         cell.dataset.x = x;
@@ -291,7 +291,7 @@
         const color = colors[i];
         let pos;
         do {
-          pos = Math.floor(Math.random() * (25 * 25));
+          pos = Math.floor(Math.random() * (40 * 40));
         } while (used.has(pos));
         used.add(pos);
 
