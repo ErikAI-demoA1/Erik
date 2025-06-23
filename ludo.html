@@ -21,15 +21,15 @@
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(25, minmax(12px, 4vw));
-      grid-template-rows: repeat(25, minmax(12px, 4vw));
+      grid-template-columns: repeat(25, 28px);
+      grid-template-rows: repeat(25, 28px);
       margin: 0 auto;
       border: 2px solid #999;
       width: fit-content;
     }
     .cell {
-      width: 100%;
-      height: 100%;
+      width: 28px;
+      height: 28px;
       border: 1px solid #ccc;
       display: flex;
       align-items: center;
@@ -38,9 +38,18 @@
     .triangle {
       width: 0;
       height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 16px solid red;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 18px solid red;
+      position: relative;
+    }
+    .triangle::after {
+      content: attr(data-number);
+      position: absolute;
+      top: -22px;
+      font-size: 10px;
+      font-weight: bold;
+      color: black;
     }
     .player-info {
       margin-top: 10px;
@@ -127,6 +136,7 @@
         fig.className = "triangle";
         fig.style.borderBottomColor = color;
         fig.dataset.player = i;
+        fig.dataset.number = i + 1;
         cell.appendChild(fig);
         players.push({ color, pos: pos });
       }
@@ -136,7 +146,7 @@
       if (!diceRoll) return;
 
       const player = players[currentPlayer];
-      if (player.pos === -1) return; // Figúrka je vyradená
+      if (player.pos === -1) return;
 
       const currentCell = board.children[player.pos];
       const targetIndex = Array.from(board.children).indexOf(cell);
@@ -145,11 +155,10 @@
       const distance = dx + dy;
 
       if (distance !== diceRoll) {
-        info.innerText += ` Môžeš ísť presne o ${diceRoll} políčok (aj do strán).`;
+        info.innerText += ` Môžeš ísť presne o ${diceRoll} políčok.`;
         return;
       }
 
-      // Vyhodenie inej figúrky
       if (cell.children.length > 0) {
         const otherFig = cell.children[0];
         const otherPlayerIndex = parseInt(otherFig.dataset.player);
@@ -162,14 +171,13 @@
         }
       }
 
-      // Vymazanie starej figúrky
       board.children[player.pos].innerHTML = "";
 
-      // Nová pozícia
       const fig = document.createElement("div");
       fig.className = "triangle";
       fig.style.borderBottomColor = player.color;
       fig.dataset.player = currentPlayer;
+      fig.dataset.number = currentPlayer + 1;
       cell.appendChild(fig);
       player.pos = targetIndex;
 
