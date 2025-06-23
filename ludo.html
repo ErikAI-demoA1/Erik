@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ErikAI Ludo – Mega režim</title>
   <style>
     body {
@@ -64,7 +64,7 @@
       <option>10 hráčov</option>
       <option>12 hráčov</option>
       <option>16 hráčov</option>
-      <option>20 hráčov</option>
+      <option selected>20 hráčov</option>
     </select>
     <button onclick="rollDice()">Hod kockou 🎲</button>
   </div>
@@ -72,8 +72,7 @@
   <div class="board" id="board"></div>
 
   <footer>
-    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
-    © 2025 Erik Mohylák – All rights reserved.
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. © 2025 Erik Mohylák – All rights reserved.
   </footer>
 
   <script>
@@ -98,77 +97,18 @@
     }
 
     function rollDice() {
-  const playerSelect = document.getElementById("playerCount");
-  const count = parseInt(playerSelect.value);
-  if (players.length !== count) setupPlayers(count);
-  diceRoll = Math.floor(Math.random() * 6) + 1;
-  const color = players[currentPlayer].color;
-  info.innerText = `Hráč ${currentPlayer + 1} (${color}) hodil: ${diceRoll}.`;
+      const playerSelect = document.getElementById("playerCount");
+      const count = parseInt(playerSelect.value);
+      if (players.length !== count) setupPlayers(count);
+      if (players[currentPlayer].pos === -1) {
+        nextTurn();
+        return;
+      }
 
-  // Pohyb automaticky o diceRoll políčok
-  moveAutomatically(currentPlayer, diceRoll);
-}
-
-function moveAutomatically(playerIndex, steps) {
-  const player = players[playerIndex];
-  if (player.pos === -1) {
-    info.innerText += " Figúrka už bola vyradená.";
-    nextTurn();
-    return;
-  }
-
-  let targetPos = player.pos;
-  let x = targetPos % 25;
-  let y = Math.floor(targetPos / 25);
-
-  for (let i = 0; i < steps; i++) {
-    if (x < 24) {
-      x++;
-    } else if (y < 24) {
-      x = 0;
-      y++;
-    } else {
-      x = 0;
-      y = 0;
+      diceRoll = Math.floor(Math.random() * 6) + 1;
+      const color = players[currentPlayer].color;
+      info.innerText = `Hráč ${currentPlayer + 1} (${color}) hodil: ${diceRoll}. Vyber políčko na pohyb.`;
     }
-  }
-
-  const newPos = y * 25 + x;
-
-  // Vyhodenie figúrky, ak existuje
-  const cell = board.children[newPos];
-  if (cell.children.length > 0) {
-    const otherFig = cell.children[0];
-    const otherPlayerIndex = parseInt(otherFig.dataset.player);
-    if (otherPlayerIndex !== playerIndex) {
-      players[otherPlayerIndex].pos = -1;
-      cell.innerHTML = "";
-    } else {
-      info.innerText += " Nemôžeš sa pohnúť na vlastnú figúrku.";
-      return;
-    }
-  }
-
-  // Zmazanie pôvodnej pozície
-  board.children[player.pos].innerHTML = "";
-
-  // Nová pozícia
-  const fig = document.createElement("div");
-  fig.className = "triangle";
-  fig.style.borderBottomColor = player.color;
-  fig.dataset.player = playerIndex;
-  cell.appendChild(fig);
-  player.pos = newPos;
-
-  nextTurn();
-}
-
-function nextTurn() {
-  diceRoll = 0;
-  currentPlayer = (currentPlayer + 1) % players.length;
-  const nextColor = players[currentPlayer].color;
-  info.innerText += ` → Hráč ${currentPlayer + 1} (${nextColor}) na ťahu.`;
-}
 
     function setupPlayers(count) {
       players = [];
@@ -196,7 +136,18 @@ function nextTurn() {
       if (!diceRoll) return;
 
       const player = players[currentPlayer];
+      if (player.pos === -1) return; // Figúrka je vyradená
+
+      const currentCell = board.children[player.pos];
       const targetIndex = Array.from(board.children).indexOf(cell);
+      const dx = Math.abs(cell.dataset.x - currentCell.dataset.x);
+      const dy = Math.abs(cell.dataset.y - currentCell.dataset.y);
+      const distance = dx + dy;
+
+      if (distance !== diceRoll) {
+        info.innerText += ` Môžeš ísť presne o ${diceRoll} políčok (aj do strán).`;
+        return;
+      }
 
       // Vyhodenie inej figúrky
       if (cell.children.length > 0) {
@@ -206,16 +157,15 @@ function nextTurn() {
           players[otherPlayerIndex].pos = -1;
           cell.innerHTML = "";
         } else {
-          return; // Nemôže ísť na vlastné pole
+          info.innerText += " Nemôžeš ísť na svoju figúrku!";
+          return;
         }
       }
 
-      // Zmazanie figúrky z predchádzajúcej pozície
-      if (player.pos !== -1) {
-        board.children[player.pos].innerHTML = "";
-      }
+      // Vymazanie starej figúrky
+      board.children[player.pos].innerHTML = "";
 
-      // Vytvorenie novej figúrky na cieľovom poli
+      // Nová pozícia
       const fig = document.createElement("div");
       fig.className = "triangle";
       fig.style.borderBottomColor = player.color;
@@ -224,8 +174,13 @@ function nextTurn() {
       player.pos = targetIndex;
 
       diceRoll = 0;
+      nextTurn();
+    }
+
+    function nextTurn() {
       currentPlayer = (currentPlayer + 1) % players.length;
-      info.innerText = `Hráč ${currentPlayer + 1} (${players[currentPlayer].color}) na ťahu.`;
+      const nextColor = players[currentPlayer].color;
+      info.innerText = `Hráč ${currentPlayer + 1} (${nextColor}) na ťahu. Klikni „Hod kockou 🎲“.`;
     }
   </script>
 </body>
