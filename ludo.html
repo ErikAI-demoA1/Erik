@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI Ludo – Mega režim</title>
   <style>
     body {
@@ -21,14 +21,15 @@
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(25, 24px);
-      grid-template-rows: repeat(25, 24px);
+      grid-template-columns: repeat(25, minmax(12px, 4vw));
+      grid-template-rows: repeat(25, minmax(12px, 4vw));
       margin: 0 auto;
       border: 2px solid #999;
+      width: fit-content;
     }
     .cell {
-      width: 24px;
-      height: 24px;
+      width: 100%;
+      height: 100%;
       border: 1px solid #ccc;
       display: flex;
       align-items: center;
@@ -37,13 +38,18 @@
     .triangle {
       width: 0;
       height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 20px solid red;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 16px solid red;
     }
     .player-info {
       margin-top: 10px;
       font-weight: bold;
+    }
+    footer {
+      font-size: 12px;
+      color: #444;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -65,6 +71,11 @@
   <div class="player-info" id="info"></div>
   <div class="board" id="board"></div>
 
+  <footer>
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+    © 2025 Erik Mohylák – All rights reserved.
+  </footer>
+
   <script>
     const board = document.getElementById("board");
     const info = document.getElementById("info");
@@ -73,11 +84,10 @@
     let currentPlayer = 0;
     let diceRoll = 0;
     let players = [];
-    const boardSize = 25;
 
-    // Vytvor hraciu plochu
-    for (let y = 0; y < boardSize; y++) {
-      for (let x = 0; x < boardSize; x++) {
+    // Vytvorenie 25x25 gridu
+    for (let y = 0; y < 25; y++) {
+      for (let x = 0; x < 25; x++) {
         const cell = document.createElement("div");
         cell.className = "cell";
         cell.dataset.x = x;
@@ -85,37 +95,6 @@
         cell.addEventListener("click", () => cellClicked(cell));
         board.appendChild(cell);
       }
-    }
-
-    function getCell(x, y) {
-      if (x < 0 || y < 0 || x >= boardSize || y >= boardSize) return null;
-      return board.querySelector(`.cell[data-x='${x}'][data-y='${y}']`);
-    }
-
-    function setupPlayers(count) {
-  players = [];
-  board.querySelectorAll(".cell").forEach(cell => cell.innerHTML = "");
-
-  const allCells = Array.from(board.querySelectorAll(".cell"));
-  const usedIndexes = new Set();
-
-  for (let i = 0; i < count; i++) {
-    let randomIndex;
-    do {
-      randomIndex = Math.floor(Math.random() * allCells.length);
-    } while (usedIndexes.has(randomIndex));
-    usedIndexes.add(randomIndex);
-
-    const cell = allCells[randomIndex];
-    const color = colors[i];
-    const fig = document.createElement("div");
-    fig.className = "triangle";
-    fig.style.borderBottomColor = color;
-    fig.dataset.player = i;
-    cell.appendChild(fig);
-
-    players.push({ color, pos: randomIndex });
-  }
     }
 
     function rollDice() {
@@ -127,57 +106,63 @@
       info.innerText = `Hráč ${currentPlayer + 1} (${color}) hodil: ${diceRoll}. Klikni na pole, kam chceš ísť.`;
     }
 
+    function setupPlayers(count) {
+      players = [];
+      board.querySelectorAll(".cell").forEach(cell => cell.innerHTML = "");
+      const used = new Set();
+      for (let i = 0; i < count; i++) {
+        const color = colors[i];
+        let pos;
+        do {
+          pos = Math.floor(Math.random() * (25 * 25));
+        } while (used.has(pos));
+        used.add(pos);
+
+        const cell = board.children[pos];
+        const fig = document.createElement("div");
+        fig.className = "triangle";
+        fig.style.borderBottomColor = color;
+        fig.dataset.player = i;
+        cell.appendChild(fig);
+        players.push({ color, pos: pos });
+      }
+    }
+
     function cellClicked(cell) {
       if (!diceRoll) return;
 
-      const targetX = parseInt(cell.dataset.x);
-      const targetY = parseInt(cell.dataset.y);
       const player = players[currentPlayer];
-      if (!player.active) return;
+      const targetIndex = Array.from(board.children).indexOf(cell);
 
-      const dx = Math.abs(player.x - targetX);
-      const dy = Math.abs(player.y - targetY);
-
-      // Povolený presný ťah so súčtom krokov == diceRoll a len v 8 smeroch
-      const isDiagonal = dx === dy && dx !== 0;
-      const isStraight = (dx === 0 && dy !== 0) || (dy === 0 && dx !== 0);
-      const validMove = (isDiagonal || isStraight) && (dx + dy === diceRoll);
-
-      if (validMove) {
-        // Vymaž starú pozíciu
-        const oldCell = getCell(player.x, player.y);
-        oldCell.innerHTML = "";
-
-        // Zisti, či tam nie je iný hráč (vyhodenie)
-        for (let i = 0; i < players.length; i++) {
-          if (i !== currentPlayer && players[i].x === targetX && players[i].y === targetY && players[i].active) {
-            players[i].active = false;
-            getCell(players[i].x, players[i].y).innerHTML = "";
-          }
+      // Vyhodenie inej figúrky
+      if (cell.children.length > 0) {
+        const otherFig = cell.children[0];
+        const otherPlayerIndex = parseInt(otherFig.dataset.player);
+        if (otherPlayerIndex !== currentPlayer) {
+          players[otherPlayerIndex].pos = -1;
+          cell.innerHTML = "";
+        } else {
+          return; // Nemôže ísť na vlastné pole
         }
-
-        // Presuň figúrku
-        const newFig = document.createElement("div");
-        newFig.className = "triangle";
-        newFig.style.borderBottomColor = player.color;
-        newFig.dataset.player = currentPlayer;
-        cell.appendChild(newFig);
-        player.x = targetX;
-        player.y = targetY;
-
-        diceRoll = 0;
-        do {
-          currentPlayer = (currentPlayer + 1) % players.length;
-        } while (!players[currentPlayer].active);
-
-        info.innerText = `Hráč ${currentPlayer + 1} (${players[currentPlayer].color}) na ťahu.`;
       }
+
+      // Zmazanie figúrky z predchádzajúcej pozície
+      if (player.pos !== -1) {
+        board.children[player.pos].innerHTML = "";
+      }
+
+      // Vytvorenie novej figúrky na cieľovom poli
+      const fig = document.createElement("div");
+      fig.className = "triangle";
+      fig.style.borderBottomColor = player.color;
+      fig.dataset.player = currentPlayer;
+      cell.appendChild(fig);
+      player.pos = targetIndex;
+
+      diceRoll = 0;
+      currentPlayer = (currentPlayer + 1) % players.length;
+      info.innerText = `Hráč ${currentPlayer + 1} (${players[currentPlayer].color}) na ťahu.`;
     }
   </script>
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
-  </p>
 </body>
 </html>
