@@ -1,115 +1,163 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ErikAI Ludo – Mega režim</title>
   <style>
-    body { font-family: sans-serif; background: #f2f2f2; text-align: center; }
-    h1 { color: #006666; margin-top: 1rem; }
-    select, button { padding: 0.5rem; font-size: 1rem; margin: 0.5rem; }
-    canvas { background: white; border: 1px solid #ccc; display: block; margin: 1rem auto; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f2f2f2;
+      margin: 0;
+    }
+
+    h1 {
+      color: #2e6d70;
+      margin-top: 1rem;
+    }
+
+    .controls {
+      margin: 1rem;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(24, minmax(10px, 3.5vw));
+      justify-content: center;
+      margin: auto;
+    }
+
+    .cell {
+      width: 100%;
+      aspect-ratio: 1;
+      border: 1px solid #ccc;
+      position: relative;
+    }
+
+    .piece {
+      width: 0;
+      height: 0;
+      border-left: 50% solid transparent;
+      border-right: 50% solid transparent;
+      border-bottom: 100% solid red;
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      right: 10%;
+      bottom: 10%;
+      margin: auto;
+    }
   </style>
 </head>
 <body>
-  <h1>ErikAI Ludo – Mega režim</h1>
-  <div>
-    Počet hráčov:
+
+<h1>ErikAI Ludo – Mega režim</h1>
+<div class="controls">
+  <label>Počet hráčov: 
     <select id="playerCount">
-      <option value="4">4 hráči</option>
-      <option value="8">8 hráčov</option>
-      <option value="12">12 hráčov</option>
+      <option>4 hráči</option>
+      <option>6 hráčov</option>
+      <option selected>8 hráčov</option>
+      <option>10 hráčov</option>
+      <option>12 hráčov</option>
     </select>
-    <button onclick="rollDice()">Hod kockou 🎲</button>
-  </div>
-  <p id="status"></p>
-  <canvas id="gameBoard" width="600" height="600"></canvas>  <script>
-    const canvas = document.getElementById('gameBoard');
-    const ctx = canvas.getContext('2d');
-    const status = document.getElementById('status');
-    const playerColors = [
-      'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'cyan', 'magenta',
-      'lime', 'pink', 'gray', 'brown'
+  </label>
+  <button onclick="rollDice()">Hod kockou 🎲</button>
+  <p id="diceInfo"></p>
+</div>
+
+<div id="board" class="board"></div>
+
+<script>
+  const boardSize = 24;
+  const board = document.getElementById('board');
+  const colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'cyan', 'brown', 'black', 'lime', 'gray'];
+  let players = [];
+  let currentPlayer = 0;
+  let diceRoll = 0;
+
+  function createBoard() {
+    board.innerHTML = '';
+    for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col < boardSize; col++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.row = row;
+        cell.dataset.col = col;
+        cell.onclick = () => handleMove(row, col);
+        board.appendChild(cell);
+      }
+    }
+  }
+
+  function placePlayers() {
+    players = [];
+    const count = parseInt(document.getElementById('playerCount').value);
+    const colorList = colors.slice(0, count);
+    const positions = [
+      [0, 0], [0, boardSize - 1], [boardSize - 1, 0], [boardSize - 1, boardSize - 1],
+      [0, Math.floor(boardSize / 2)], [Math.floor(boardSize / 2), 0],
+      [Math.floor(boardSize / 2), boardSize - 1], [boardSize - 1, Math.floor(boardSize / 2)],
+      [Math.floor(boardSize / 3), Math.floor(boardSize / 3)],
+      [boardSize - 2, boardSize - 2], [2, boardSize - 3], [boardSize - 3, 2]
     ];
-    let players = [];
-    let activePlayer = 0;
-    let diceRoll = 0;
 
-    function resetGame(count) {
-      players = [];
-      const pos = [
-        [0, 0], [11, 0], [0, 11], [11, 11],
-        [5, 0], [11, 5], [5, 11], [0, 5],
-        [3, 3], [8, 3], [8, 8], [3, 8]
-      ];
-      for (let i = 0; i < count; i++) {
-        players.push({ color: playerColors[i], x: pos[i][0], y: pos[i][1], alive: true });
-      }
-      activePlayer = 0;
-      drawBoard();
+    for (let i = 0; i < count; i++) {
+      players.push({ id: i + 1, color: colorList[i], row: positions[i][0], col: positions[i][1], alive: true });
     }
+    drawPieces();
+  }
 
-    function drawBoard() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const cellSize = 50;
-      ctx.strokeStyle = '#ccc';
-      for (let i = 0; i < 12; i++) {
-        for (let j = 0; j < 12; j++) {
-          ctx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
-        }
-      }
-      for (const p of players) {
-        if (p.alive) {
-          ctx.beginPath();
-          ctx.moveTo(p.x * cellSize + 25, p.y * cellSize);
-          ctx.lineTo(p.x * cellSize, p.y * cellSize + 50);
-          ctx.lineTo(p.x * cellSize + 50, p.y * cellSize + 50);
-          ctx.closePath();
-          ctx.fillStyle = p.color;
-          ctx.fill();
-        }
+  function drawPieces() {
+    document.querySelectorAll('.cell').forEach(cell => cell.innerHTML = '');
+    for (const p of players) {
+      if (!p.alive) continue;
+      const selector = `.cell[data-row="${p.row}"][data-col="${p.col}"]`;
+      const cell = document.querySelector(selector);
+      if (cell) {
+        const piece = document.createElement('div');
+        piece.className = 'piece';
+        piece.style.borderBottomColor = p.color;
+        cell.appendChild(piece);
       }
     }
+  }
 
-    function rollDice() {
-      diceRoll = Math.floor(Math.random() * 6) + 1;
-      status.textContent = `Hráč ${activePlayer + 1} (${players[activePlayer].color}) hodil: ${diceRoll}. Klikni na pole, kam chceš ísť.`;
-      canvas.onclick = movePlayer;
-    }
+  function rollDice() {
+    diceRoll = Math.floor(Math.random() * 6) + 1;
+    const p = players[currentPlayer];
+    document.getElementById('diceInfo').textContent = `Hráč ${p.id} (${p.color}) hodil: ${diceRoll}. Klikni na pole, kam chceš ísť.`;
+  }
 
-    function movePlayer(event) {
-      const cellSize = 50;
-      const rect = canvas.getBoundingClientRect();
-      const x = Math.floor((event.clientX - rect.left) / cellSize);
-      const y = Math.floor((event.clientY - rect.top) / cellSize);
+  function handleMove(targetRow, targetCol) {
+    if (diceRoll === 0) return;
 
-      const p = players[activePlayer];
-      const dist = Math.abs(p.x - x) + Math.abs(p.y - y);
-      if (dist === diceRoll) {
-        const victim = players.find((other, i) => i !== activePlayer && other.x === x && other.y === y && other.alive);
-        if (victim) {
-          victim.alive = false;
-          status.textContent += ` Vyhodil si hráča ${players.indexOf(victim) + 1} (${victim.color})!`;
-        }
-        p.x = x;
-        p.y = y;
-        drawBoard();
-        nextTurn();
-      } else {
-        alert('Musíš ísť presne o toľko polí, koľko si hodil.');
+    const p = players[currentPlayer];
+    const dx = Math.abs(targetRow - p.row);
+    const dy = Math.abs(targetCol - p.col);
+
+    if (Math.max(dx, dy) === diceRoll) {
+      const target = players.find(other => other.row === targetRow && other.col === targetCol && other.alive);
+      if (target) {
+        target.alive = false;
+        alert(`Hráč ${p.id} (${p.color}) vyhodil hráča ${target.id} (${target.color})`);
       }
+      p.row = targetRow;
+      p.col = targetCol;
+      drawPieces();
+      diceRoll = 0;
+      currentPlayer = (currentPlayer + 1) % players.length;
     }
+  }
 
-    function nextTurn() {
-      do {
-        activePlayer = (activePlayer + 1) % players.length;
-      } while (!players[activePlayer].alive);
-      status.textContent += ` Na rade je hráč ${activePlayer + 1} (${players[activePlayer].color}).`;
-      canvas.onclick = null;
-    }
+  document.getElementById('playerCount').addEventListener('change', () => {
+    createBoard();
+    placePlayers();
+  });
 
-    document.getElementById('playerCount').addEventListener('change', (e) => {
-      resetGame(parseInt(e.target.value));
-    });
-
-    resetGame(4);
-  </script></body>
+  createBoard();
+  placePlayers();
+</script>
+</body>
 </html>
