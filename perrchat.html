@@ -1,127 +1,70 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Peer Chat (bez servera)</title>
+  <title>ErikAI Peer Chat - Spojenie kódom</title>
   <style>
-    body {
-      font-family: sans-serif;
-      padding: 1rem;
-      background: #f4f4f4;
-      max-width: 800px;
-      margin: auto;
-    }
-    textarea, input[type=text] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 0.5rem;
-      box-sizing: border-box;
-    }
-    button {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .log {
-      height: 200px;
-      background: white;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-    }
-    hr {
-      margin: 1.5rem 0;
-    }
+    body { font-family: sans-serif; padding: 1rem; background: #f4f4f4; }
+    textarea, input[type=text] { width: 100%; margin-bottom: 10px; padding: 10px; }
+    button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; margin-bottom: 10px; }
+    .log { height: 150px; background: #fff; overflow-y: auto; border: 1px solid #ccc; padding: 0.5rem; }
+    .status { font-weight: bold; color: green; margin-bottom: 10px; }
   </style>
 </head>
 <body>
+  <h2>💬 ErikAI Peer Chat (cez kód)</h2><button onclick="vytvorKod()">🔐 Vytvor kód (mobil 1)</button>
 
-  <h2>💬 ErikAI Peer Chat (bez servera)</h2>
-
-  <!-- OFFER -->
-  <button onclick="startConnection()">1️⃣ Spusti spojenie (vytvor OFFER)</button>
-  <textarea id="offer" placeholder="Tu sa objaví tvoj OFFER..."></textarea>
-  <textarea id="remoteAnswer" placeholder="Sem vlož ANSWER z druhého mobilu..."></textarea>
-  <button onclick="addAnswer()">2️⃣ Vložiť odpoveď (ANSWER)</button>
-
-  <hr>
-
-  <!-- ANSWER -->
-  <textarea id="answer" placeholder="Ak ti niekto pošle OFFER, vlož sem..."></textarea>
-  <button onclick="createAnswer()">3️⃣ Vytvoriť odpoveď (ANSWER)</button>
-  <textarea id="sendAnswer" placeholder="Pošli tento ANSWER späť druhému..."></textarea>
-
-  <hr>
-
-  <!-- CHAT -->
-  <input type="text" id="message" placeholder="Napíš správu...">
-  <button onclick="sendMessage()">✉️ Poslať</button>
-  <div class="log" id="chat"></div>
-
-<script>
+  <textarea id="vygenerovanyKod" placeholder="Tu sa zobrazí tvoj kód..."></textarea>  <input type="text" id="prijatyKod" placeholder="Sem vlož kód od kamoša...">
+  <button onclick="pripojKod()">🔓 Pripoj sa (mobil 2)</button>  <div class="status" id="stavSpojenia">❌ Zatiaľ nie ste spojení</div>  <input type="text" id="sprava" placeholder="Napíš správu...">
+  <button onclick="odosliSpravu()">✉️ Poslať</button>
+  <div class="log" id="chat"></div><script>
   let pc;
   let dc;
+  let spojene = false;
 
-  function log(msg, incoming = false) {
-    const div = document.createElement("div");
-    div.innerHTML = incoming ? `<b>🟢 Prijaté:</b> ${msg}` : `<b>🔵 Ty:</b> ${msg}`;
-    document.getElementById("chat").appendChild(div);
-    document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
-  }
-
-  function initConnection() {
+  async function vytvorKod() {
     pc = new RTCPeerConnection();
-    pc.ondatachannel = (event) => {
-      dc = event.channel;
-      dc.onmessage = (e) => log(e.data, true);
-      dc.onopen = () => log("<i>✅ Spojenie nadviazané!</i>");
-    };
-  }
-
-  async function startConnection() {
-    initConnection();
     dc = pc.createDataChannel("chat");
-    dc.onmessage = (e) => log(e.data, true);
-    dc.onopen = () => log("<i>✅ Spojenie nadviazané!</i>");
+    nastavChat();
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
-    document.getElementById("offer").value = JSON.stringify(offer);
+    document.getElementById("vygenerovanyKod").value = btoa(JSON.stringify(offer));
   }
 
-  async function addAnswer() {
-    const answerText = document.getElementById("remoteAnswer").value;
-    if (!answerText) return alert("Chýba ANSWER.");
-    const answer = JSON.parse(answerText);
-    await pc.setRemoteDescription(answer);
-  }
-
-  async function createAnswer() {
-    initConnection();
-    const offerText = document.getElementById("answer").value;
-    if (!offerText) return alert("Chýba OFFER.");
-    const offer = JSON.parse(offerText);
+  async function pripojKod() {
+    const kod = document.getElementById("prijatyKod").value;
+    const offer = JSON.parse(atob(kod));
+    pc = new RTCPeerConnection();
+    pc.ondatachannel = (e) => {
+      dc = e.channel;
+      nastavChat();
+    };
     await pc.setRemoteDescription(offer);
     const answer = await pc.createAnswer();
     await pc.setLocalDescription(answer);
-    document.getElementById("sendAnswer").value = JSON.stringify(answer);
+    const kodAnswer = btoa(JSON.stringify(answer));
+    prompt("Pošli tento kód naspäť prvému mobilu:", kodAnswer);
   }
 
-  function sendMessage() {
-    const msg = document.getElementById("message").value.trim();
-    if (!msg || !dc || dc.readyState !== "open") return;
-    dc.send(msg);
-    log(msg);
-    document.getElementById("message").value = "";
+  function nastavChat() {
+    dc.onopen = () => {
+      spojene = true;
+      document.getElementById("stavSpojenia").textContent = "✅ Ste spojení, môžte písať!";
+      document.getElementById("stavSpojenia").style.color = "green";
+    };
+    dc.onmessage = (e) => {
+      document.getElementById("chat").innerHTML += `<div><b>🟢 Kamoš:</b> ${e.data}</div>`;
+    };
   }
-</script>
 
-</body>
+  function odosliSpravu() {
+    const text = document.getElementById("sprava").value;
+    if (!spojene) {
+      alert("Najprv sa musíte spojiť cez kód!");
+      return;
+    }
+    dc.send(text);
+    document.getElementById("chat").innerHTML += `<div><b>🔵 Ty:</b> ${text}</div>`;
+    document.getElementById("sprava").value = "";
+  }
+</script></body>
 </html>
