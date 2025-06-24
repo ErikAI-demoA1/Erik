@@ -1,72 +1,64 @@
-<!DOCTYPE html><html lang="sk">
+<!-- ErikAI TV - Pripojenie zariadenia (TV potvrdzuje pripojenie z mobilu) --><!DOCTYPE html><html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ErikAI TV</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ErikAI TV Pripojenie</title>
   <style>
     body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
+      background: black;
+      color: white;
+      font-family: sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 2em;
     }
-    .screen {
-      background-color: #111;
-      border: 3px solid #444;
-      border-radius: 12px;
-      padding: 30px;
-      margin: 40px auto;
-      max-width: 700px;
-      box-shadow: 0 0 30px #0f0;
+    .container {
+      background: #111;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 0 20px lime;
+      display: inline-block;
     }
-    .code-input {
-      margin-top: 20px;
-    }
-    input[type="text"] {
-      padding: 10px;
-      font-size: 18px;
-      width: 200px;
+    input {
+      padding: 0.6em;
+      font-size: 1.1em;
+      border-radius: 5px;
       border: none;
-      border-radius: 8px;
+      margin-top: 1em;
+      width: 80%;
     }
     button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #0f0;
-      color: #000;
+      margin-top: 1em;
+      background-color: lime;
       border: none;
-      border-radius: 8px;
+      padding: 0.6em 1.5em;
+      font-size: 1.1em;
+      border-radius: 5px;
       cursor: pointer;
-      margin-left: 10px;
-    }
-    .note {
-      margin-top: 20px;
-      font-size: 15px;
-      color: #ccc;
     }
   </style>
 </head>
 <body>
   <h1>ErikAI TV</h1>
-  <p class="note">Pripoj sa na svoju ErikAI TV obrazovku v okolí a sleduj, čo ťa zaujíma!</p>  <div class="screen">
-    <h2>Pripájanie na obrazovku</h2>
-    <p>Zadaj kód obrazovky alebo použi QR kód/odkaz zo zariadenia:</p><div class="code-input">
-  <input type="text" id="screenCode" placeholder="Zadaj kód obrazovky...">
-  <button onclick="connectToTV()">Pripojiť</button>
-</div>
-
-<p class="note">Príklad: Kód môžeš získať z ErikAI zariadenia alebo TV s ErikAI OS</p>
-
+  <p>Zariadenie v okolí sa chce pripojiť k tvojej TV.</p>  <div class="container">
+    <h2>Zadaj kód z mobilu pre pripojenie</h2>
+    <input type="text" id="codeInput" placeholder="Zadaj kód napr. 23456" />
+    <br />
+    <button onclick="checkCode()">Potvrdiť</button>
+    <p id="status"></p>
   </div>  <script>
-    function connectToTV() {
-      const code = document.getElementById('screenCode').value;
-      if(code) {
-        alert(`Pripájam sa na obrazovku s kódom: ${code}`);
-        // Tu môžeš neskôr nasmerovať na zariadenie, napr.:
-        // window.location.href = `/tv/${code}`;
+    const correctCode = "23456"; // Sem sa môže neskôr dať dynamicky
+
+    function checkCode() {
+      const userCode = document.getElementById("codeInput").value;
+      const status = document.getElementById("status");
+
+      if (userCode === correctCode) {
+        status.innerText = "✅ Pripojenie úspešné!";
+        status.style.color = "lime";
+        // Tu môžeš pridať ďalší krok: napr. otvorenie prehrávača, prenos dát, atď.
       } else {
-        alert("Zadaj kód obrazovky, prosím.");
+        status.innerText = "❌ Nesprávny kód, skús znova.";
+        status.style.color = "red";
       }
     }
   </script></body>
