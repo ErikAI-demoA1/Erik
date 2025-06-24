@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoznam ErikAI APK WEB</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: red;
+    }
+    .button-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    a {
+      display: inline-block;
+      background-color: #d10000;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      width: 220px;
+    }
+    a:hover {
+      background-color: #990000;
+    }
+  </style>
+</head>
+<body>
+  
+  <p id="cas" style="font-size: 18px;"></p>
+
+  <script>
+    function aktualizujCas() {
+      const teraz = new Date();
+      const moznosti = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const casText = teraz.toLocaleDateString('sk-SK', moznosti);
+      document.getElementById('cas').innerText = `🕓 Aktuálny čas: ${casText}`;
+    }
+    setInterval(aktualizujCas, 1000);
+    aktualizujCas();
+  </script>
+
+  <div id="google_translate_element"></div>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'sk',
+      includedLanguages: 'en,cs,fr,hu,de,pl,ro,ru,es,it,uk,sr,bn,ko,ja,zh-CN',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  
+  <h1>📂 Zoznam ErikAI APK WEB </h1>
+
+  <div class="button-list">
+    <a href="zoznam_straniek.html">ErikAI zoznam APK WEB 1</a>
+    <a href="nastroje.html">ErikAI Pomocné Nástroje 2</a>
+    <a href="generator_hesla_mena.html">ErikAI generator náhodnosti 3</a>
+    <a href="ukazka.html">ErikAI ukážka 4</a>
+    <a href="generator_obrazkov.html">ErikAI generátor obrazomix 5</a>
+  </div>
+
+  <p style="font-size: 14px; color: gray; margin-top: 20px;">
+  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
+© 2025 Erik Mohylák – All rights reserved.
+  </p>
+</body>
+</html>
