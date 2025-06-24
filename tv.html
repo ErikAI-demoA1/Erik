@@ -1,49 +1,55 @@
-<!-- ErikAI TV - HTML & JS PIN prepojenie --><!-- 1. Mobil: Vygenerovanie PIN kódu --><!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-  <title>ErikAI TV - Mobil (PIN generátor)</title>
+  <meta charset="UTF-8">
+  <title>ErikAI TV - Pripojenie</title>
   <style>
-    body { background: black; color: white; text-align: center; font-family: sans-serif; }
-    .pin-box { font-size: 40px; margin-top: 40px; color: lime; }
+    body { background: black; color: white; font-family: sans-serif; text-align: center; padding: 2em; }
+    input, button { font-size: 1.2em; padding: 0.5em; margin: 1em; }
+    .green { color: #00FF00; }
+    .red { color: red; }
   </style>
 </head>
 <body>
-  <h1>📱 ErikAI TV - Mobil</h1>
-  <p>Vygenerovaný kód PIN pre pripojenie:</p>
-  <div class="pin-box" id="pin"></div>  <script>
-    // Vygeneruj PIN
-    const pin = Math.floor(10000 + Math.random() * 90000);
-    document.getElementById("pin").innerText = pin;
 
-    // Ulož do LocalStorage ako "shared channel"
-    localStorage.setItem("erikai_tv_pin", pin);
-  </script></body>
-</html><!-- 2. TV: Zadanie PIN a overenie --><!DOCTYPE html><html>
-<head>
-  <title>ErikAI TV - Televízor (pripojenie)</title>
-  <style>
-    body { background: black; color: white; text-align: center; font-family: sans-serif; }
-    input { padding: 10px; font-size: 20px; border-radius: 5px; }
-    button { padding: 10px 20px; background: lime; border: none; font-size: 18px; }
-    .error { color: red; margin-top: 15px; }
-  </style>
-</head>
-<body>
-  <h1>📺 ErikAI TV - Televízor</h1>
-  <p>Zadaj kód z mobilu pre pripojenie:</p>
-  <input type="text" id="enteredPin" placeholder="Zadaj kód...">
-  <br><br>
-  <button onclick="checkPin()">Potvrdiť</button>
-  <div class="error" id="message"></div>  <script>
-    function checkPin() {
-      const entered = document.getElementById("enteredPin").value;
-      const correct = localStorage.getItem("erikai_tv_pin");
-      if (entered === correct) {
-        document.getElementById("message").style.color = "lime";
-        document.getElementById("message").innerText = "✅ Pripojenie úspešné!";
+  <h1>ErikAI TV – Pripojenie</h1>
+
+  <div id="mobil">
+    <h2>📱 ErikAI TV – Mobil</h2>
+    <button onclick="vygenerujPin()">🔐 Vygeneruj PIN</button>
+    <p>PIN: <span id="vystupPin" class="green"></span></p>
+  </div>
+
+  <hr style="margin: 2em 0;">
+
+  <div id="tv">
+    <h2>📺 ErikAI TV – Televízor</h2>
+    <input type="text" id="zadanyPin" placeholder="Zadaj PIN z mobilu">
+    <button onclick="overPin()">✅ Potvrdiť</button>
+    <p id="vysledok"></p>
+  </div>
+
+  <script>
+    let pin;
+
+    function vygenerujPin() {
+      pin = Math.floor(10000 + Math.random() * 90000).toString();
+      document.getElementById('vystupPin').textContent = pin;
+      localStorage.setItem('erikai_pin', pin);
+    }
+
+    function overPin() {
+      const zadané = document.getElementById('zadanyPin').value;
+      const uložené = localStorage.getItem('erikai_pin');
+      const výstup = document.getElementById('vysledok');
+
+      if (zadané === uložené) {
+        výstup.innerHTML = '✅ <span class="green">Pripojenie úspešné!</span>';
       } else {
-        document.getElementById("message").style.color = "red";
-        document.getElementById("message").innerText = "❌ Nesprávny kód, skús znova.";
+        výstup.innerHTML = '❌ <span class="red">Nesprávny PIN, skús znova.</span>';
       }
     }
-  </script></body>
+  </script>
+
+</body>
 </html>
