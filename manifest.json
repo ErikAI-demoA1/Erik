@@ -1,6 +1,6 @@
 {
-  "name": "ErikAI Universe",
-  "short_name": "ErikAI",
+  "name": "ErikAI Universe OS",
+  "short_name": "ErikAI OS",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#000000",
