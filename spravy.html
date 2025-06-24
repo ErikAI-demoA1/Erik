@@ -2,46 +2,57 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Správy</title>
+  <title>📰 ErikAI Správy</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    h1 { color: #cc0000; }
-    ul { list-style: none; padding: 0; }
-    li { margin: 10px 0; }
-    a { text-decoration: none; color: #0077cc; }
-    a:hover { text-decoration: underline; }
+    body { font-family: sans-serif; background: #f0f0f0; margin: 0; padding: 0; }
+    header { background: #cc0000; color: white; padding: 10px; text-align: center; font-size: 20px; }
+    select { font-size: 16px; margin: 10px; padding: 5px; width: 90%; max-width: 400px; }
+    iframe { width: 100%; height: 90vh; border: none; }
   </style>
 </head>
 <body>
-  <h1>🗞️ ErikAI Správy (SME.sk)</h1>
-  <ul id="spravy"></ul>
+  <header>📰 ErikAI Správy – Výber portálu</header>
+  <center>
+    <select id="newsSelect" onchange="changeNews(this.value)">
+      <option value="">-- Vyber portál --</option>
+      <optgroup label="🇸🇰 Slovensko">
+        <option value="https://www.sme.sk">SME.sk</option>
+        <option value="https://www.pravda.sk">Pravda.sk</option>
+        <option value="https://www.ta3.com">TA3.com</option>
+      </optgroup>
+      <optgroup label="🌍 Svet">
+        <option value="https://www.bbc.com/news">BBC News</option>
+        <option value="https://edition.cnn.com">CNN</option>
+        <option value="https://www.reuters.com">Reuters</option>
+        <option value="https://www.aljazeera.com">Al Jazeera</option>
+        <option value="https://news.sky.com">Sky News</option>
+        <option value="https://www.bloomberg.com">Bloomberg</option>
+        <option value="https://www.theguardian.com">The Guardian</option>
+        <option value="https://www.nytimes.com">New York Times</option>
+        <option value="https://www.washingtonpost.com">Washington Post</option>
+        <option value="https://www.foxnews.com">Fox News</option>
+        <option value="https://www.nbcnews.com">NBC News</option>
+        <option value="https://abcnews.go.com">ABC News</option>
+        <option value="https://www.cbsnews.com">CBS News</option>
+        <option value="https://www.euronews.com">Euronews</option>
+        <option value="https://www.politico.com">Politico</option>
+        <option value="https://www.forbes.com">Forbes</option>
+        <option value="https://www.ft.com">Financial Times</option>
+        <option value="https://news.yahoo.com">Yahoo News</option>
+        <option value="https://www.newsweek.com">Newsweek</option>
+        <option value="https://www.npr.org">NPR</option>
+      </optgroup>
+    </select>
+  </center>
+
+  <iframe id="newsFrame" src=""></iframe>
 
   <script>
-    const feedUrl = 'https://rss.sme.sk/rss/rss.asp'; // Môžeš zmeniť
-    const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(feedUrl);
-
-    fetch(proxy)
-      .then(response => response.json())
-      .then(data => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data.contents, "text/xml");
-        const items = xml.querySelectorAll("item");
-
-        const list = document.getElementById("spravy");
-        items.forEach(item => {
-          const li = document.createElement("li");
-          const link = document.createElement("a");
-          link.href = item.querySelector("link").textContent;
-          link.textContent = item.querySelector("title").textContent;
-          link.target = "_blank";
-          li.appendChild(link);
-          list.appendChild(li);
-        });
-      })
-      .catch(err => {
-        document.getElementById("spravy").innerHTML = "<li>Chyba pri načítaní správ.</li>";
-        console.error("Chyba:", err);
-      });
+    function changeNews(url) {
+      if (url) {
+        document.getElementById('newsFrame').src = url;
+      }
+    }
   </script>
 </body>
 </html>
