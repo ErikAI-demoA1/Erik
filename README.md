@@ -11,7 +11,7 @@ ErikAI OS je aj PWA Aplikácia (je úplne offline aplikácia)
 
 🔷 Stručná charakteristika
 
-> ErikAI OS je kompletný operačný AI systém pre web a Android, vytvorený z 49 navzájom prepojených stránok, ktoré fungujú ako inteligentné príkazy, aplikácie, nástroje a platformy. Nevyžaduje programovanie zo strany používateľa – všetko funguje cez jednoduché značky alebo kliknutia.
+> ErikAI OS je kompletný operačný AI systém pre web a Android, vytvorený z 51 navzájom prepojených stránok, ktoré fungujú ako inteligentné príkazy, aplikácie, nástroje a platformy. Nevyžaduje programovanie zo strany používateľa – všetko funguje cez jednoduché značky alebo kliknutia.
 
 
 
@@ -20,11 +20,11 @@ ErikAI OS je aj PWA Aplikácia (je úplne offline aplikácia)
 
 🧩 Štruktúra ErikAI OS
 
-📄 49 stránok (modulov)
+📄 51 stránok (modulov)
 
 33 nástrojov (originálnych, multifunkčných)
 
-10 základné statické stránky
+12 základné statické stránky
 
 3 platformové stránky (viac nižšie)
 
