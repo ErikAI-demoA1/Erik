@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI Správy</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    h1 { color: #cc0000; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 10px 0; }
+    a { text-decoration: none; color: #0077cc; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>🗞️ ErikAI Správy (SME.sk)</h1>
+  <ul id="spravy"></ul>
+
+  <script>
+    const feedUrl = 'https://rss.sme.sk/rss/rss.asp'; // Môžeš zmeniť
+    const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(feedUrl);
+
+    fetch(proxy)
+      .then(response => response.json())
+      .then(data => {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(data.contents, "text/xml");
+        const items = xml.querySelectorAll("item");
+
+        const list = document.getElementById("spravy");
+        items.forEach(item => {
+          const li = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = item.querySelector("link").textContent;
+          link.textContent = item.querySelector("title").textContent;
+          link.target = "_blank";
+          li.appendChild(link);
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        document.getElementById("spravy").innerHTML = "<li>Chyba pri načítaní správ.</li>";
+        console.error("Chyba:", err);
+      });
+  </script>
+</body>
+</html>
