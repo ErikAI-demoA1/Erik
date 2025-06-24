@@ -21,8 +21,8 @@
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(50, 40px);
-      grid-template-rows: repeat(50, 40px);
+      grid-template-columns: repeat(100, 40px);
+      grid-template-rows: repeat(100, 40px);
       margin: 0 auto;
       border: 3px solid #999;
       width: fit-content;
@@ -317,7 +317,7 @@
 <option>97 hráčov</option>
 <option>98 hráčov</option>
 <option>99 hráčov</option>
-      <option selected>500 hráčov</option>
+      <option selected>700 hráčov</option>
     </select>
     <button onclick="rollDice()">Hod kockou 🎲</button>
   </div>
@@ -368,15 +368,34 @@
  "plum1", "plum2", "plum3", "plum4", "plum5", "plum6", "plum7", "plum8", "plum9", "plum10",
  "chocolate1", "chocolate2", "chocolate3", "chocolate4", "chocolate5", "chocolate6", "chocolate7", "chocolate8", "chocolate9", "chocolate10",
  "lightgreen1", "lightgreen2", "lightgreen3", "lightgreen4", "lightgreen5", "lightgreen6", "lightgreen7", "lightgreen8", "lightgreen9", "lightgreen10",
- "firebrick1", "firebrick2", "firebrick3", "firebrick4", "firebrick5", "firebrick6", "firebrick7", "firebrick8", "firebrick9", "firebrick10"];
+ "firebrick1", "firebrick2", "firebrick3", "firebrick4", "firebrick5", "firebrick6", "firebrick7", "firebrick8", "firebrick9", "firebrick10", "mediumblue1", "mediumblue2", "mediumblue3", "mediumblue4", "mediumblue5", "mediumblue6", "mediumblue7", "mediumblue8", "mediumblue9", "mediumblue10",
+ "darkcyan1", "darkcyan2", "darkcyan3", "darkcyan4", "darkcyan5", "darkcyan6", "darkcyan7", "darkcyan8", "darkcyan9", "darkcyan10",
+ "aquamarine1", "aquamarine2", "aquamarine3", "aquamarine4", "aquamarine5", "aquamarine6", "aquamarine7", "aquamarine8", "aquamarine9", "aquamarine10",
+ "darkmagenta1", "darkmagenta2", "darkmagenta3", "darkmagenta4", "darkmagenta5", "darkmagenta6", "darkmagenta7", "darkmagenta8", "darkmagenta9", "darkmagenta10",
+ "lavender1", "lavender2", "lavender3", "lavender4", "lavender5", "lavender6", "lavender7", "lavender8", "lavender9", "lavender10",
+ "lightcoral1", "lightcoral2", "lightcoral3", "lightcoral4", "lightcoral5", "lightcoral6", "lightcoral7", "lightcoral8", "lightcoral9", "lightcoral10",
+ "dodgerblue1", "dodgerblue2", "dodgerblue3", "dodgerblue4", "dodgerblue5", "dodgerblue6", "dodgerblue7", "dodgerblue8", "dodgerblue9", "dodgerblue10",
+ "mediumorchid1", "mediumorchid2", "mediumorchid3", "mediumorchid4", "mediumorchid5", "mediumorchid6", "mediumorchid7", "mediumorchid8", "mediumorchid9", "mediumorchid10",
+ "sienna1", "sienna2", "sienna3", "sienna4", "sienna5", "sienna6", "sienna7", "sienna8", "sienna9", "sienna10",
+ "thistle1", "thistle2", "thistle3", "thistle4", "thistle5", "thistle6", "thistle7", "thistle8", "thistle9", "thistle10",
+ "springgreen1", "springgreen2", "springgreen3", "springgreen4", "springgreen5", "springgreen6", "springgreen7", "springgreen8", "springgreen9", "springgreen10",
+ "tomato1", "tomato2", "tomato3", "tomato4", "tomato5", "tomato6", "tomato7", "tomato8", "tomato9", "tomato10",
+ "darkkhaki1", "darkkhaki2", "darkkhaki3", "darkkhaki4", "darkkhaki5", "darkkhaki6", "darkkhaki7", "darkkhaki8", "darkkhaki9", "darkkhaki10",
+ "peachpuff1", "peachpuff2", "peachpuff3", "peachpuff4", "peachpuff5", "peachpuff6", "peachpuff7", "peachpuff8", "peachpuff9", "peachpuff10",
+ "rosybrown1", "rosybrown2", "rosybrown3", "rosybrown4", "rosybrown5", "rosybrown6", "rosybrown7", "rosybrown8", "rosybrown9", "rosybrown10",
+ "mediumslateblue1", "mediumslateblue2", "mediumslateblue3", "mediumslateblue4", "mediumslateblue5", "mediumslateblue6", "mediumslateblue7", "mediumslateblue8", "mediumslateblue9", "mediumslateblue10",
+ "seagreen1", "seagreen2", "seagreen3", "seagreen4", "seagreen5", "seagreen6", "seagreen7", "seagreen8", "seagreen9", "seagreen10",
+ "mistyrose1", "mistyrose2", "mistyrose3", "mistyrose4", "mistyrose5", "mistyrose6", "mistyrose7", "mistyrose8", "mistyrose9", "mistyrose10",
+ "cadetblue1", "cadetblue2", "cadetblue3", "cadetblue4", "cadetblue5", "cadetblue6", "cadetblue7", "cadetblue8", "cadetblue9", "cadetblue10",
+ "goldenrod1", "goldenrod2", "goldenrod3", "goldenrod4", "goldenrod5", "goldenrod6", "goldenrod7", "goldenrod8", "goldenrod9", "goldenrod10"];
 
     let currentPlayer = 0;
     let diceRoll = 0;
     let players = [];
 
     // Vytvorenie 25x25 gridu
-    for (let y = 0; y < 50; y++) {
-      for (let x = 0; x < 50; x++) {
+    for (let y = 0; y < 100; y++) {
+      for (let x = 0; x < 100; x++) {
         const cell = document.createElement("div");
         cell.className = "cell";
         cell.dataset.x = x;
@@ -408,7 +427,7 @@
         const color = colors[i];
         let pos;
         do {
-          pos = Math.floor(Math.random() * (50 * 50));
+          pos = Math.floor(Math.random() * (100 * 100));
         } while (used.has(pos));
         used.add(pos);
 
