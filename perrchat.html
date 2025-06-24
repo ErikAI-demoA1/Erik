@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI Peer Chat</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; background: #f4f4f4; }
+    textarea { width: 100%; height: 100px; margin-bottom: 0.5rem; }
+    input[type=text] { width: 100%; margin-bottom: 0.5rem; }
+    button { margin: 5px; padding: 10px; }
+    .log { height: 150px; background: #fff; overflow-y: auto; border: 1px solid #ccc; padding: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h2>💬 ErikAI Peer Chat (bez servera)</h2>  <div>
+    <button onclick="startConnection()">1️⃣ Spusti spojenie (vytvor OFFER)</button>
+    <textarea id="offer" placeholder="Tu sa objaví tvoj offer..."></textarea><textarea id="remoteAnswer" placeholder="Sem vlož answer z druhého mobilu..."></textarea>
+<button onclick="addAnswer()">2️⃣ Vložiť odpoveď (ANSWER)</button>
+
+  </div>  <hr>  <div>
+    <textarea id="answer" placeholder="Ak ti niekto pošle OFFER, vlož sem..."></textarea>
+    <button onclick="createAnswer()">3️⃣ Vytvoriť odpoveď (ANSWER)</button>
+    <textarea id="sendAnswer" placeholder="Pošli tento answer späť druhému..."></textarea>
+  </div>  <hr>  <div>
+    <input type="text" id="message" placeholder="Napíš správu...">
+    <button onclick="sendMessage()">✉️ Poslať</button>
+    <div class="log" id="chat"></div>
+  </div>  <script>
+    let pc = new RTCPeerConnection();
+    let dc = pc.createDataChannel("chat");
+    dc.onmessage = (e) => {
+      document.getElementById("chat").innerHTML += `<div><b>🟢 Prijaté:</b> ${e.data}</div>`;
+    };
+    dc.onopen = () => {
+      document.getElementById("chat").innerHTML += `<div><i>✅ Spojenie nadviazané!</i></div>`;
+    };
+
+    async function startConnection() {
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      document.getElementById("offer").value = JSON.stringify(offer);
+    }
+
+    async function addAnswer() {
+      const answer = JSON.parse(document.getElementById("remoteAnswer").value);
+      await pc.setRemoteDescription(answer);
+    }
+
+    pc.ondatachannel = (e) => {
+      dc = e.channel;
+      dc.onmessage = (ev) => {
+        document.getElementById("chat").innerHTML += `<div><b>🟢 Prijaté:</b> ${ev.data}</div>`;
+      };
+    };
+
+    async function createAnswer() {
+      const offer = JSON.parse(document.getElementById("answer").value);
+      await pc.setRemoteDescription(offer);
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      document.getElementById("sendAnswer").value = JSON.stringify(answer);
+    }
+
+    function sendMessage() {
+      const msg = document.getElementById("message").value;
+      dc.send(msg);
+      document.getElementById("chat").innerHTML += `<div><b>🔵 Ty:</b> ${msg}</div>`;
+      document.getElementById("message").value = "";
+    }
+  </script></body>
+</html>
