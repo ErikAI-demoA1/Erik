@@ -1,74 +1,49 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!-- ErikAI TV - HTML & JS PIN prepojenie --><!-- 1. Mobil: Vygenerovanie PIN kódu --><!DOCTYPE html><html>
 <head>
-  <meta charset="UTF-8">
-  <title>ErikAI TV – Pripojenie</title>
+  <title>ErikAI TV - Mobil (PIN generátor)</title>
   <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 50px;
-    }
-    .box {
-      background-color: #111;
-      border-radius: 10px;
-      display: inline-block;
-      padding: 30px;
-      box-shadow: 0 0 20px green;
-    }
-    input {
-      padding: 10px;
-      font-size: 20px;
-      width: 200px;
-      text-align: center;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: lime;
-      border: none;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-    .error {
-      color: red;
-      margin-top: 10px;
-    }
-    .success {
-      color: lime;
-      margin-top: 10px;
-    }
+    body { background: black; color: white; text-align: center; font-family: sans-serif; }
+    .pin-box { font-size: 40px; margin-top: 40px; color: lime; }
   </style>
 </head>
 <body>
-  <h1>ErikAI TV</h1>
-  <p>Zariadenie v okolí sa chce pripojiť k tvojej TV.</p>
+  <h1>📱 ErikAI TV - Mobil</h1>
+  <p>Vygenerovaný kód PIN pre pripojenie:</p>
+  <div class="pin-box" id="pin"></div>  <script>
+    // Vygeneruj PIN
+    const pin = Math.floor(10000 + Math.random() * 90000);
+    document.getElementById("pin").innerText = pin;
 
-  <div class="box">
-    <h2>Zadaj kód z mobilu pre pripojenie</h2>
-    <input type="text" id="codeInput" placeholder="Zadaj kód...">
-    <br>
-    <button onclick="overKod()">Potvrdiť</button>
-    <div id="vysledok" class="error"></div>
-  </div>
-
-  <script>
-    const generovanyKod = "24567"; // Tento kód bol vygenerovaný mobilom
-
-    function overKod() {
-      const zadanyKod = document.getElementById("codeInput").value;
-      const vysledok = document.getElementById("vysledok");
-
-      if (zadanyKod === generovanyKod) {
-        vysledok.className = "success";
-        vysledok.textContent = "✅ Pripojenie úspešné!";
+    // Ulož do LocalStorage ako "shared channel"
+    localStorage.setItem("erikai_tv_pin", pin);
+  </script></body>
+</html><!-- 2. TV: Zadanie PIN a overenie --><!DOCTYPE html><html>
+<head>
+  <title>ErikAI TV - Televízor (pripojenie)</title>
+  <style>
+    body { background: black; color: white; text-align: center; font-family: sans-serif; }
+    input { padding: 10px; font-size: 20px; border-radius: 5px; }
+    button { padding: 10px 20px; background: lime; border: none; font-size: 18px; }
+    .error { color: red; margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <h1>📺 ErikAI TV - Televízor</h1>
+  <p>Zadaj kód z mobilu pre pripojenie:</p>
+  <input type="text" id="enteredPin" placeholder="Zadaj kód...">
+  <br><br>
+  <button onclick="checkPin()">Potvrdiť</button>
+  <div class="error" id="message"></div>  <script>
+    function checkPin() {
+      const entered = document.getElementById("enteredPin").value;
+      const correct = localStorage.getItem("erikai_tv_pin");
+      if (entered === correct) {
+        document.getElementById("message").style.color = "lime";
+        document.getElementById("message").innerText = "✅ Pripojenie úspešné!";
       } else {
-        vysledok.className = "error";
-        vysledok.textContent = "❌ Nesprávny kód, skús znova.";
+        document.getElementById("message").style.color = "red";
+        document.getElementById("message").innerText = "❌ Nesprávny kód, skús znova.";
       }
     }
-  </script>
-</body>
+  </script></body>
 </html>
