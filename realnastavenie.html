@@ -1,60 +1,100 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErikAI OS – Nastavenia</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #111;
-      color: white;
-      padding: 2rem;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #0f0;
+      padding: 20px;
     }
     h1 {
       text-align: center;
-      margin-bottom: 2rem;
     }
-    button, a.button {
+    button {
       display: block;
       width: 100%;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      font-size: 1.1rem;
-      background-color: #1e1e1e;
-      border: 2px solid #00ff88;
-      color: #00ff88;
+      padding: 15px;
+      margin: 10px auto;
+      background-color: #000;
+      border: 2px solid #0f0;
+      color: #0f0;
+      font-size: 16px;
       border-radius: 10px;
-      text-align: center;
-      text-decoration: none;
+      cursor: pointer;
     }
-    button:hover, a.button:hover {
-      background-color: #00ff88;
-      color: #111;
+    .fallback {
+      background-color: #111;
+      color: #fff;
+      border: 1px dashed #999;
+      padding: 10px;
+      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>⚙️ ErikAI OS – Nastavenia</h1>  <!-- Android only: priame odkazy -->  <a class="button" href="intent://android.settings.WIFI_SETTINGS#Intent;scheme=android-app;end">
-    📶 Otvoriť Wi-Fi nastavenia (Android)
-  </a>
-  <a class="button" href="intent://android.settings.BLUETOOTH_SETTINGS#Intent;scheme=android-app;end">
-    📳 Otvoriť Bluetooth nastavenia (Android)
-  </a>
-  <a class="button" href="intent://android.settings.BATTERY_SAVER_SETTINGS#Intent;scheme=android-app;end">
-    🔋 Otvoriť nastavenie batérie (Android)
-  </a>
-  <a class="button" href="intent://android.settings.SETTINGS#Intent;scheme=android-app;end">
-    ⚙️ Otvoriť hlavné nastavenia (Android)
-  </a>  <!-- Všeobecné: len návod -->  <button onclick="alert('Pre zapnutie Wi-Fi choď do: Nastavenia > Sieť > Wi-Fi a zapni ho ručne.')">
-    ℹ️ Pomoc: Wi-Fi (návod)
-  </button>
-  <button onclick="alert('Pre aktiváciu baterky posuň hornú lištu a klikni na ikonu baterky.')">
-    🔦 Zapnúť baterku (návod)
-  </button>
-  <button onclick="alert('Pre jas obrazovky choď do: Nastavenia > Displej > Jas.')">
-    ☀️ Nastavenie jasu (návod)
-  </button>
-  <button onclick="alert('Pre zapnutie Bluetooth: Nastavenia > Pripojenia > Bluetooth.')">
-    ℹ️ Pomoc: Bluetooth (návod)
-  </button></body>
+
+  <h1>⚙️ ErikAI OS – Nastavenia</h1>
+
+  <button onclick="openSetting('wifi')">📶 Otvoriť Wi-Fi nastavenia</button>
+  <div id="fallback-wifi" class="fallback">
+    👉 Otvor si nastavenia > Sieť & internet > Wi-Fi
+  </div>
+
+  <button onclick="openSetting('bluetooth')">🔵 Otvoriť Bluetooth nastavenia</button>
+  <div id="fallback-bluetooth" class="fallback">
+    👉 Otvor si nastavenia > Pripojené zariadenia > Bluetooth
+  </div>
+
+  <button onclick="openSetting('battery')">🔋 Otvoriť nastavenie batérie</button>
+  <div id="fallback-battery" class="fallback">
+    👉 Otvor si nastavenia > Batéria alebo Šetrenie batérie
+  </div>
+
+  <button onclick="openSetting('settings')">⚙️ Otvoriť hlavné nastavenia</button>
+  <div id="fallback-settings" class="fallback">
+    👉 Otvor si aplikáciu Nastavenia z domovskej obrazovky
+  </div>
+
+  <script>
+    function openSetting(type) {
+      let url = '';
+      switch (type) {
+        case 'wifi':
+          url = 'intent:#Intent;action=android.settings.WIFI_SETTINGS;end';
+          break;
+        case 'bluetooth':
+          url = 'intent:#Intent;action=android.settings.BLUETOOTH_SETTINGS;end';
+          break;
+        case 'battery':
+          url = 'intent:#Intent;action=android.settings.BATTERY_SAVER_SETTINGS;end';
+          break;
+        case 'settings':
+          url = 'intent:#Intent;action=android.settings.SETTINGS;end';
+          break;
+      }
+
+      // Pokus o presmerovanie
+      let opened = false;
+      try {
+        window.location.href = url;
+        opened = true;
+      } catch (e) {
+        opened = false;
+      }
+
+      // Po 2 sekundách zobraz fallback
+      setTimeout(() => {
+        if (!opened) {
+          document.getElementById(`fallback-${type}`).style.display = 'block';
+        }
+      }, 2000);
+    }
+  </script>
+
+</body>
 </html>
