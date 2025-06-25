@@ -2,40 +2,82 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI TV - Pripojenie</title>
+  <title>ErikAI TV – Pripojenie</title>
   <style>
-    body { background: black; color: white; font-family: sans-serif; text-align: center; padding: 2em; }
-    input, button { font-size: 1.2em; padding: 0.5em; margin: 1em; }
+    body {
+      background: black;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+    input, button {
+      font-size: 1.2em;
+      padding: 0.5em;
+      margin: 1em;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      background: #ff0000;
+      color: white;
+      cursor: pointer;
+    }
     .green { color: #00FF00; }
     .red { color: red; }
+    .animated { animation: blink 1s infinite; }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
   </style>
 </head>
 <body>
 
-  <h1>ErikAI TV – Pripojenie</h1>
+  <h1>🔐 ErikAI TV – Pripojenie zariadení</h1>
 
   <div id="mobil">
-    <h2>📱 ErikAI TV – Mobil</h2>
-    <button onclick="vygenerujPin()">🔐 Vygeneruj PIN</button>
+    <h2>📱 Mobil – Vygeneruj PIN</h2>
+    <button onclick="vygenerujPin()">🔄 Vygeneruj PIN</button>
     <p>PIN: <span id="vystupPin" class="green"></span></p>
+    <p id="casovac" style="color: gray;"></p>
   </div>
 
   <hr style="margin: 2em 0;">
 
   <div id="tv">
-    <h2>📺 ErikAI TV – Televízor</h2>
+    <h2>📺 Televízor – Zadaj PIN</h2>
     <input type="text" id="zadanyPin" placeholder="Zadaj PIN z mobilu">
-    <button onclick="overPin()">✅ Potvrdiť</button>
+    <button onclick="overPin()">✅ Pripojiť</button>
     <p id="vysledok"></p>
   </div>
 
   <script>
     let pin;
+    let timer;
 
     function vygenerujPin() {
       pin = Math.floor(10000 + Math.random() * 90000).toString();
       document.getElementById('vystupPin').textContent = pin;
       localStorage.setItem('erikai_pin', pin);
+
+      const vystup = document.getElementById('casovac');
+      let sekundy = 60;
+      vystup.textContent = `PIN platný ešte: ${sekundy} sekúnd`;
+
+      clearInterval(timer);
+      timer = setInterval(() => {
+        sekundy--;
+        if (sekundy > 0) {
+          vystup.textContent = `PIN platný ešte: ${sekundy} sekúnd`;
+        } else {
+          clearInterval(timer);
+          localStorage.removeItem('erikai_pin');
+          document.getElementById('vystupPin').textContent = '❌ PIN vypršal';
+          vystup.textContent = '';
+        }
+      }, 1000);
     }
 
     function overPin() {
@@ -43,11 +85,14 @@
       const uložené = localStorage.getItem('erikai_pin');
       const výstup = document.getElementById('vysledok');
 
-      if (zadané === uložené) {
-        výstup.innerHTML = '✅ <span class="green">Pripojenie úspešné!</span>';
-      } else {
-        výstup.innerHTML = '❌ <span class="red">Nesprávny PIN, skús znova.</span>';
-      }
+      výstup.innerHTML = '🔄 <span class="animated">Pripájam sa...</span>';
+      setTimeout(() => {
+        if (zadané === uložené && zadané !== null) {
+          výstup.innerHTML = '✅ <span class="green">Pripojenie úspešné!</span>';
+        } else {
+          výstup.innerHTML = '❌ <span class="red">Nesprávny PIN alebo vypršal.</span>';
+        }
+      }, 1500);
     }
   </script>
 
