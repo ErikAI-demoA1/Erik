@@ -5,6 +5,7 @@ self.addEventListener('install', e => {
       return cache.addAll([
         'index.html',
         'index2.html',
+        'index3.html',
         'android_apk.html',
         'budik.html',
         'create_pwa.html',
