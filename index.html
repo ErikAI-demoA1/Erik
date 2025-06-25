@@ -2,55 +2,63 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>Login | ErikAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Licencia – ErikAI</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin: 0.5rem;
+      width: 60%;
+    }
+    button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .error {
+      color: red;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
 
-<h1>🔐 Prihlásenie do ErikAI</h1>
+  <h1>🔐 Prístup do ErikAI</h1>
+  <p>Zadaj licenčný kód pre odomknutie funkcií</p>
 
-<input type="text" id="meno" placeholder="Tvoje meno"><br>
-<input type="password" id="heslo" placeholder="Heslo"><br>
-<input type="password" id="kod" placeholder="Špeciálny kód"><br>
-<button onclick="prihlas()">Prihlásiť sa</button>
+  <input type="text" id="accessKey" placeholder="Sem zadaj kód..." />
+  <br>
+  <button onclick="checkAccess()">Odomknúť</button>
 
-<!-- Skryté tlačidlo na prechod -->
-<div id="pokracuj" style="display:none; margin-top: 20px;">
-  <p>✅ Úspešné prihlásenie!</p>
-  <a href="index3.html">
-    <button>➡️ Pokračovať do ErikAI</button>
-  </a>
-</div>
+  <div id="error" class="error"></div>
 
-<script>
-  if (!localStorage.getItem("specKod")) {
-    const kod = prompt("🔐 Zadaj špeciálny kód (iba raz):");
-    const meno = prompt("👤 Tvoje meno:");
-    const heslo = prompt("🔑 Tvoje heslo:");
-    if (!kod || !meno || !heslo) {
-      alert("❌ Všetky údaje sú povinné.");
-      location.reload();
-    } else {
-      localStorage.setItem("specKod", kod);
-      localStorage.setItem("meno", meno);
-      localStorage.setItem("heslo", heslo);
+  <script>
+    // Tvoj špeciálny licenčný kód
+    const LICENCE_KEY = "ERIK-2025-A1";
+
+    // Ak už je prístup povolený, presmeruj na hlavnú stránku
+    if (localStorage.getItem("erik_access") === "granted") {
+      window.location.href = "main.html";
     }
-  }
 
-  function prihlas() {
-    const zMeno = document.getElementById("meno").value;
-    const zHeslo = document.getElementById("heslo").value;
-    const zKod = document.getElementById("kod").value;
-    const meno = localStorage.getItem("meno");
-    const heslo = localStorage.getItem("heslo");
-    const kod = localStorage.getItem("specKod");
-
-    if (zMeno === meno && zHeslo === heslo && zKod === kod) {
-      document.getElementById("pokracuj").style.display = "block";
-    } else {
-      alert("❌ Nesprávne údaje.");
+    function checkAccess() {
+      const input = document.getElementById("accessKey").value.trim();
+      if (input === LICENCE_KEY) {
+        localStorage.setItem("erik_access", "granted");
+        window.location.href = "main.html";
+      } else {
+        document.getElementById("error").innerText = "❌ Nesprávny kód.";
+      }
     }
-  }
-</script>
+  </script>
 
 </body>
 </html>
