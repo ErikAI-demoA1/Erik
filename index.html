@@ -75,7 +75,7 @@
 
     function checkAccess() {
       const input = inputField.value.trim();
-      if (input === LICENCE_KEY) {
+      if (LICENCE_KEY.includes(input)) {
         localStorage.setItem("erik_access", "granted");
         clearInterval(interval);
         window.location.href = "index3.html";
