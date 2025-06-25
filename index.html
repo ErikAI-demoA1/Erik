@@ -41,11 +41,14 @@
   <div id="error" class="error"></div>
 
   <script>
-    // Tvoj špeciálny licenčný kód
     const LICENCE_KEY = "ERIK-2025-A1";
+    const ACCESS_DURATION_MS = 10 * 60 * 1000; // 10 minút
 
-    // Ak už je prístup povolený, presmeruj na hlavnú stránku
-    if (localStorage.getItem("erik_access") === "granted") {
+    // ⏱ Skontroluj, či je prístup platný
+    const granted = localStorage.getItem("erik_access") === "granted";
+    const expiry = parseInt(localStorage.getItem("erik_expiry") || "0");
+
+    if (granted && Date.now() < expiry) {
       window.location.href = "index3.html";
     }
 
@@ -53,11 +56,28 @@
       const input = document.getElementById("accessKey").value.trim();
       if (input === LICENCE_KEY) {
         localStorage.setItem("erik_access", "granted");
+        localStorage.setItem("erik_expiry", Date.now() + ACCESS_DURATION_MS);
         window.location.href = "index3.html";
       } else {
         document.getElementById("error").innerText = "❌ Nesprávny kód.";
       }
     }
+
+    // 🛑 Odhlásenie pri zatvorení okna
+    window.addEventListener("beforeunload", () => {
+      localStorage.removeItem("erik_access");
+      localStorage.removeItem("erik_expiry");
+    });
+
+    // ⏰ Odhlásenie po 10 minútach nečinnosti
+    setInterval(() => {
+      const expiry = parseInt(localStorage.getItem("erik_expiry") || "0");
+      if (Date.now() > expiry) {
+        localStorage.removeItem("erik_access");
+        localStorage.removeItem("erik_expiry");
+        location.reload(); // znova ukáže prihlasenie
+      }
+    }, 10000); // kontroluje každých 10 sekúnd
   </script>
 
 </body>
