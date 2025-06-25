@@ -2,62 +2,60 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI TV & Ovládač</title>
+  <title>ErikAI TV</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2em; background: black; color: white; }
-    button { font-size: 1.2em; margin: 1em; padding: 0.5em 1em; }
-    .big { font-size: 2em; margin: 1em 0; }
-    .tv-display { border: 2px solid white; padding: 1em; margin-top: 2em; }
+    body { font-family: sans-serif; background: black; color: white; text-align: center; padding: 2em; }
+    input, button { font-size: 1.2em; padding: 0.5em; margin: 1em; }
+    .green { color: #00FF00; }
+    #tv-display { font-size: 2em; margin-top: 2em; }
   </style>
 </head>
 <body>
 
-  <h1>ErikAI TV</h1>
+  <h1>ErikAI TV Pripojenie</h1>
 
-  <div id="modeSelect">
-    <p class="big">Zvoľ režim:</p>
-    <button onclick="setMode('tv')">🖥️ TV režim</button>
-    <button onclick="setMode('remote')">📱 Mobilný ovládač</button>
-  </div>
-
-  <div id="tvMode" style="display:none;">
-    <h2>🖥️ Zobrazenie na TV</h2>
-    <div id="tvDisplay" class="tv-display">Čakám na príkaz z mobilu...</div>
-  </div>
-
-  <div id="remoteMode" style="display:none;">
-    <h2>📱 Ovládač</h2>
-    <button onclick="sendToTV('📰 Zobraziť novinky')">📰 Novinky</button>
-    <button onclick="sendToTV('🎥 Prehrať video')">🎥 Video</button>
-    <button onclick="sendToTV('🎵 Pusti hudbu')">🎵 Hudba</button>
-    <button onclick="sendToTV('📺 Režim TV')">📺 TV režim</button>
-  </div>
+  <div id="content"></div>
 
   <script>
-    function setMode(mode) {
-      document.getElementById('modeSelect').style.display = 'none';
-      if (mode === 'tv') {
-        document.getElementById('tvMode').style.display = 'block';
-        startTVListener();
-      } else {
-        document.getElementById('remoteMode').style.display = 'block';
-      }
-    }
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
 
-    function sendToTV(text) {
-      localStorage.setItem('erikai_message', text + " " + Date.now());
-    }
+    const content = document.getElementById("content");
 
-    function startTVListener() {
-      let lastMessage = '';
+    if (mode === "tv") {
+      // TV režim
+      const url = `${window.location.origin}${window.location.pathname}?mode=mobile`;
+      content.innerHTML = `<p>Naskenuj tento QR kód z mobilu:</p><canvas id="qr"></canvas><div id="tv-display">Čakám na pripojenie…</div>`;
+      QRCode.toCanvas(document.getElementById('qr'), url);
+
+      // TV číta každú sekundu
       setInterval(() => {
-        const message = localStorage.getItem('erikai_message');
-        if (message && message !== lastMessage) {
-          lastMessage = message;
-          const cleanText = message.replace(/\s\d+$/, '');
-          document.getElementById('tvDisplay').textContent = cleanText;
+        const data = localStorage.getItem("erikai_data");
+        if (data) {
+          document.getElementById("tv-display").innerHTML = `<span class="green">📱 Mobil hovorí:</span> ${data}`;
         }
       }, 1000);
+
+    } else if (mode === "mobile") {
+      // Mobil režim
+      content.innerHTML = `
+        <p>Zadaj správu pre TV:</p>
+        <input id="msg" placeholder="napr. 'Ahoj z mobilu'" />
+        <button onclick="posli()">📤 Pošli na TV</button>
+        <p class="green">Dáta budú videné na TV.</p>
+      `;
+    } else {
+      // Výber režimu
+      content.innerHTML = `
+        <button onclick="location.href='?mode=tv'">Spustiť ako TV</button>
+        <button onclick="location.href='?mode=mobile'">Spustiť ako Mobil</button>
+      `;
+    }
+
+    function posli() {
+      const text = document.getElementById("msg").value;
+      localStorage.setItem("erikai_data", text);
     }
   </script>
 
