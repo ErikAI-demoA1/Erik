@@ -2,34 +2,30 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI – Prihlásenie</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 2rem; text-align: center; }
-    input { padding: 10px; margin: 5px; border-radius: 5px; border: none; width: 80%; max-width: 300px; }
-    button { padding: 10px 20px; border: none; background: #d40000; color: white; border-radius: 5px; cursor: pointer; }
-    h1 { margin-bottom: 20px; }
-  </style>
+  <title>Login | ErikAI</title>
 </head>
 <body>
 
-<h1>🔐 Vstup do ErikAI</h1>
-<p id="info">Zadaj svoje prihlasovacie údaje</p>
+<h1>🔐 Prihlásenie do ErikAI</h1>
 
-<div id="form" style="margin-top: 2rem;">
-  <input type="text" id="meno" placeholder="Tvoje meno"><br>
-  <input type="password" id="heslo" placeholder="Heslo"><br>
-  <input type="password" id="kod" placeholder="Špeciálny kód"><br>
-  <button onclick="prihlas()">Prihlásiť sa</button>
+<input type="text" id="meno" placeholder="Tvoje meno"><br>
+<input type="password" id="heslo" placeholder="Heslo"><br>
+<input type="password" id="kod" placeholder="Špeciálny kód"><br>
+<button onclick="prihlas()">Prihlásiť sa</button>
+
+<!-- Skryté tlačidlo na prechod -->
+<div id="pokracuj" style="display:none; margin-top: 20px;">
+  <p>✅ Úspešné prihlásenie!</p>
+  <a href="index.html">
+    <button>➡️ Pokračovať do ErikAI</button>
+  </a>
 </div>
 
 <script>
-  // Prvé spustenie – registrácia
   if (!localStorage.getItem("specKod")) {
-    const kod = prompt("🔐 Zadaj špeciálny kód (iba raz, nejde zmeniť):");
+    const kod = prompt("🔐 Zadaj špeciálny kód (iba raz):");
     const meno = prompt("👤 Tvoje meno:");
     const heslo = prompt("🔑 Tvoje heslo:");
-
     if (!kod || !meno || !heslo) {
       alert("❌ Všetky údaje sú povinné.");
       location.reload();
@@ -37,7 +33,6 @@
       localStorage.setItem("specKod", kod);
       localStorage.setItem("meno", meno);
       localStorage.setItem("heslo", heslo);
-      alert("✅ Registrované. Teraz sa prihlás.");
     }
   }
 
@@ -45,13 +40,12 @@
     const zMeno = document.getElementById("meno").value;
     const zHeslo = document.getElementById("heslo").value;
     const zKod = document.getElementById("kod").value;
-
     const meno = localStorage.getItem("meno");
     const heslo = localStorage.getItem("heslo");
     const kod = localStorage.getItem("specKod");
 
     if (zMeno === meno && zHeslo === heslo && zKod === kod) {
-      window.location.href = "index.html"; // tu daj názov tvojej hlavnej stránky
+      document.getElementById("pokracuj").style.display = "block";
     } else {
       alert("❌ Nesprávne údaje.");
     }
