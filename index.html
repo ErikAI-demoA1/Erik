@@ -49,45 +49,32 @@
   <script>
     const LICENCE_KEY = "ERIK-2025-A1";
 
-    // Ak už bol prístup udelený
+    // Presmerovanie ak už má povolený prístup
     if (localStorage.getItem("erik_access") === "granted") {
       window.location.href = "index3.html";
     }
 
-    // Časovač
+    // Časovač na zadanie kódu (20 sekúnd)
     let timeLeft = 20;
     const timerElement = document.getElementById("timer");
+    const inputField = document.getElementById("accessKey");
+
     const interval = setInterval(() => {
       timeLeft--;
       timerElement.innerText = `⏳ Čas na zadanie: ${timeLeft} sekúnd`;
       if (timeLeft <= 0) {
         clearInterval(interval);
-        document.getElementById("accessKey").value = "";
+        inputField.value = "";
         document.getElementById("error").innerText = "❌ Čas vypršal. Skús znova.";
-        timeLeft = 20;
         setTimeout(() => {
           document.getElementById("error").innerText = "";
-          timerElement.innerText = `⏳ Čas na zadanie: 20 sekúnd`;
-          startTimer(); // znovu spusti časovač
+          window.location.reload();
         }, 3000);
       }
     }, 1000);
 
-    function startTimer() {
-      timeLeft = 20;
-      setInterval(() => {
-        timeLeft--;
-        timerElement.innerText = `⏳ Čas na zadanie: ${timeLeft} sekúnd`;
-        if (timeLeft <= 0) {
-          clearInterval(interval);
-          document.getElementById("accessKey").value = "";
-          document.getElementById("error").innerText = "❌ Čas vypršal. Skús znova.";
-        }
-      }, 1000);
-    }
-
     function checkAccess() {
-      const input = document.getElementById("accessKey").value.trim();
+      const input = inputField.value.trim();
       if (input === LICENCE_KEY) {
         localStorage.setItem("erik_access", "granted");
         clearInterval(interval);
@@ -96,6 +83,28 @@
         document.getElementById("error").innerText = "❌ Nesprávny kód.";
       }
     }
+
+    // ========== Toto patrí do index3.html ========== //
+    // Ak chceš automatické odhlásenie po 10 sekundách neaktivity, vlož do index3.html nasledujúci kód:
+    /*
+    <script>
+      let logoutTimer;
+      function resetLogoutTimer() {
+        clearTimeout(logoutTimer);
+        logoutTimer = setTimeout(() => {
+          localStorage.removeItem("erik_access");
+          alert("⏳ Bol si neaktívny. Prístup bol zrušený.");
+          window.location.href = "index.html";
+        }, 10000); // 10 sekúnd
+      }
+
+      // Aktivita používateľa = resetuj časovač
+      window.onload = resetLogoutTimer;
+      document.onmousemove = resetLogoutTimer;
+      document.onkeypress = resetLogoutTimer;
+      document.ontouchstart = resetLogoutTimer;
+    </script>
+    */
   </script>
 
 </body>
