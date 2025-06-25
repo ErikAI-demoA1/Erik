@@ -27,6 +27,11 @@
       color: red;
       margin-top: 1rem;
     }
+    .timer {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #00ffcc;
+    }
   </style>
 </head>
 <body>
@@ -38,46 +43,59 @@
   <br>
   <button onclick="checkAccess()">Odomknúť</button>
 
+  <div class="timer" id="timer">⏳ Čas na zadanie: 20 sekúnd</div>
   <div id="error" class="error"></div>
 
   <script>
     const LICENCE_KEY = "ERIK-2025-A1";
-    const ACCESS_DURATION_MS = 10 * 60 * 1000; // 10 minút
 
-    // ⏱ Skontroluj, či je prístup platný
-    const granted = localStorage.getItem("erik_access") === "granted";
-    const expiry = parseInt(localStorage.getItem("erik_expiry") || "0");
-
-    if (granted && Date.now() < expiry) {
+    // Ak už bol prístup udelený
+    if (localStorage.getItem("erik_access") === "granted") {
       window.location.href = "index3.html";
+    }
+
+    // Časovač
+    let timeLeft = 20;
+    const timerElement = document.getElementById("timer");
+    const interval = setInterval(() => {
+      timeLeft--;
+      timerElement.innerText = `⏳ Čas na zadanie: ${timeLeft} sekúnd`;
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        document.getElementById("accessKey").value = "";
+        document.getElementById("error").innerText = "❌ Čas vypršal. Skús znova.";
+        timeLeft = 20;
+        setTimeout(() => {
+          document.getElementById("error").innerText = "";
+          timerElement.innerText = `⏳ Čas na zadanie: 20 sekúnd`;
+          startTimer(); // znovu spusti časovač
+        }, 3000);
+      }
+    }, 1000);
+
+    function startTimer() {
+      timeLeft = 20;
+      setInterval(() => {
+        timeLeft--;
+        timerElement.innerText = `⏳ Čas na zadanie: ${timeLeft} sekúnd`;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          document.getElementById("accessKey").value = "";
+          document.getElementById("error").innerText = "❌ Čas vypršal. Skús znova.";
+        }
+      }, 1000);
     }
 
     function checkAccess() {
       const input = document.getElementById("accessKey").value.trim();
       if (input === LICENCE_KEY) {
         localStorage.setItem("erik_access", "granted");
-        localStorage.setItem("erik_expiry", Date.now() + ACCESS_DURATION_MS);
+        clearInterval(interval);
         window.location.href = "index3.html";
       } else {
         document.getElementById("error").innerText = "❌ Nesprávny kód.";
       }
     }
-
-    // 🛑 Odhlásenie pri zatvorení okna
-    window.addEventListener("beforeunload", () => {
-      localStorage.removeItem("erik_access");
-      localStorage.removeItem("erik_expiry");
-    });
-
-    // ⏰ Odhlásenie po 10 minútach nečinnosti
-    setInterval(() => {
-      const expiry = parseInt(localStorage.getItem("erik_expiry") || "0");
-      if (Date.now() > expiry) {
-        localStorage.removeItem("erik_access");
-        localStorage.removeItem("erik_expiry");
-        location.reload(); // znova ukáže prihlasenie
-      }
-    }, 10000); // kontroluje každých 10 sekúnd
   </script>
 
 </body>
