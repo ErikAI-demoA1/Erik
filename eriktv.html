@@ -2,22 +2,27 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Erik TV App</title>
+  <title>ErikAI TV – QR kód</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body { background: black; color: white; font-family: sans-serif; text-align: center; padding-top: 5vh; }
+    #qr { margin-top: 3vh; }
+  </style>
 </head>
 <body>
 
-  <h1>Vitaj v Erik TV!</h1>
-  <p>Firebase by mal byť aktívny.</p>
+  <h1>📺 ErikAI TV QR</h1>
+  <p>Naskenuj QR kód mobilom a spojíš sa s Erik TV</p>
+  <div id="qr"></div>
 
-  <!-- FIREBASE KÓD -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
-    import { firebaseConfig } from "./config.js"; <!-- toto je dôležité -->
+  <script>
+    // Tu zadaj adresu kam má mobil ísť – môže byť aj IP alebo tvoje web URL
+    const adresa = "https://erikai-demoa1.github.io/Erik/"; // napr. tvoj web
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    QRCode.toCanvas(adresa, { width: 250 }, function (err, canvas) {
+      if (err) console.error(err);
+      document.getElementById("qr").appendChild(canvas);
+    });
   </script>
 
 </body>
