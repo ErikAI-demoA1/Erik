@@ -2,97 +2,90 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ErikAI OS – Nastavenia</title>
+  <title>ErikAI OS – Pomoc s nastaveniami</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       background-color: #000;
       color: #0f0;
+      font-family: Arial, sans-serif;
       padding: 20px;
     }
     h1 {
       text-align: center;
+      color: #00ff00;
     }
-    button {
-      display: block;
+    select, button {
       width: 100%;
-      padding: 15px;
-      margin: 10px auto;
-      background-color: #000;
-      border: 2px solid #0f0;
-      color: #0f0;
-      font-size: 16px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .fallback {
-      background-color: #111;
-      color: #fff;
-      border: 1px dashed #999;
       padding: 10px;
       margin-top: 10px;
-      display: none;
+      font-size: 16px;
+      background: #000;
+      color: #0f0;
+      border: 2px solid #0f0;
+      border-radius: 10px;
+    }
+    .navod {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed #0f0;
+      background-color: #111;
     }
   </style>
 </head>
 <body>
 
-  <h1>⚙️ ErikAI OS – Nastavenia</h1>
+  <h1>⚙️ ErikAI OS – Návod na nastavenia</h1>
 
-  <button onclick="openSetting('wifi')">📶 Otvoriť Wi-Fi nastavenia</button>
-  <div id="fallback-wifi" class="fallback">
-    👉 Otvor si nastavenia > Sieť & internet > Wi-Fi
-  </div>
+  <label for="system">Vyber svoj systém:</label>
+  <select id="system" onchange="zobrazNavod()">
+    <option value="">-- Vyber --</option>
+    <option value="android">📱 Android</option>
+    <option value="ios">🍏 iOS (Apple)</option>
+    <option value="ine">💻 Iné (Huawei, Xiaomi, atď.)</option>
+  </select>
 
-  <button onclick="openSetting('bluetooth')">🔵 Otvoriť Bluetooth nastavenia</button>
-  <div id="fallback-bluetooth" class="fallback">
-    👉 Otvor si nastavenia > Pripojené zariadenia > Bluetooth
-  </div>
-
-  <button onclick="openSetting('battery')">🔋 Otvoriť nastavenie batérie</button>
-  <div id="fallback-battery" class="fallback">
-    👉 Otvor si nastavenia > Batéria alebo Šetrenie batérie
-  </div>
-
-  <button onclick="openSetting('settings')">⚙️ Otvoriť hlavné nastavenia</button>
-  <div id="fallback-settings" class="fallback">
-    👉 Otvor si aplikáciu Nastavenia z domovskej obrazovky
-  </div>
+  <div class="navod" id="navod" style="display:none;"></div>
 
   <script>
-    function openSetting(type) {
-      let url = '';
-      switch (type) {
-        case 'wifi':
-          url = 'intent:#Intent;action=android.settings.WIFI_SETTINGS;end';
-          break;
-        case 'bluetooth':
-          url = 'intent:#Intent;action=android.settings.BLUETOOTH_SETTINGS;end';
-          break;
-        case 'battery':
-          url = 'intent:#Intent;action=android.settings.BATTERY_SAVER_SETTINGS;end';
-          break;
-        case 'settings':
-          url = 'intent:#Intent;action=android.settings.SETTINGS;end';
-          break;
+    function zobrazNavod() {
+      const typ = document.getElementById("system").value;
+      const navodBox = document.getElementById("navod");
+      navodBox.style.display = "block";
+
+      let obsah = "";
+
+      if (typ === "android") {
+        obsah = `
+          <h3>📱 Android – Návody:</h3>
+          <ul>
+            <li><b>Wi-Fi:</b> Otvor aplikáciu <i>Nastavenia</i> > <i>Sieť a internet</i> > <i>Wi-Fi</i></li>
+            <li><b>Bluetooth:</b> Nastavenia > Pripojené zariadenia > Bluetooth</li>
+            <li><b>Batéria:</b> Nastavenia > Batéria alebo Energetický manažment</li>
+            <li><b>Hlavné nastavenia:</b> Otvor aplikáciu <i>Nastavenia</i> z domovskej obrazovky</li>
+          </ul>`;
+      } else if (typ === "ios") {
+        obsah = `
+          <h3>🍏 Apple (iOS) – Návody:</h3>
+          <ul>
+            <li><b>Wi-Fi:</b> Otvor <i>Nastavenia</i> > <i>Wi-Fi</i></li>
+            <li><b>Bluetooth:</b> Nastavenia > Bluetooth</li>
+            <li><b>Batéria:</b> Nastavenia > Batéria > Stav batérie</li>
+            <li><b>Hlavné nastavenia:</b> Otvor aplikáciu <i>Settings</i></li>
+          </ul>`;
+      } else if (typ === "ine") {
+        obsah = `
+          <h3>💻 Iné systémy – Návody:</h3>
+          <ul>
+            <li><b>Huawei:</b> Nastavenia > Bezdrôtové pripojenie > Wi-Fi / Bluetooth</li>
+            <li><b>Xiaomi:</b> Nastavenia > Wi-Fi / Bluetooth / Batéria</li>
+            <li><b>Samsung:</b> Nastavenia > Pripojenia > Wi-Fi / Bluetooth</li>
+            <li><b>Všeobecne:</b> Otvor aplikáciu <i>Nastavenia</i> a pohľadaj príslušnú sekciu podľa názvu</li>
+          </ul>`;
+      } else {
+        obsah = "⚠️ Vyber si prosím platný systém vyššie.";
       }
 
-      // Pokus o presmerovanie
-      let opened = false;
-      try {
-        window.location.href = url;
-        opened = true;
-      } catch (e) {
-        opened = false;
-      }
-
-      // Po 2 sekundách zobraz fallback
-      setTimeout(() => {
-        if (!opened) {
-          document.getElementById(`fallback-${type}`).style.display = 'block';
-        }
-      }, 2000);
+      navodBox.innerHTML = obsah;
     }
   </script>
 
