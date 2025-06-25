@@ -12,78 +12,83 @@
   </style>
 </head>
 <body>
+
   <h2>💬 ErikAI Peer Chat (cez kód)</h2>
 
+  <!-- Krok 1 - Vytvorenie kódu (mobil 1) -->
   <button onclick="vytvorKod()">🔐 Vytvor kód (mobil 1)</button>
   <textarea id="vygenerovanyKod" placeholder="Tu sa zobrazí tvoj kód..."></textarea>
 
-  <input type="text" id="prijatyKod" placeholder="Sem vlož kód od kamoša...">
+  <!-- Krok 2 - Pripojenie (mobil 2) -->
+  <input type="text" id="prijatyKod" placeholder="Sem vlož kód od kamoša (mobil 2)">
   <button onclick="pripojKod()">🔓 Pripoj sa (mobil 2)</button>
 
-  <div class="status" id="stavSpojenia">❌ Zatiaľ nie ste spojení</div>
+  <!-- Krok 3 - Mobil 1 vloží spätný kód (ANSWER) -->
+  <textarea id="answerFromFriend" placeholder="Sem vlož spätný kód z mobilu 2..."></textarea>
+  <button onclick="vlozAnswer()">✅ Vložiť spätný kód (mobil 1)</button>
 
+  <!-- Stav a chat -->
+  <div class="status" id="stavSpojenia">❌ Zatiaľ nie ste spojení</div>
   <input type="text" id="sprava" placeholder="Napíš správu...">
   <button onclick="odosliSpravu()">✉️ Poslať</button>
   <div class="log" id="chat"></div>
 
-  <script>
-    let pc;
-    let dc;
-    let spojene = false;
+<script>
+  let pc;
+  let dc;
+  let spojene = false;
 
-    const konfiguracia = {
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-    };
+  async function vytvorKod() {
+    pc = new RTCPeerConnection();
+    dc = pc.createDataChannel("chat");
+    nastavChat();
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    document.getElementById("vygenerovanyKod").value = btoa(JSON.stringify(offer));
+  }
 
-    async function vytvorKod() {
-      pc = new RTCPeerConnection(konfiguracia);
-      dc = pc.createDataChannel("chat");
+  async function pripojKod() {
+    const kod = document.getElementById("prijatyKod").value;
+    const offer = JSON.parse(atob(kod));
+    pc = new RTCPeerConnection();
+    pc.ondatachannel = (e) => {
+      dc = e.channel;
       nastavChat();
+    };
+    await pc.setRemoteDescription(offer);
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    const kodAnswer = btoa(JSON.stringify(answer));
+    prompt("Pošli tento spätný kód (ANSWER) naspäť prvému mobilu:", kodAnswer);
+  }
 
-      const offer = await pc.createOffer();
-      await pc.setLocalDescription(offer);
-      document.getElementById("vygenerovanyKod").value = btoa(JSON.stringify(offer));
+  async function vlozAnswer() {
+    const answer = JSON.parse(atob(document.getElementById("answerFromFriend").value));
+    await pc.setRemoteDescription(answer);
+  }
+
+  function nastavChat() {
+    dc.onopen = () => {
+      spojene = true;
+      document.getElementById("stavSpojenia").textContent = "✅ Ste spojení, môžte písať!";
+      document.getElementById("stavSpojenia").style.color = "green";
+    };
+    dc.onmessage = (e) => {
+      document.getElementById("chat").innerHTML += `<div><b>🟢 Kamoš:</b> ${e.data}</div>`;
+    };
+  }
+
+  function odosliSpravu() {
+    const text = document.getElementById("sprava").value;
+    if (!spojene) {
+      alert("Najprv sa musíte spojiť cez kód!");
+      return;
     }
+    dc.send(text);
+    document.getElementById("chat").innerHTML += `<div><b>🔵 Ty:</b> ${text}</div>`;
+    document.getElementById("sprava").value = "";
+  }
+</script>
 
-    async function pripojKod() {
-      const kod = document.getElementById("prijatyKod").value;
-      const offer = JSON.parse(atob(kod));
-      pc = new RTCPeerConnection(konfiguracia);
-
-      pc.ondatachannel = (e) => {
-        dc = e.channel;
-        nastavChat();
-      };
-
-      await pc.setRemoteDescription(offer);
-      const answer = await pc.createAnswer();
-      await pc.setLocalDescription(answer);
-
-      const kodAnswer = btoa(JSON.stringify(answer));
-      prompt("Pošli tento kód naspäť prvému mobilu:", kodAnswer);
-    }
-
-    function nastavChat() {
-      dc.onopen = () => {
-        spojene = true;
-        document.getElementById("stavSpojenia").textContent = "✅ Ste spojení, môžete písať!";
-        document.getElementById("stavSpojenia").style.color = "green";
-      };
-      dc.onmessage = (e) => {
-        document.getElementById("chat").innerHTML += `<div><b>🟢 Kamoš:</b> ${e.data}</div>`;
-      };
-    }
-
-    function odosliSpravu() {
-      const text = document.getElementById("sprava").value;
-      if (!spojene) {
-        alert("Najprv sa musíte spojiť cez kód!");
-        return;
-      }
-      dc.send(text);
-      document.getElementById("chat").innerHTML += `<div><b>🔵 Ty:</b> ${text}</div>`;
-      document.getElementById("sprava").value = "";
-    }
-  </script>
 </body>
 </html>
