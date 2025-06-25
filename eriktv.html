@@ -2,27 +2,63 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI TV – QR kód</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <title>ErikAI TV & Ovládač</title>
   <style>
-    body { background: black; color: white; font-family: sans-serif; text-align: center; padding-top: 5vh; }
-    #qr { margin-top: 3vh; }
+    body { font-family: sans-serif; text-align: center; padding: 2em; background: black; color: white; }
+    button { font-size: 1.2em; margin: 1em; padding: 0.5em 1em; }
+    .big { font-size: 2em; margin: 1em 0; }
+    .tv-display { border: 2px solid white; padding: 1em; margin-top: 2em; }
   </style>
 </head>
 <body>
 
-  <h1>📺 ErikAI TV QR</h1>
-  <p>Naskenuj QR kód mobilom a spojíš sa s Erik TV</p>
-  <div id="qr"></div>
+  <h1>ErikAI TV</h1>
+
+  <div id="modeSelect">
+    <p class="big">Zvoľ režim:</p>
+    <button onclick="setMode('tv')">🖥️ TV režim</button>
+    <button onclick="setMode('remote')">📱 Mobilný ovládač</button>
+  </div>
+
+  <div id="tvMode" style="display:none;">
+    <h2>🖥️ Zobrazenie na TV</h2>
+    <div id="tvDisplay" class="tv-display">Čakám na príkaz z mobilu...</div>
+  </div>
+
+  <div id="remoteMode" style="display:none;">
+    <h2>📱 Ovládač</h2>
+    <button onclick="sendToTV('📰 Zobraziť novinky')">📰 Novinky</button>
+    <button onclick="sendToTV('🎥 Prehrať video')">🎥 Video</button>
+    <button onclick="sendToTV('🎵 Pusti hudbu')">🎵 Hudba</button>
+    <button onclick="sendToTV('📺 Režim TV')">📺 TV režim</button>
+  </div>
 
   <script>
-    // Tu zadaj adresu kam má mobil ísť – môže byť aj IP alebo tvoje web URL
-    const adresa = "https://erikai-demoa1.github.io/ErikAI/"; // napr. tvoj web
+    function setMode(mode) {
+      document.getElementById('modeSelect').style.display = 'none';
+      if (mode === 'tv') {
+        document.getElementById('tvMode').style.display = 'block';
+        startTVListener();
+      } else {
+        document.getElementById('remoteMode').style.display = 'block';
+      }
+    }
 
-    QRCode.toCanvas(adresa, { width: 250 }, function (err, canvas) {
-      if (err) console.error(err);
-      document.getElementById("qr").appendChild(canvas);
-    });
+    function sendToTV(text) {
+      localStorage.setItem('erikai_message', text + " " + Date.now());
+    }
+
+    function startTVListener() {
+      let lastMessage = '';
+      setInterval(() => {
+        const message = localStorage.getItem('erikai_message');
+        if (message && message !== lastMessage) {
+          lastMessage = message;
+          const cleanText = message.replace(/\s\d+$/, '');
+          document.getElementById('tvDisplay').textContent = cleanText;
+        }
+      }, 1000);
+    }
   </script>
 
 </body>
