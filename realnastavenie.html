@@ -10,11 +10,20 @@
       font-family: sans-serif;
       padding: 1rem;
     }
-    h1, h2 {
-      color: #0f0;
+    select {
+      font-size: 1rem;
+      padding: 0.3rem;
+      margin-bottom: 1rem;
     }
     .section {
+      display: none;
+      border: 1px solid #0f0;
+      padding: 1rem;
+      border-radius: 10px;
       margin-bottom: 2rem;
+    }
+    .visible {
+      display: block;
     }
     ul {
       list-style-type: square;
@@ -22,58 +31,69 @@
     li {
       margin-bottom: 0.5rem;
     }
-    .android, .ios, .others {
-      border: 1px solid #0f0;
-      padding: 1rem;
-      border-radius: 10px;
-    }
   </style>
 </head>
 <body>
   <h1>⚙️ ErikAI OS – Návod na nastavenia</h1>
 
-  <div class="section android">
-    <h2>📱 Android – Všeobecný návod</h2>
+  <label for="system">Vyber svoj systém:</label>
+  <select id="system" onchange="showSection()">
+    <option value="">-- vyber systém --</option>
+    <option value="android">📱 Android</option>
+    <option value="ios">🍏 Apple (iOS)</option>
+    <option value="others">💻 Iné (Huawei, Xiaomi, Samsung...)</option>
+  </select>
+
+  <div id="android" class="section">
+    <h2>📱 Android – Všetky návody</h2>
     <ul>
       <li><b>Wi-Fi:</b> Nastavenia > Sieť a internet > Wi-Fi</li>
       <li><b>Bluetooth:</b> Nastavenia > Pripojené zariadenia > Bluetooth</li>
-      <li><b>Baterka (svetlo):</b> Rýchla lišta > ikona baterky (alebo Nastavenia > Displej > Baterka)</li>
-      <li><b>Mobilné dáta:</b> Nastavenia > Sieť a internet > Mobilná sieť > Mobilné dáta</li>
-      <li><b>Režim lietadlo:</b> Rýchla lišta > ikona lietadla (alebo Nastavenia > Sieť a internet > Režim lietadlo)</li>
-      <li><b>Zvuk / Tichý režim:</b> Nastavenia > Zvuk (alebo podrž hlasitosť > prepni režim)</li>
-      <li><b>Režim šetrenia batérie:</b> Nastavenia > Batéria > Šetrenie batérie</li>
-      <li><b>Displej (jas, tmavý režim):</b> Nastavenia > Displej > Jas / Tmavý režim</li>
-      <li><b>Zámok obrazovky:</b> Nastavenia > Zabezpečenie > Zámok obrazovky</li>
-      <li><b>Odtlačok prsta / PIN:</b> Nastavenia > Zabezpečenie > Odtlačok / PIN</li>
-      <li><b>Aplikácie a upozornenia:</b> Nastavenia > Aplikácie a oznámenia</li>
-      <li><b>Hlavné nastavenia:</b> Otvor aplikáciu "Nastavenia" z domovskej obrazovky</li>
+      <li><b>Baterka (svetlo):</b> Rýchla lišta > ikona baterky</li>
+      <li><b>Mobilné dáta:</b> Nastavenia > Mobilná sieť > Mobilné dáta</li>
+      <li><b>Režim lietadlo:</b> Rýchla lišta > lietadlo</li>
+      <li><b>Zvuk / Tichý režim:</b> Nastavenia > Zvuk</li>
+      <li><b>Šetrenie batérie:</b> Nastavenia > Batéria > Šetrenie batérie</li>
+      <li><b>Displej (jas, tmavý režim):</b> Nastavenia > Displej</li>
+      <li><b>Ovládanie gestami:</b> Nastavenia > Systém > Gestá</li>
+      <li><b>Zámok obrazovky:</b> Nastavenia > Zabezpečenie</li>
     </ul>
   </div>
 
-  <div class="section ios">
-    <h2>🍏 Apple (iOS) – Návod</h2>
+  <div id="ios" class="section">
+    <h2>🍏 iOS (Apple) – Všetky návody</h2>
     <ul>
       <li><b>Wi-Fi:</b> Settings > Wi-Fi</li>
       <li><b>Bluetooth:</b> Settings > Bluetooth</li>
-      <li><b>Baterka:</b> Ovládacie centrum (stiahni roh obrazovky) > Baterka</li>
+      <li><b>Baterka:</b> Ovládacie centrum > baterka</li>
       <li><b>Mobilné dáta:</b> Settings > Mobile Data</li>
-      <li><b>Airplane Mode:</b> Settings > Airplane Mode alebo ovládacie centrum</li>
-      <li><b>Zvuk a vibrácie:</b> Settings > Sounds & Haptics</li>
-      <li><b>Low Power Mode:</b> Settings > Battery > Low Power Mode</li>
+      <li><b>Režim lietadlo:</b> Settings > Airplane Mode</li>
       <li><b>Displej:</b> Settings > Display & Brightness</li>
-      <li><b>Face ID / Touch ID / Heslo:</b> Settings > Face ID & Passcode</li>
-      <li><b>Hlavné nastavenia:</b> Otvor aplikáciu Settings z domovskej obrazovky</li>
+      <li><b>Low Power Mode:</b> Settings > Battery</li>
+      <li><b>Face ID / Passcode:</b> Settings > Face ID & Passcode</li>
     </ul>
   </div>
 
-  <div class="section others">
-    <h2>💻 Iné značky – Návod</h2>
+  <div id="others" class="section">
+    <h2>💻 Iné značky – Všetky návody</h2>
     <ul>
       <li><b>Huawei:</b> Nastavenia > Bezdrôtové pripojenia > Wi-Fi / Bluetooth</li>
       <li><b>Xiaomi:</b> Nastavenia > Wi-Fi / Bluetooth / Batéria</li>
       <li><b>Samsung:</b> Nastavenia > Pripojenia > Wi-Fi / Bluetooth</li>
-      <li><b>Všeobecne:</b> Otvor aplikáciu Nastavenia a vyhľadaj názov funkcie (napr. "batéria")</li>
+      <li><b>Všeobecne:</b> Otvor aplikáciu <i>Nastavenia</i> a hľadaj podľa názvu</li>
     </ul>
   </div>
+
+  <script>
+    function showSection() {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(s => s.classList.remove('visible'));
+
+      const selected = document.getElementById('system').value;
+      if (selected) {
+        document.getElementById(selected).classList.add('visible');
+      }
+    }
+  </script>
 </body>
 </html>
