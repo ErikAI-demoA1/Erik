@@ -142,23 +142,22 @@
 
 
 <script>
-      let logoutTimer;
-      function resetLogoutTimer() {
-        clearTimeout(logoutTimer);
-        logoutTimer = setTimeout(() => {
-          localStorage.removeItem("erik_access");
-          alert("⏳ Bol si neaktívny. Prístup bol zrušený.");
-          window.location.href = "index.html";
-        }, 10000); // 10 sekúnd
-      }
+  let hideTimeout;
 
-      // Aktivita používateľa = resetuj časovač
-      window.onload = resetLogoutTimer;
-      document.onmousemove = resetLogoutTimer;
-      document.onkeypress = resetLogoutTimer;
-      document.ontouchstart = resetLogoutTimer;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      // Keď opustí stránku – spusti časovač
+      hideTimeout = setTimeout(() => {
+        localStorage.removeItem("erik_access");
+        alert("❌ Prístup vypršal (bol si preč príliš dlho).");
+        window.location.href = "index.html";
+      }, 10000); // 10 sekúnd
+    } else {
+      // Keď sa vráti späť – zruš časovač
+      clearTimeout(hideTimeout);
+    }
+  });
 </script>
-
 
 
 
