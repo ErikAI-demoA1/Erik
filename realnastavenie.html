@@ -4,48 +4,32 @@
   <meta charset="UTF-8">
   <title>ErikAI OS – Návod na nastavenia</title>
   <style>
-    body {
-      background-color: #000;
-      color: #0f0;
-      font-family: sans-serif;
-      padding: 1rem;
-    }
-    select {
-      font-size: 1rem;
-      padding: 0.3rem;
-      margin-bottom: 1rem;
-    }
-    .section {
-      display: none;
-      border: 1px solid #0f0;
-      padding: 1rem;
-      border-radius: 10px;
-      margin-bottom: 2rem;
-    }
-    .visible {
-      display: block;
-    }
-    ul {
-      list-style-type: square;
-    }
-    li {
-      margin-bottom: 0.5rem;
-    }
+    body { background: black; color: lime; font-family: sans-serif; padding: 1rem; }
+    select, option { background: black; color: lime; padding: 5px; }
+    .section { display: none; border: 1px solid lime; padding: 1rem; margin-top: 1rem; }
+    .visible { display: block; }
+    h2, h3 { color: lime; }
   </style>
+  <script>
+    function showSection() {
+      const value = document.getElementById("systemSelect").value;
+      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("visible"));
+      document.getElementById(value).classList.add("visible");
+    }
+  </script>
 </head>
 <body>
-  <h1>⚙️ ErikAI OS – Návod na nastavenia</h1>
-
-  <label for="system">Vyber svoj systém:</label>
-  <select id="system" onchange="showSection()">
-    <option value="">-- vyber systém --</option>
+  <h2>⚙️ ErikAI OS – Návod na nastavenia</h2>
+  <label for="systemSelect">Vyber svoj systém: </label>
+  <select id="systemSelect" onchange="showSection()">
     <option value="android">📱 Android</option>
     <option value="ios">🍏 Apple (iOS)</option>
-    <option value="others">💻 Iné (Huawei, Xiaomi, Samsung...)</option>
+    <option value="ine">💻 Iné (Huawei, Xiaomi, Samsung...)</option>
   </select>
 
-  <div id="android" class="section">
-    <h2>📱 Android – Všetky návody</h2>
+  <!-- Android -->
+  <div id="android" class="section visible">
+    <h3>📱 Android – Všetky návody</h3>
     <ul>
       <li><b>Wi-Fi:</b> Nastavenia > Sieť a internet > Wi-Fi</li>
       <li><b>Bluetooth:</b> Nastavenia > Pripojené zariadenia > Bluetooth</li>
@@ -57,11 +41,18 @@
       <li><b>Displej (jas, tmavý režim):</b> Nastavenia > Displej</li>
       <li><b>Ovládanie gestami:</b> Nastavenia > Systém > Gestá</li>
       <li><b>Zámok obrazovky:</b> Nastavenia > Zabezpečenie</li>
+      <li><b>Úložisko:</b> Nastavenia > Úložisko</li>
+      <li><b>Aplikácie:</b> Nastavenia > Aplikácie</li>
+      <li><b>Odtlačok / Rozpoznanie tváre:</b> Nastavenia > Zabezpečenie</li>
+      <li><b>Notifikácie:</b> Nastavenia > Upozornenia</li>
+      <li><b>Súkromie:</b> Nastavenia > Súkromie</li>
+      <li><b>Aktualizácie systému:</b> Nastavenia > O telefóne > Aktualizácia systému</li>
     </ul>
   </div>
 
+  <!-- iOS -->
   <div id="ios" class="section">
-    <h2>🍏 iOS (Apple) – Všetky návody</h2>
+    <h3>🍏 iOS (Apple) – Všetky návody</h3>
     <ul>
       <li><b>Wi-Fi:</b> Settings > Wi-Fi</li>
       <li><b>Bluetooth:</b> Settings > Bluetooth</li>
@@ -74,8 +65,9 @@
     </ul>
   </div>
 
-  <div id="others" class="section">
-    <h2>💻 Iné značky – Všetky návody</h2>
+  <!-- Iné -->
+  <div id="ine" class="section">
+    <h3>💻 Iné značky – Všetky návody</h3>
     <ul>
       <li><b>Huawei:</b> Nastavenia > Bezdrôtové pripojenia > Wi-Fi / Bluetooth</li>
       <li><b>Xiaomi:</b> Nastavenia > Wi-Fi / Bluetooth / Batéria</li>
@@ -83,17 +75,5 @@
       <li><b>Všeobecne:</b> Otvor aplikáciu <i>Nastavenia</i> a hľadaj podľa názvu</li>
     </ul>
   </div>
-
-  <script>
-    function showSection() {
-      const sections = document.querySelectorAll('.section');
-      sections.forEach(s => s.classList.remove('visible'));
-
-      const selected = document.getElementById('system').value;
-      if (selected) {
-        document.getElementById(selected).classList.add('visible');
-      }
-    }
-  </script>
 </body>
 </html>
