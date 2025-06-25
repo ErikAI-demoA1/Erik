@@ -1,76 +1,89 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>Núdzový preukaz – ErikAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Núdzový preukaz</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
+      background: #000;
+      color: white;
       padding: 1rem;
-      background-color: #111;
-      color: #fff;
     }
-    h1, h2 {
-      color: #ff5555;
-    }
-    .section {
-      margin-bottom: 1.5rem;
+    .card {
+      background: #1a1a1a;
+      border: 2px solid red;
       padding: 1rem;
-      background: #222;
-      border-left: 5px solid #ff5555;
-      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-radius: 10px;
     }
-    .label {
-      font-weight: bold;
-      color: #aaa;
+    h2 {
+      color: red;
     }
-    .value {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
+    label {
+      display: block;
+      margin-top: 0.5rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.3rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: red;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .output {
+      background: #111;
+      border: 1px solid #444;
+      padding: 1rem;
+      margin-top: 1rem;
+      white-space: pre-line;
     }
   </style>
 </head>
 <body>
+  <h1>🆘 Núdzový preukaz</h1>
+  <div class="card">
+    <h2>Vyplň svoje údaje</h2>
+    <label>Meno:<input id="meno" /></label>
+    <label>Dátum narodenia:<input id="narodenie" /></label>
+    <label>Krvná skupina:<input id="krv" /></label>
+    <label>Alergie:<input id="alergie" /></label>
+    <label>Poznámka:<textarea id="poznamka"></textarea></label>
+    <label>Kontakt na mamu:<input id="mama" /></label>
+    <label>Kontakt na frajerku:<input id="frajerka" /></label>
+    <label>Kontakt na lekára:<input id="lekar" /></label>
+    <label>Lieky:<input id="lieky" /></label>
+    <label>Zdravotná poisťovňa:<input id="poistovna" /></label>
+    <button onclick="vygeneruj()">Vygenerovať preukaz</button>
+  </div>  <div class="output" id="vystup"></div>  <script>
+    function vygeneruj() {
+      const meno = document.getElementById('meno').value;
+      const nar = document.getElementById('narodenie').value;
+      const krv = document.getElementById('krv').value;
+      const alergie = document.getElementById('alergie').value;
+      const poznamka = document.getElementById('poznamka').value;
+      const mama = document.getElementById('mama').value;
+      const frajerka = document.getElementById('frajerka').value;
+      const lekar = document.getElementById('lekar').value;
+      const lieky = document.getElementById('lieky').value;
+      const poistovna = document.getElementById('poistovna').value;
 
-  <h1>🚨 Núdzový preukaz</h1>
-  <p><i>Tento preukaz môže pomôcť v prípade ohrozenia života alebo zdravia.</i></p>
+      const html = `
+🔴 Núdzový preukaz\n
+👤 Osobné údaje\nMeno: ${meno}\nDátum narodenia: ${nar}\nKrvná skupina: ${krv}\nAlergie: ${alergie}\nPoznámka: ${poznamka}\n
+📞 Núdzové kontakty\nMama: ${mama}\nFrajerka: ${frajerka}\nLekár: ${lekar}\n
+🏥 Zdravotné informácie\nLieky: ${lieky}\nZdravotná poisťovňa: ${poistovna}\n
+📌 Pokyny\nAk ${meno} nereaguje, volajte 112 a informujte záchranné zložky o jeho stave.`;
 
-  <div class="section">
-    <h2>👤 Osobné údaje</h2>
-    <div class="label">Meno:</div>
-    <div class="value">Erik Mohylak</div>
-    <div class="label">Dátum narodenia:</div>
-    <div class="value">20. júl 2004</div>
-    <div class="label">Krvná skupina:</div>
-    <div class="value">0 Rh+</div>
-    <div class="label">Alergie:</div>
-    <div class="value">Žiadne známe</div>
-    <div class="label">Poznámka:</div>
-    <div class="value">Trpí úzkosťou, silné emocionálne stresy</div>
-  </div>
-
-  <div class="section">
-    <h2>📞 Núdzové kontakty</h2>
-    <div class="label">Mama:</div>
-    <div class="value">+421 904 123 456</div>
-    <div class="label">Frajerka:</div>
-    <div class="value">+421 944 987 654</div>
-    <div class="label">Lekár:</div>
-    <div class="value">MUDr. Novák – +421 902 111 222</div>
-  </div>
-
-  <div class="section">
-    <h2>🏥 Zdravotné informácie</h2>
-    <div class="label">Lieky:</div>
-    <div class="value">Neuvedené / bez liekov</div>
-    <div class="label">Zdravotná poisťovňa:</div>
-    <div class="value">VšZP</div>
-  </div>
-
-  <div class="section">
-    <h2>📍 Pokyny</h2>
-    <div class="value">Ak Erik nereaguje, volajte 112 a informujte záchranné zložky o jeho stave. Tento dokument je dostupný bez internetu.</div>
-  </div>
-
-</body>
+      document.getElementById('vystup').innerText = html;
+    }
+  </script></body>
 </html>
