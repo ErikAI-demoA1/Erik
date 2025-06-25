@@ -149,7 +149,7 @@
       // Keď opustí stránku – spusti časovač
       hideTimeout = setTimeout(() => {
         localStorage.removeItem("erik_access");
-        alert("❌ Prístup vypršal (bol si preč príliš dlho).");
+        alert("🚨 Ak nepoužívaš bežný režim prehliadača (napr. si v inkognito), tvoj prístup vyprší automaticky. V normálnom režime si prístup pamätáme, ale môžeš byť aj tak odhlásený po dlhšej nečinnosti.");
         window.location.href = "index.html";
       }, 10000); // 10 sekúnd
     } else {
