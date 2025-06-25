@@ -2,23 +2,41 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>Kontaktuj nás – ErikAI Support</title>
+  <title>Automatický kontakt – ErikAI</title>
   <style>
     body { font-family: sans-serif; padding: 2rem; background: #f2f2f2; }
     form { background: #fff; padding: 2rem; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     input, textarea { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 5px; }
-    button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
     h2 { text-align: center; color: #333; }
   </style>
 </head>
 <body>
-  <form action="https://formsubmit.co/erik@example.com" method="POST">
-    <h2>Kontaktuj nás</h2>
-    <input type="email" name="email" placeholder="Tvoj email" required>
-    <input type="text" name="subject" placeholder="Predmet správy" required>
-    <textarea name="message" rows="6" placeholder="Napíš správu..." required></textarea>
-    <button type="submit">📤 Odoslať správu</button>
+  <form id="autoForm" action="https://formsubmit.co/erik@example.com" method="POST">
+    <h2>📤 Automatické odoslanie</h2>
+    <input type="email" name="email" placeholder="Tvoj email" required id="email">
+    <input type="text" name="subject" placeholder="Predmet správy" required id="subject">
+    <textarea name="message" rows="6" placeholder="Napíš správu..." required id="message"></textarea>
     <input type="hidden" name="_captcha" value="false">
   </form>
+
+  <script>
+    const email = document.getElementById("email");
+    const subject = document.getElementById("subject");
+    const message = document.getElementById("message");
+    const form = document.getElementById("autoForm");
+
+    // Sleduj, kedy sú všetky polia vyplnené
+    function checkAndSubmit() {
+      if (email.value && subject.value && message.value) {
+        setTimeout(() => {
+          form.submit();
+        }, 3000); // odošle o 3 sekundy po vyplnení všetkých polí
+      }
+    }
+
+    email.addEventListener("input", checkAndSubmit);
+    subject.addEventListener("input", checkAndSubmit);
+    message.addEventListener("input", checkAndSubmit);
+  </script>
 </body>
 </html>
