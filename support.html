@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontaktuj nás – ErikAI Support</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <form action="https://formsubmit.co/erik@example.com" method="POST">
+    <h2>📩 Kontaktuj nás</h2><label for="meno">Meno:</label>
+<input type="text" name="Meno" id="meno" placeholder="Zadaj meno" required>
+
+<label for="kontakt">Kontakt (e-mail alebo číslo):</label>
+<input type="text" name="Kontakt" id="kontakt" placeholder="Zadaj kontakt" required>
+
+<label for="sprava">Správa:</label>
+<textarea name="Správa" id="sprava" rows="5" placeholder="Napíš svoju správu..." required></textarea>
+
+<button type="submit">📤 Odoslať</button>
+
+<!-- Skryté -->
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_next" value="https://tvoja-stranka.sk/dakujeme.html">
+
+  </form>
+</body>
+</html>
