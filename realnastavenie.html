@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI OS – Nastavenia</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #111;
+      color: white;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    button, a.button {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+      background-color: #1e1e1e;
+      border: 2px solid #00ff88;
+      color: #00ff88;
+      border-radius: 10px;
+      text-align: center;
+      text-decoration: none;
+    }
+    button:hover, a.button:hover {
+      background-color: #00ff88;
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚙️ ErikAI OS – Nastavenia</h1>  <!-- Android only: priame odkazy -->  <a class="button" href="intent://android.settings.WIFI_SETTINGS#Intent;scheme=android-app;end">
+    📶 Otvoriť Wi-Fi nastavenia (Android)
+  </a>
+  <a class="button" href="intent://android.settings.BLUETOOTH_SETTINGS#Intent;scheme=android-app;end">
+    📳 Otvoriť Bluetooth nastavenia (Android)
+  </a>
+  <a class="button" href="intent://android.settings.BATTERY_SAVER_SETTINGS#Intent;scheme=android-app;end">
+    🔋 Otvoriť nastavenie batérie (Android)
+  </a>
+  <a class="button" href="intent://android.settings.SETTINGS#Intent;scheme=android-app;end">
+    ⚙️ Otvoriť hlavné nastavenia (Android)
+  </a>  <!-- Všeobecné: len návod -->  <button onclick="alert('Pre zapnutie Wi-Fi choď do: Nastavenia > Sieť > Wi-Fi a zapni ho ručne.')">
+    ℹ️ Pomoc: Wi-Fi (návod)
+  </button>
+  <button onclick="alert('Pre aktiváciu baterky posuň hornú lištu a klikni na ikonu baterky.')">
+    🔦 Zapnúť baterku (návod)
+  </button>
+  <button onclick="alert('Pre jas obrazovky choď do: Nastavenia > Displej > Jas.')">
+    ☀️ Nastavenie jasu (návod)
+  </button>
+  <button onclick="alert('Pre zapnutie Bluetooth: Nastavenia > Pripojenia > Bluetooth.')">
+    ℹ️ Pomoc: Bluetooth (návod)
+  </button></body>
+</html>
