@@ -1,89 +1,119 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Núdzový preukaz</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <style>
     body {
-      font-family: sans-serif;
-      background: #000;
+      background: #111;
       color: white;
+      font-family: sans-serif;
       padding: 1rem;
     }
-    .card {
-      background: #1a1a1a;
-      border: 2px solid red;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-    }
-    h2 {
-      color: red;
-    }
-    label {
-      display: block;
-      margin-top: 0.5rem;
-    }
-    input, textarea {
+    input {
       width: 100%;
-      padding: 0.3rem;
-      margin-bottom: 1rem;
-      border-radius: 5px;
+      padding: 6px;
+      margin: 4px 0;
+      border-radius: 4px;
       border: none;
     }
-    button {
+    .btn {
       background: red;
       color: white;
       border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      font-size: 1rem;
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 6px;
     }
-    .output {
-      background: #111;
-      border: 1px solid #444;
-      padding: 1rem;
-      margin-top: 1rem;
-      white-space: pre-line;
+    .box {
+      background: #222;
+      border: 1px solid #333;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+    .btn-save {
+      background: green;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>🆘 Núdzový preukaz</h1>
-  <div class="card">
-    <h2>Vyplň svoje údaje</h2>
-    <label>Meno:<input id="meno" /></label>
-    <label>Dátum narodenia:<input id="narodenie" /></label>
-    <label>Krvná skupina:<input id="krv" /></label>
-    <label>Alergie:<input id="alergie" /></label>
-    <label>Poznámka:<textarea id="poznamka"></textarea></label>
-    <label>Kontakt na mamu:<input id="mama" /></label>
-    <label>Kontakt na frajerku:<input id="frajerka" /></label>
-    <label>Kontakt na lekára:<input id="lekar" /></label>
-    <label>Lieky:<input id="lieky" /></label>
-    <label>Zdravotná poisťovňa:<input id="poistovna" /></label>
-    <button onclick="vygeneruj()">Vygenerovať preukaz</button>
-  </div>  <div class="output" id="vystup"></div>  <script>
-    function vygeneruj() {
-      const meno = document.getElementById('meno').value;
-      const nar = document.getElementById('narodenie').value;
-      const krv = document.getElementById('krv').value;
-      const alergie = document.getElementById('alergie').value;
-      const poznamka = document.getElementById('poznamka').value;
-      const mama = document.getElementById('mama').value;
-      const frajerka = document.getElementById('frajerka').value;
-      const lekar = document.getElementById('lekar').value;
-      const lieky = document.getElementById('lieky').value;
-      const poistovna = document.getElementById('poistovna').value;
 
-      const html = `
-🔴 Núdzový preukaz\n
-👤 Osobné údaje\nMeno: ${meno}\nDátum narodenia: ${nar}\nKrvná skupina: ${krv}\nAlergie: ${alergie}\nPoznámka: ${poznamka}\n
-📞 Núdzové kontakty\nMama: ${mama}\nFrajerka: ${frajerka}\nLekár: ${lekar}\n
-🏥 Zdravotné informácie\nLieky: ${lieky}\nZdravotná poisťovňa: ${poistovna}\n
-📌 Pokyny\nAk ${meno} nereaguje, volajte 112 a informujte záchranné zložky o jeho stave.`;
+<h2>🆘 Núdzový preukaz</h2>
 
-      document.getElementById('vystup').innerText = html;
-    }
-  </script></body>
+<label>Meno:</label><input id="meno" type="text">
+<label>Dátum narodenia:</label><input id="datum" type="text">
+<label>Krvná skupina:</label><input id="krv" type="text">
+<label>Alergie:</label><input id="alergie" type="text">
+<label>Poznámka:</label><input id="poznamka" type="text">
+<label>Mama:</label><input id="mama" type="text">
+<label>Frajerka:</label><input id="frajerka" type="text">
+<label>Lekár:</label><input id="lekar" type="text">
+<label>Lieky:</label><input id="lieky" type="text">
+<label>Zdravotná poisťovňa:</label><input id="poistovna" type="text">
+
+<button class="btn" onclick="vygenerujPreukaz()">Vygenerovať preukaz</button>
+
+<!-- Výstupný preukaz -->
+<div class="box" id="preukazNaExport" style="display:none"></div>
+
+<!-- Tlačidlo uloženia -->
+<button class="btn btn-save" onclick="ulozitAkoObrazok()" style="display:none" id="btnSave">💾 Uložiť ako obrázok</button>
+
+<script>
+function vygenerujPreukaz() {
+  const meno = document.getElementById("meno").value;
+  const datum = document.getElementById("datum").value;
+  const krv = document.getElementById("krv").value;
+  const alergie = document.getElementById("alergie").value;
+  const poznamka = document.getElementById("poznamka").value;
+  const mama = document.getElementById("mama").value;
+  const frajerka = document.getElementById("frajerka").value;
+  const lekar = document.getElementById("lekar").value;
+  const lieky = document.getElementById("lieky").value;
+  const poistovna = document.getElementById("poistovna").value;
+
+  const box = document.getElementById("preukazNaExport");
+  box.style.display = "block";
+  document.getElementById("btnSave").style.display = "inline-block";
+
+  box.innerHTML = `
+    <h3>🔴 Núdzový preukaz</h3>
+    <p>👤 <strong>Osobné údaje</strong><br>
+    Meno: ${meno}<br>
+    Dátum narodenia: ${datum}<br>
+    Krvná skupina: ${krv}<br>
+    Alergie: ${alergie}<br>
+    Poznámka: ${poznamka}</p>
+
+    <p>📞 <strong>Núdzové kontakty</strong><br>
+    Mama: ${mama}<br>
+    Frajerka: ${frajerka}<br>
+    Lekár: ${lekar}</p>
+
+    <p>🏥 <strong>Zdravotné informácie</strong><br>
+    Lieky: ${lieky}<br>
+    Zdravotná poisťovňa: ${poistovna}</p>
+
+    <p>📌 <strong>Pokyny</strong><br>
+    Ak ${meno} nereaguje, volajte 112 a informujte záchranné zložky o jeho stave.</p>
+  `;
+}
+
+function ulozitAkoObrazok() {
+  const element = document.getElementById("preukazNaExport");
+  html2canvas(element).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'nudzovy_preukaz.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+</script>
+
+</body>
 </html>
