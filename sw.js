@@ -57,6 +57,7 @@ self.addEventListener('install', e => {
         'programy_menu.html',
         'nudzove.html',
         'support.html',
+        'realnastavenie.html',
         'APP_Dowloand/Erik1.jpg',
         'APP_Dowloand/Erik2.jpg',
         'APP_Dowloand/Erik3.jpg',
