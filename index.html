@@ -50,35 +50,35 @@
 
   <script>
     const FIRMY = [
-      {
-        znacka: "Samsung",
-        userAgentRegex: /Samsung|SM-|Galaxy/i,
-        licenceKey: "SAMSUNG-ERIK-2025",
-        shortPass: "samsung123",
-        specialCode: "SG-987"
-      },
-      {
-        znacka: "Apple",
-        userAgentRegex: /iPhone|iPad|iOS/i,
-        licenceKey: "APPLE-ERIK-2025",
-        shortPass: "apple123",
-        specialCode: "AP-987"
-      },
-      {
-        znacka: "Huawei",
-        userAgentRegex: /Huawei|HUAWEI/i,
-        licenceKey: "HUAWEI-ERIK-2025",
-        shortPass: "huawei123",
-        specialCode: "HW-987"
-      },
-      {
+  {
+    znacka: "Samsung",
+    userAgentRegex: /Samsung|SM-|Galaxy/i,
+    licenceKey: "SAMSUNG-ERIK-2025",
+    shortPass: "samsung123",
+    specialCode: "SG-987"
+  },
+  {
+    znacka: "Apple",
+    userAgentRegex: /iPhone|iPad|iOS/i,
+    licenceKey: "APPLE-ERIK-2025",
+    shortPass: "apple123",
+    specialCode: "AP-987"
+  },
+  {
+    znacka: "Huawei",
+    userAgentRegex: /Huawei|HUAWEI/i,
+    licenceKey: "HUAWEI-ERIK-2025",
+    shortPass: "huawei123",
+    specialCode: "HW-987"
+  },
+  {
     znacka: "Xiaomi",
-    userAgentRegex: /Xiaomi|Redmi|MIUI|Mi\s/i,
+    userAgentRegex: /Xiaomi|Redmi|MIUI|Mi\s|POCO|M20\d{2}/i,
     licenceKey: "XIAOMI-ERIK-2025",
     shortPass: "xiaomi123",
     specialCode: "XM-987"
-    }
-    ];
+  }
+];
 
     if (localStorage.getItem("erik_access") === "granted") {
       window.location.href = "index3.html";
