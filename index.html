@@ -49,10 +49,29 @@
   <div id="error" class="error"></div>
 
   <script>
-    const LICENCE_KEY = ["ERIK-2025-A1", "Erikai-21:10-25-06-2025-2"];
-    const SHORT_PASSWORD = "12345";
-    const SPECIAL_KEY = "1234567";
-    const ALLOWED_DEVICE = "Android"; // Môžeš zmeniť napr. na "Windows", "iPhone", atď.
+    const FIRMY = [
+      {
+        znacka: "Samsung",
+        userAgentRegex: /Samsung|SM-|Galaxy/i,
+        licenceKey: "SAMSUNG-ERIK-2025",
+        shortPass: "samsung123",
+        specialCode: "SG-987"
+      },
+      {
+        znacka: "Apple",
+        userAgentRegex: /iPhone|iPad|iOS/i,
+        licenceKey: "APPLE-ERIK-2025",
+        shortPass: "apple123",
+        specialCode: "AP-987"
+      },
+      {
+        znacka: "Huawei",
+        userAgentRegex: /Huawei|HUAWEI/i,
+        licenceKey: "HUAWEI-ERIK-2025",
+        shortPass: "huawei123",
+        specialCode: "HW-987"
+      }
+    ];
 
     if (localStorage.getItem("erik_access") === "granted") {
       window.location.href = "index3.html";
@@ -71,19 +90,24 @@
     }, 1000);
 
     function checkAccess() {
-      const key = document.getElementById("accessKey").value.trim();
-      const pass = document.getElementById("shortPass").value.trim();
-      const special = document.getElementById("specialCode").value.trim();
-      const device = navigator.userAgent;
+      const inputKey = document.getElementById("accessKey").value.trim();
+      const inputPass = document.getElementById("shortPass").value.trim();
+      const inputCode = document.getElementById("specialCode").value.trim();
+      const deviceInfo = navigator.userAgent;
 
-      const isValidDevice = device.includes(ALLOWED_DEVICE);
+      const firma = FIRMY.find(f =>
+        f.licenceKey === inputKey &&
+        f.shortPass === inputPass &&
+        f.specialCode === inputCode &&
+        f.userAgentRegex.test(deviceInfo)
+      );
 
-      if (LICENCE_KEY.includes(key) && pass === SHORT_PASSWORD && special === SPECIAL_KEY && isValidDevice) {
+      if (firma) {
         clearInterval(interval);
         localStorage.setItem("erik_access", "granted");
         window.location.href = "index3.html";
       } else {
-        document.getElementById("error").innerText = "❌ Neúspešné overenie údajov.";
+        document.getElementById("error").innerText = "❌ Neúspešné overenie alebo nesprávne zariadenie.";
       }
     }
   </script>
