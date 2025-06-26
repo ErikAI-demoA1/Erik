@@ -94,11 +94,11 @@
       const inputCode = document.getElementById("specialCode").value.trim();
 
       const firma = FIRMY.find(f =>
-        f.licenceKey === inputKey &&
-        f.shortPass === inputPass &&
-        f.specialCode === inputCode &&
-        f.userAgentRegex.test(deviceInfo)
-      );
+  (Array.isArray(f.licenceKey) ? f.licenceKey.includes(inputKey) : f.licenceKey === inputKey) &&
+  (Array.isArray(f.shortPass) ? f.shortPass.includes(inputPass) : f.shortPass === inputPass) &&
+  (Array.isArray(f.specialCode) ? f.specialCode.includes(inputCode) : f.specialCode === inputCode) &&
+  f.userAgentRegex.test(deviceInfo)
+);
 
       if (firma) {
         clearInterval(interval);
