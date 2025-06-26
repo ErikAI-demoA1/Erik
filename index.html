@@ -37,10 +37,12 @@
 <body>
 
   <h1>🔐 Prístup do ErikAI</h1>
-  <p>Zadaj licenčný kód pre odomknutie funkcií</p>
+  <p>Zadaj všetky údaje pre overenie</p>
 
-  <input type="text" id="accessKey" placeholder="Sem zadaj kód..." />
-  <br>
+  <input type="text" id="accessKey" placeholder="Licenčný kód..." /><br>
+  <input type="password" id="shortPass" placeholder="Krátke heslo..." /><br>
+  <input type="text" id="specialCode" placeholder="Špeciálny kód..." /><br>
+
   <button onclick="checkAccess()">Odomknúť</button>
 
   <div class="timer" id="timer">⏳ Čas na zadanie: 20 sekúnd</div>
@@ -48,47 +50,48 @@
 
   <script>
     const LICENCE_KEY = ["ERIK-2025-A1", "Erikai-21:10-25-06-2025-2"];
+    const SHORT_PASSWORD = "12345";
+    const SPECIAL_KEY = "1234567";
+    const ALLOWED_DEVICE = "Android"; // Môžeš zmeniť napr. na "Windows", "iPhone", atď.
 
-    // Presmerovanie ak už má povolený prístup
     if (localStorage.getItem("erik_access") === "granted") {
       window.location.href = "index3.html";
     }
 
-    // Časovač na zadanie kódu (20 sekúnd)
     let timeLeft = 20;
     const timerElement = document.getElementById("timer");
-    const inputField = document.getElementById("accessKey");
-
     const interval = setInterval(() => {
       timeLeft--;
       timerElement.innerText = `⏳ Čas na zadanie: ${timeLeft} sekúnd`;
       if (timeLeft <= 0) {
         clearInterval(interval);
-        inputField.value = "";
         document.getElementById("error").innerText = "❌ Čas vypršal. Skús znova.";
-        setTimeout(() => {
-          document.getElementById("error").innerText = "";
-          window.location.reload();
-        }, 3000);
+        setTimeout(() => window.location.reload(), 3000);
       }
     }, 1000);
 
     function checkAccess() {
-      const input = inputField.value.trim();
-      if (LICENCE_KEY.includes(input)) {
-        localStorage.setItem("erik_access", "granted");
+      const key = document.getElementById("accessKey").value.trim();
+      const pass = document.getElementById("shortPass").value.trim();
+      const special = document.getElementById("specialCode").value.trim();
+      const device = navigator.userAgent;
+
+      const isValidDevice = device.includes(ALLOWED_DEVICE);
+
+      if (LICENCE_KEY.includes(key) && pass === SHORT_PASSWORD && special === SPECIAL_KEY && isValidDevice) {
         clearInterval(interval);
+        localStorage.setItem("erik_access", "granted");
         window.location.href = "index3.html";
       } else {
-        document.getElementById("error").innerText = "❌ Nesprávny kód.";
+        document.getElementById("error").innerText = "❌ Neúspešné overenie údajov.";
       }
     }
   </script>
 
   <p style="font-size: 14px; color: gray; margin-top: 20px;">
-  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
-© 2025 Erik Mohylák – All rights reserved.
+    This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.    
+    To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0    
+    © 2025 Erik Mohylák – All rights reserved.
   </p>
 
 </body>
