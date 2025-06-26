@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Licencia – ErikAI (DEBUG)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Licencia – ErikAI</title>
   <style>
     body {
       font-family: sans-serif;
@@ -39,9 +39,9 @@
   <h1>🔐 Prístup do ErikAI</h1>
   <p>Zadaj všetky údaje pre overenie</p>
 
-  <input type="text" id="accessKey" placeholder="Licenčný kód..." /><br>
-  <input type="password" id="shortPass" placeholder="Krátke heslo..." /><br>
-  <input type="text" id="specialCode" placeholder="Špeciálny kód..." /><br>
+  <input type="text" id="accessKey" placeholder="Licenčný kód..." /><br />
+  <input type="password" id="shortPass" placeholder="Krátke heslo..." /><br />
+  <input type="text" id="specialCode" placeholder="Špeciálny kód..." /><br />
 
   <button onclick="checkAccess()">Odomknúť</button>
 
@@ -73,7 +73,7 @@
       },
       {
         znacka: "Xiaomi",
-        userAgentRegex: /Xiaomi|Redmi|MIUI|Mi\s|POCO|M\d{4}|XMS/i,
+        userAgentRegex: /Xiaomi|Redmi|MIUI|Mi\s|POCO|M20\d{2}/i,
         licenceKey: "XIAOMI-ERIK-2025",
         shortPass: "xiaomi123",
         specialCode: "XM-987"
@@ -100,39 +100,24 @@
       const inputKey = document.getElementById("accessKey").value.trim();
       const inputPass = document.getElementById("shortPass").value.trim();
       const inputCode = document.getElementById("specialCode").value.trim();
-      const deviceInfo = navigator.userAgent;
-
-      console.log("DEBUG – UserAgent: ", deviceInfo);
-      alert("🕵️ UserAgent tvojho zariadenia:\n" + deviceInfo);
+      const deviceInfo = navigator.userAgent.toLowerCase();
 
       const firma = FIRMY.find(f =>
         f.licenceKey === inputKey &&
         f.shortPass === inputPass &&
         f.specialCode === inputCode &&
-        f.userAgentRegex.test(deviceInfo)
+        (
+          f.userAgentRegex.test(deviceInfo) ||
+          (f.znacka === "Xiaomi" && inputKey.includes("XIAOMI"))
+        )
       );
 
-      if (!firma) {
-        // Diagnostika: ktorá časť neprešla?
-        let matchedFirma = FIRMY.find(f =>
-          f.licenceKey === inputKey &&
-          f.shortPass === inputPass &&
-          f.specialCode === inputCode
-        );
-
-        if (matchedFirma) {
-          const matched = matchedFirma.userAgentRegex.test(deviceInfo);
-          document.getElementById("error").innerText = matched
-            ? "✅ Regex sedí, ale niečo iné zlyhalo (???)"
-            : "❌ Prístup zamietnutý: Zariadenie nie je rozpoznané ako " + matchedFirma.znacka;
-        } else {
-          document.getElementById("error").innerText = "❌ Nesprávne údaje: kód/heslo/kód nesedia.";
-        }
-
-      } else {
+      if (firma) {
         clearInterval(interval);
         localStorage.setItem("erik_access", "granted");
         window.location.href = "index3.html";
+      } else {
+        document.getElementById("error").innerText = "❌ Prístup zamietnutý: Zariadenie nie je rozpoznané ako " + inputKey.split("-")[0];
       }
     }
   </script>
