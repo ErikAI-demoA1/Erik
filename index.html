@@ -45,7 +45,7 @@
 
   <button onclick="checkAccess()">Odomknúť</button>
 
-  <div class="timer" id="timer">⏳ Čas na zadanie: 20 sekúnd</div>
+  <div class="timer" id="timer">⏳ Čas na zadanie: 60 sekúnd</div>
   <div id="error" class="error"></div>
 
   <script>
@@ -77,7 +77,7 @@
       window.location.href = "index3.html";
     }
 
-    let timeLeft = 20;
+    let timeLeft = 60;
     const timerElement = document.getElementById("timer");
     const interval = setInterval(() => {
       timeLeft--;
