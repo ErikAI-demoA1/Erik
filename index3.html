@@ -1151,5 +1151,14 @@ sortSelectOptions(engineSelect);
     });
   });
     </script>
+
+    <script>
+  const povolenyRef = "erikai-demoa1.github.io";
+
+  if (!document.referrer.includes(povolenyRef)) {
+    alert("Prístup zakázaný: túto stránku nemožno otvoriť priamo.");
+    window.location.href = "https://erikai-demoa1.github.io/ErikAI/";
+  }
+    </script>
 </body>
 </html>
