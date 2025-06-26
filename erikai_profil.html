@@ -87,5 +87,13 @@
     <p>Tu sa môžu nachádzať tvoje údaje, projekty, pripojenia a odkazy na ďalšie časti systému.</p>
     <a href="erikai_tube.html">← Späť na ErikAI Tube</a>
   </div>
+  <script>
+  const povolenyRef = "erikai-demoa1.github.io";
+
+  if (!document.referrer.includes(povolenyRef)) {
+    alert("Prístup zakázaný: túto stránku nemožno otvoriť priamo.");
+    window.location.href = "https://erikai-demoa1.github.io/ErikAI/";
+  }
+</script>
 </body>
 </html>
