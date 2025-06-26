@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,151 +33,34 @@
     }
   </style>
 </head>
-<body>
+<body>  <h1>🔐 Prístup do ErikAI</h1>
+  <p>Zadaj všetky údaje pre overenie</p><input type="text" id="accessKey" placeholder="Licenčný kód..." /><br /> <input type="password" id="shortPass" placeholder="Krátke heslo..." /><br /> <input type="text" id="specialCode" placeholder="Špeciálny kód..." /><br />
 
-  <h1>🔐 Prístup do ErikAI</h1>
-  <p>Zadaj všetky údaje pre overenie</p>
-
-  <input type="text" id="accessKey" placeholder="Licenčný kód..." /><br />
-  <input type="password" id="shortPass" placeholder="Krátke heslo..." /><br />
-  <input type="text" id="specialCode" placeholder="Špeciálny kód..." /><br />
-
-  <button onclick="checkAccess()">Odomknúť</button>
+<button onclick="checkAccess()">Odomknúť</button>
 
   <div class="timer" id="timer">⏳ Čas na zadanie: 75 sekúnd</div>
-  <div id="error" class="error"></div>
+  <div id="error" class="error"></div>  <script>
+    const deviceInfo = navigator.userAgent;
 
-  <script>
     const FIRMY = [
-      {
-        znacka: "Samsung",
-        userAgentRegex: /Samsung|SM-|Galaxy/i,
-        licenceKey: "SAMSUNG-ERIK-2025",
-        shortPass: "samsung123",
-        specialCode: "SG-987"
-      },
-      {
-        znacka: "Apple",
-        userAgentRegex: /iPhone|iPad|iOS|Macintosh|Mac OS/i,
-        licenceKey: "APPLE-ERIK-2025",
-        shortPass: "apple123",
-        specialCode: "AP-987"
-      },
-      {
-        znacka: "Huawei",
-        userAgentRegex: /Huawei|HUAWEI/i,
-        licenceKey: "HUAWEI-ERIK-2025",
-        shortPass: "huawei123",
-        specialCode: "HW-987"
-      },
-      {
-        znacka: "Xiaomi",
-        userAgentRegex: /Xiaomi|Redmi|POCO|Mi\s|MIUI|M\d{4}[A-Z0-9]{3,}/i,
-        extraCheck: function(deviceInfo) {
-          return deviceInfo.includes("M2101") || deviceInfo.includes("Build/MIUI") || deviceInfo.includes("M20") || deviceInfo.includes("Redmi") || deviceInfo.includes("Mi ");
-        },
-        licenceKey: "XIAOMI-ERIK-2025",
-        shortPass: "xiaomi123",
-        specialCode: "XM-987"
-      },
-      {
-        znacka: "Windows",
-        userAgentRegex: /Windows NT|Win64|WOW64/i,
-        licenceKey: "WINDOWS-ERIK-2025",
-        shortPass: "windows123",
-        specialCode: "WN-987"
-      },
-      {
-        znacka: "PlayStation",
-        userAgentRegex: /PlayStation|PS4|PS5/i,
-        licenceKey: "PS-ERIK-2025",
-        shortPass: "ps123",
-        specialCode: "PS-987"
-      },
-      {
-        znacka: "Xbox",
-        userAgentRegex: /Xbox/i,
-        licenceKey: "XBOX-ERIK-2025",
-        shortPass: "xbox123",
-        specialCode: "XB-987"
-      },
-      {
-        znacka: "Nintendo",
-        userAgentRegex: /Nintendo|Switch/i,
-        licenceKey: "NINTENDO-ERIK-2025",
-        shortPass: "nintendo123",
-        specialCode: "NT-987"
-      },
-      {
-        znacka: "SmartTV",
-        userAgentRegex: /SmartTV|Tizen|Web0S|Smart-TV|NetCast|HbbTV|tv|AppleTV/i,
-        licenceKey: "TV-ERIK-2025",
-        shortPass: "tv123",
-        specialCode: "TV-987"
-      },
-      {
-        znacka: "Linux",
-        userAgentRegex: /Linux|X11/i,
-        licenceKey: "LINUX-ERIK-2025",
-        shortPass: "linux123",
-        specialCode: "LX-987"
-      },
-      {
-        znacka: "OnePlus",
-        userAgentRegex: /OnePlus/i,
-        licenceKey: "ONEPLUS-ERIK-2025",
-        shortPass: "oneplus123",
-        specialCode: "OP-987"
-      },
-      {
-        znacka: "Motorola",
-        userAgentRegex: /Moto|Motorola/i,
-        licenceKey: "MOTOROLA-ERIK-2025",
-        shortPass: "moto123",
-        specialCode: "MT-987"
-      },
-      {
-        znacka: "Realme",
-        userAgentRegex: /Realme/i,
-        licenceKey: "REALME-ERIK-2025",
-        shortPass: "realme123",
-        specialCode: "RM-987"
-      },
-      {
-        znacka: "Oppo",
-        userAgentRegex: /Oppo/i,
-        licenceKey: "OPPO-ERIK-2025",
-        shortPass: "oppo123",
-        specialCode: "OPP-987"
-      },
-      {
-        znacka: "Vivo",
-        userAgentRegex: /Vivo/i,
-        licenceKey: "VIVO-ERIK-2025",
-        shortPass: "vivo123",
-        specialCode: "VV-987"
-      },
-      {
-        znacka: "Tecno",
-        userAgentRegex: /Tecno/i,
-        licenceKey: "TECNO-ERIK-2025",
-        shortPass: "tecno123",
-        specialCode: "TC-987"
-      },
-      {
-        znacka: "Infinix",
-        userAgentRegex: /Infinix/i,
-        licenceKey: "INFINIX-ERIK-2025",
-        shortPass: "infinix123",
-        specialCode: "IX-987"
-      },
-      {
-        znacka: "Nothing",
-        userAgentRegex: /Nothing/i,
-        licenceKey: "NOTHING-ERIK-2025",
-        shortPass: "nothing123",
-        specialCode: "NTG-987"
-      }
+      { znacka: "Xiaomi", userAgentRegex: /Xiaomi|Redmi|POCO|Mi\s|MIUI|M\d{4}[A-Z0-9]{3,}/i, licenceKey: "XIAOMI-ERIK-2025", shortPass: "xiaomi123", specialCode: "XM-987" },
+      { znacka: "Samsung", userAgentRegex: /Samsung|SM-|Galaxy/i, licenceKey: "SAMSUNG-ERIK-2025", shortPass: "samsung123", specialCode: "SG-987" },
+      { znacka: "Apple", userAgentRegex: /iPhone|iPad|iOS|Macintosh|Mac OS/i, licenceKey: "APPLE-ERIK-2025", shortPass: "apple123", specialCode: "AP-987" },
+      { znacka: "Huawei", userAgentRegex: /Huawei|HUAWEI/i, licenceKey: "HUAWEI-ERIK-2025", shortPass: "huawei123", specialCode: "HW-987" },
+      { znacka: "Windows", userAgentRegex: /Windows NT|Win64|WOW64/i, licenceKey: "WINDOWS-ERIK-2025", shortPass: "windows123", specialCode: "WN-987" },
+      { znacka: "PlayStation", userAgentRegex: /PlayStation|PS4|PS5/i, licenceKey: "PS-ERIK-2025", shortPass: "ps123", specialCode: "PS-987" },
+      { znacka: "Xbox", userAgentRegex: /Xbox/i, licenceKey: "XBOX-ERIK-2025", shortPass: "xbox123", specialCode: "XB-987" },
+      { znacka: "Nintendo", userAgentRegex: /Nintendo|Switch/i, licenceKey: "NINTENDO-ERIK-2025", shortPass: "nintendo123", specialCode: "NT-987" },
+      { znacka: "SmartTV", userAgentRegex: /SmartTV|Tizen|Web0S|Smart-TV|NetCast|HbbTV|tv|AppleTV/i, licenceKey: "TV-ERIK-2025", shortPass: "tv123", specialCode: "TV-987" },
+      { znacka: "Linux", userAgentRegex: /Linux|X11/i, licenceKey: "LINUX-ERIK-2025", shortPass: "linux123", specialCode: "LX-987" },
+      { znacka: "OnePlus", userAgentRegex: /OnePlus/i, licenceKey: "ONEPLUS-ERIK-2025", shortPass: "oneplus123", specialCode: "OP-987" },
+      { znacka: "Motorola", userAgentRegex: /Moto|Motorola/i, licenceKey: "MOTOROLA-ERIK-2025", shortPass: "moto123", specialCode: "MT-987" },
+      { znacka: "Realme", userAgentRegex: /Realme/i, licenceKey: "REALME-ERIK-2025", shortPass: "realme123", specialCode: "RM-987" },
+      { znacka: "Oppo", userAgentRegex: /Oppo/i, licenceKey: "OPPO-ERIK-2025", shortPass: "oppo123", specialCode: "OPP-987" },
+      { znacka: "Vivo", userAgentRegex: /Vivo/i, licenceKey: "VIVO-ERIK-2025", shortPass: "vivo123", specialCode: "VV-987" },
+      { znacka: "Tecno", userAgentRegex: /Tecno/i, licenceKey: "TECNO-ERIK-2025", shortPass: "tecno123", specialCode: "TC-987" },
+      { znacka: "Infinix", userAgentRegex: /Infinix/i, licenceKey: "INFINIX-ERIK-2025", shortPass: "infinix123", specialCode: "IX-987" },
+      { znacka: "Nothing", userAgentRegex: /Nothing/i, licenceKey: "NOTHING-ERIK-2025", shortPass: "nothing123", specialCode: "NTG-987" }
     ];
 
     if (localStorage.getItem("erik_access") === "granted") {
@@ -201,16 +83,12 @@
       const inputKey = document.getElementById("accessKey").value.trim();
       const inputPass = document.getElementById("shortPass").value.trim();
       const inputCode = document.getElementById("specialCode").value.trim();
-      const deviceInfo = navigator.userAgent;
 
       const firma = FIRMY.find(f =>
         f.licenceKey === inputKey &&
         f.shortPass === inputPass &&
         f.specialCode === inputCode &&
-        (
-          f.userAgentRegex.test(deviceInfo) ||
-          (typeof f.extraCheck === "function" && f.extraCheck(deviceInfo))
-        )
+        f.userAgentRegex.test(deviceInfo)
       );
 
       if (firma) {
@@ -222,20 +100,13 @@
           "❌ Prístup zamietnutý: Nesprávne údaje alebo zariadenie.";
       }
     }
-  </script>
-
-  <p style="margin-top: 1rem; color: #888;">
+  </script>  <p style="margin-top: 1rem; color: #888;">
     Tvoje zariadenie (UA): <span id="ua"></span>
   </p>
   <script>
     document.getElementById("ua").innerText = navigator.userAgent;
-  </script>
-
-  <p style="font-size: 14px; color: gray; margin-top: 20px;">
+  </script>  <p style="font-size: 14px; color: gray; margin-top: 20px;">
     This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br>
-    To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0<br>
-    © 2025 Erik Mohylák – All rights reserved.
-  </p>
-
-</body>
+    © 2025 Erik Mohylák
+  </p></body>
 </html>
