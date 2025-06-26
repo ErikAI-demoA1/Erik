@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="sk">
+<!DOCTYPE html>
+<html lang="sk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,13 +34,19 @@
     }
   </style>
 </head>
-<body>  <h1>🔐 Prístup do ErikAI</h1>
-  <p>Zadaj všetky údaje pre overenie</p><input type="text" id="accessKey" placeholder="Licenčný kód..." /><br /> <input type="password" id="shortPass" placeholder="Krátke heslo..." /><br /> <input type="text" id="specialCode" placeholder="Špeciálny kód..." /><br />
+<body>
+  <h1>🔐 Prístup do ErikAI</h1>
+  <p>Zadaj všetky údaje pre overenie</p>
+  <input type="text" id="accessKey" placeholder="Licenčný kód..." /><br />
+  <input type="password" id="shortPass" placeholder="Krátke heslo..." /><br />
+  <input type="text" id="specialCode" placeholder="Špeciálny kód..." /><br />
 
-<button onclick="checkAccess()">Odomknúť</button>
+  <button onclick="checkAccess()">Odomknúť</button>
 
   <div class="timer" id="timer">⏳ Čas na zadanie: 75 sekúnd</div>
-  <div id="error" class="error"></div>  <script>
+  <div id="error" class="error"></div>
+
+  <script>
     const deviceInfo = navigator.userAgent;
 
     const FIRMY = [
@@ -60,7 +67,9 @@
       { znacka: "Vivo", userAgentRegex: /Vivo/i, licenceKey: "VIVO-ERIK-2025", shortPass: "vivo123", specialCode: "VV-987" },
       { znacka: "Tecno", userAgentRegex: /Tecno/i, licenceKey: "TECNO-ERIK-2025", shortPass: "tecno123", specialCode: "TC-987" },
       { znacka: "Infinix", userAgentRegex: /Infinix/i, licenceKey: "INFINIX-ERIK-2025", shortPass: "infinix123", specialCode: "IX-987" },
-      { znacka: "Nothing", userAgentRegex: /Nothing/i, licenceKey: "NOTHING-ERIK-2025", shortPass: "nothing123", specialCode: "NTG-987" }
+      { znacka: "Nothing", userAgentRegex: /Nothing/i, licenceKey: "NOTHING-ERIK-2025", shortPass: "nothing123", specialCode: "NTG-987" },
+      // ➕ Záložná kategória pre všetky Android zariadenia
+      { znacka: "Android", userAgentRegex: /Android/i, licenceKey: "ANDROID-ERIK-2025", shortPass: "android123", specialCode: "AD-987" }
     ];
 
     if (localStorage.getItem("erik_access") === "granted") {
@@ -100,13 +109,18 @@
           "❌ Prístup zamietnutý: Nesprávne údaje alebo zariadenie.";
       }
     }
-  </script>  <p style="margin-top: 1rem; color: #888;">
+  </script>
+
+  <p style="margin-top: 1rem; color: #888;">
     Tvoje zariadenie (UA): <span id="ua"></span>
   </p>
   <script>
     document.getElementById("ua").innerText = navigator.userAgent;
-  </script>  <p style="font-size: 14px; color: gray; margin-top: 20px;">
+  </script>
+
+  <p style="font-size: 14px; color: gray; margin-top: 20px;">
     This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br>
     © 2025 Erik Mohylák
-  </p></body>
+  </p>
+</body>
 </html>
