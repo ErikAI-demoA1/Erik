@@ -50,35 +50,133 @@
 
   <script>
     const FIRMY = [
+  {
+    znacka: "Samsung",
+    userAgentRegex: /Samsung|SM-|Galaxy/i,
+    licenceKey: "SAMSUNG-ERIK-2025",
+    shortPass: "samsung123",
+    specialCode: "SG-987"
+  },
+  {
+    znacka: "Apple",
+    userAgentRegex: /iPhone|iPad|iOS|Macintosh|Mac OS/i,
+    licenceKey: "APPLE-ERIK-2025",
+    shortPass: "apple123",
+    specialCode: "AP-987"
+  },
+  {
+    znacka: "Huawei",
+    userAgentRegex: /Huawei|HUAWEI/i,
+    licenceKey: "HUAWEI-ERIK-2025",
+    shortPass: "huawei123",
+    specialCode: "HW-987"
+  },
+  {
+    znacka: "Xiaomi",
+    userAgentRegex: /Xiaomi|Redmi|POCO|Mi\s|MIUI|M20\d{2}/i,
+    licenceKey: "XIAOMI-ERIK-2025",
+    shortPass: "xiaomi123",
+    specialCode: "XM-987"
+  },
+  {
+    znacka: "Windows",
+    userAgentRegex: /Windows NT|Win64|WOW64/i,
+    licenceKey: "WINDOWS-ERIK-2025",
+    shortPass: "windows123",
+    specialCode: "WN-987"
+  },
+  {
+    znacka: "PlayStation",
+    userAgentRegex: /PlayStation|PS4|PS5/i,
+    licenceKey: "PS-ERIK-2025",
+    shortPass: "ps123",
+    specialCode: "PS-987"
+  },
+  {
+    znacka: "Xbox",
+    userAgentRegex: /Xbox/i,
+    licenceKey: "XBOX-ERIK-2025",
+    shortPass: "xbox123",
+    specialCode: "XB-987"
+  },
+  {
+    znacka: "Nintendo",
+    userAgentRegex: /Nintendo|Switch/i,
+    licenceKey: "NINTENDO-ERIK-2025",
+    shortPass: "nintendo123",
+    specialCode: "NT-987"
+  },
+  {
+    znacka: "SmartTV",
+    userAgentRegex: /SmartTV|Tizen|Web0S|Smart-TV|NetCast|HbbTV|tv|AppleTV/i,
+    licenceKey: "TV-ERIK-2025",
+    shortPass: "tv123",
+    specialCode: "TV-987"
+  },
+  {
+    znacka: "Linux",
+    userAgentRegex: /Linux|X11/i,
+    licenceKey: "LINUX-ERIK-2025",
+    shortPass: "linux123",
+    specialCode: "LX-987"
+  },
       {
-        znacka: "Samsung",
-        userAgentRegex: /Samsung|SM-|Galaxy/i,
-        licenceKey: "SAMSUNG-ERIK-2025",
-        shortPass: "samsung123",
-        specialCode: "SG-987"
-      },
-      {
-        znacka: "Apple",
-        userAgentRegex: /iPhone|iPad|iOS/i,
-        licenceKey: "APPLE-ERIK-2025",
-        shortPass: "apple123",
-        specialCode: "AP-987"
-      },
-      {
-        znacka: "Huawei",
-        userAgentRegex: /Huawei|HUAWEI/i,
-        licenceKey: "HUAWEI-ERIK-2025",
-        shortPass: "huawei123",
-        specialCode: "HW-987"
-      },
-      {
-        znacka: "Xiaomi",
-        userAgentRegex: /Xiaomi|Redmi|MIUI|Mi\s|POCO|M20\d{2}/i,
-        licenceKey: "XIAOMI-ERIK-2025",
-        shortPass: "xiaomi123",
-        specialCode: "XM-987"
-      }
-    ];
+  znacka: "OnePlus",
+  userAgentRegex: /OnePlus/i,
+  licenceKey: "ONEPLUS-ERIK-2025",
+  shortPass: "oneplus123",
+  specialCode: "OP-987"
+},
+{
+  znacka: "Motorola",
+  userAgentRegex: /Moto|Motorola/i,
+  licenceKey: "MOTOROLA-ERIK-2025",
+  shortPass: "moto123",
+  specialCode: "MT-987"
+},
+{
+  znacka: "Realme",
+  userAgentRegex: /Realme/i,
+  licenceKey: "REALME-ERIK-2025",
+  shortPass: "realme123",
+  specialCode: "RM-987"
+},
+{
+  znacka: "Oppo",
+  userAgentRegex: /Oppo/i,
+  licenceKey: "OPPO-ERIK-2025",
+  shortPass: "oppo123",
+  specialCode: "OPP-987"
+},
+{
+  znacka: "Vivo",
+  userAgentRegex: /Vivo/i,
+  licenceKey: "VIVO-ERIK-2025",
+  shortPass: "vivo123",
+  specialCode: "VV-987"
+},
+{
+  znacka: "Tecno",
+  userAgentRegex: /Tecno/i,
+  licenceKey: "TECNO-ERIK-2025",
+  shortPass: "tecno123",
+  specialCode: "TC-987"
+},
+{
+  znacka: "Infinix",
+  userAgentRegex: /Infinix/i,
+  licenceKey: "INFINIX-ERIK-2025",
+  shortPass: "infinix123",
+  specialCode: "IX-987"
+},
+{
+  znacka: "Nothing",
+  userAgentRegex: /Nothing/i,
+  licenceKey: "NOTHING-ERIK-2025",
+  shortPass: "nothing123",
+  specialCode: "NTG-987"
+}
+];
 
     if (localStorage.getItem("erik_access") === "granted") {
       window.location.href = "index3.html";
