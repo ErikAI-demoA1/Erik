@@ -116,5 +116,14 @@
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/  
 © 2025 Erik Mohylák – All rights reserved.
   </p>
+
+  <script>
+  const povolenyRef = "erikai-demoa1.github.io";
+
+  if (!document.referrer.includes(povolenyRef)) {
+    alert("Prístup zakázaný: túto stránku nemožno otvoriť priamo.");
+    window.location.href = "https://erikai-demoa1.github.io/ErikAI/";
+  }
+  </script>
 </body>
       </html>
