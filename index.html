@@ -69,7 +69,7 @@
       { znacka: "Infinix", userAgentRegex: /Infinix/i, licenceKey: "INFINIX-ERIK-2025", shortPass: "infinix123", specialCode: "IX-987" },
       { znacka: "Nothing", userAgentRegex: /Nothing/i, licenceKey: "NOTHING-ERIK-2025", shortPass: "nothing123", specialCode: "NTG-987" },
       // ➕ Záložná kategória pre všetky Android zariadenia
-      { znacka: "Android", userAgentRegex: /Android/i, licenceKey: "ANDROID-ERIK-2025", shortPass: "android123", specialCode: "AD-987" }
+      { znacka: "Android", userAgentRegex: /Android/i, licenceKey: ["ANDROID-ERIK-2025", "ANDROID2-ERIK-2025"], shortPass: ["android123", "android456"], specialCode: ["AD-987", "AD-123"]}
     ];
 
     if (localStorage.getItem("erik_access") === "granted") {
