@@ -89,12 +89,17 @@ To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-
   </p>
 
   <script>
-  const povolenyRef = "erikai-demoa1.github.io";
+  const povoleneRef = ["erikai-demoa1.github.io", "erikaios.online"];
 
-  if (!document.referrer.includes(povolenyRef)) {
-    alert("Prístup zakázaný: túto stránku nemožno otvoriť priamo.");
-    window.location.href = "https://erikai-demoa1.github.io/ErikAI/";
-  }
+let pristupOk = false;
+povoleneRef.forEach(ref => {
+  if (document.referrer.includes(ref)) pristupOk = true;
+});
+
+if (!pristupOk) {
+  alert("Prístup zakázaný: túto stránku nemožno otvoriť priamo.");
+  window.location.href = "https://erikaios.online/";
+}
 </script>
 </body>
 </html>
