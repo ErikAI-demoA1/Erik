@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Licencia – ErikAI</title>
+  <title>Licencia – ErikAI (DEBUG)</title>
   <style>
     body {
       font-family: sans-serif;
@@ -50,35 +50,35 @@
 
   <script>
     const FIRMY = [
-  {
-    znacka: "Samsung",
-    userAgentRegex: /Samsung|SM-|Galaxy/i,
-    licenceKey: "SAMSUNG-ERIK-2025",
-    shortPass: "samsung123",
-    specialCode: "SG-987"
-  },
-  {
-    znacka: "Apple",
-    userAgentRegex: /iPhone|iPad|iOS/i,
-    licenceKey: "APPLE-ERIK-2025",
-    shortPass: "apple123",
-    specialCode: "AP-987"
-  },
-  {
-    znacka: "Huawei",
-    userAgentRegex: /Huawei|HUAWEI/i,
-    licenceKey: "HUAWEI-ERIK-2025",
-    shortPass: "huawei123",
-    specialCode: "HW-987"
-  },
-  {
-    znacka: "Xiaomi",
-    userAgentRegex: /Xiaomi|Redmi|MIUI|Mi\s|POCO|M20\d{2}/i,
-    licenceKey: "XIAOMI-ERIK-2025",
-    shortPass: "xiaomi123",
-    specialCode: "XM-987"
-  }
-];
+      {
+        znacka: "Samsung",
+        userAgentRegex: /Samsung|SM-|Galaxy/i,
+        licenceKey: "SAMSUNG-ERIK-2025",
+        shortPass: "samsung123",
+        specialCode: "SG-987"
+      },
+      {
+        znacka: "Apple",
+        userAgentRegex: /iPhone|iPad|iOS/i,
+        licenceKey: "APPLE-ERIK-2025",
+        shortPass: "apple123",
+        specialCode: "AP-987"
+      },
+      {
+        znacka: "Huawei",
+        userAgentRegex: /Huawei|HUAWEI/i,
+        licenceKey: "HUAWEI-ERIK-2025",
+        shortPass: "huawei123",
+        specialCode: "HW-987"
+      },
+      {
+        znacka: "Xiaomi",
+        userAgentRegex: /Xiaomi|Redmi|MIUI|Mi\s|POCO|M\d{4}|XMS/i,
+        licenceKey: "XIAOMI-ERIK-2025",
+        shortPass: "xiaomi123",
+        specialCode: "XM-987"
+      }
+    ];
 
     if (localStorage.getItem("erik_access") === "granted") {
       window.location.href = "index3.html";
@@ -102,6 +102,9 @@
       const inputCode = document.getElementById("specialCode").value.trim();
       const deviceInfo = navigator.userAgent;
 
+      console.log("DEBUG – UserAgent: ", deviceInfo);
+      alert("🕵️ UserAgent tvojho zariadenia:\n" + deviceInfo);
+
       const firma = FIRMY.find(f =>
         f.licenceKey === inputKey &&
         f.shortPass === inputPass &&
@@ -109,12 +112,27 @@
         f.userAgentRegex.test(deviceInfo)
       );
 
-      if (firma) {
+      if (!firma) {
+        // Diagnostika: ktorá časť neprešla?
+        let matchedFirma = FIRMY.find(f =>
+          f.licenceKey === inputKey &&
+          f.shortPass === inputPass &&
+          f.specialCode === inputCode
+        );
+
+        if (matchedFirma) {
+          const matched = matchedFirma.userAgentRegex.test(deviceInfo);
+          document.getElementById("error").innerText = matched
+            ? "✅ Regex sedí, ale niečo iné zlyhalo (???)"
+            : "❌ Prístup zamietnutý: Zariadenie nie je rozpoznané ako " + matchedFirma.znacka;
+        } else {
+          document.getElementById("error").innerText = "❌ Nesprávne údaje: kód/heslo/kód nesedia.";
+        }
+
+      } else {
         clearInterval(interval);
         localStorage.setItem("erik_access", "granted");
         window.location.href = "index3.html";
-      } else {
-        document.getElementById("error").innerText = "❌ Neúspešné overenie alebo nesprávne zariadenie.";
       }
     }
   </script>
