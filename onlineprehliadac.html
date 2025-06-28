@@ -2,69 +2,65 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI Prehliadač</title>
+  <title>🌐 ErikAI Webový Prehliadač – Zoznam 100 prehliadačov</title>
   <style>
     body {
       background-color: #000;
-      color: #fff;
+      color: #00ccff;
       font-family: sans-serif;
       text-align: center;
-      padding: 2rem;
+      padding: 1.5rem;
     }
-    input, button {
-      font-size: 1.1rem;
-      padding: 10px;
-      margin: 10px;
-      border-radius: 10px;
-      border: none;
-      width: 60%;
+    h1 {
+      color: #00ffff;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
     }
-    button {
-      background-color: #0077cc;
-      color: white;
-      cursor: pointer;
+    p {
+      color: #ccc;
+      margin-bottom: 1.5rem;
     }
-    .results a {
+    .browser-list a {
       display: block;
+      margin: 6px 0;
       color: #00ccff;
-      margin: 10px 0;
       font-size: 1.1rem;
       text-decoration: none;
     }
-    .results a:hover {
+    .browser-list a:hover {
       text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <h1>🌐 ErikAI Vyhľadávač</h1>
-  <p>Zadaj hľadaný výraz a vyber si vyhľadávač:</p>
-  <input type="text" id="query" placeholder="Napíš, čo chceš nájsť...">
-  <button onclick="search()">Vyhľadať 🔍</button>
+  <h1>🌐 ErikAI – Zoznam Prehliadačov</h1>
+  <p>Prehľad 100 známych prehliadačov na svete</p>
 
-  <div class="results" id="results"></div>
+  <div class="browser-list" id="browserList"></div>
 
   <script>
-    function search() {
-      const q = encodeURIComponent(document.getElementById("query").value.trim());
-      if (!q) return;
+    const browsers = [
+      "Google Chrome", "Mozilla Firefox", "Safari", "Microsoft Edge", "Opera", "Brave", "Vivaldi", "Tor Browser",
+      "DuckDuckGo Browser", "Samsung Internet", "UC Browser", "Yandex Browser", "Puffin", "Maxthon", "Ecosia Browser",
+      "Aloha Browser", "AVG Secure Browser", "Avast Secure Browser", "KaiOS Browser", "Internet Explorer",
+      "Netscape Navigator", "Chromium", "Comodo Dragon", "SRWare Iron", "Waterfox", "Pale Moon", "SeaMonkey",
+      "Orion Browser", "Beaker Browser", "Blisk", "Dolphin Browser", "Flynx", "Phoenix Browser", "QQ Browser",
+      "Sleipnir", "JioPages", "Kiwi Browser", "Min Browser", "Midori", "UR Browser", "Lunascape", "Hi Browser",
+      "Epic Privacy Browser", "Coc Coc", "Tor Browser Alpha", "Microsoft Internet TV", "Avant Browser", "Amigo",
+      "IceDragon", "Dooble", "Otter Browser", "Falkon", "Colibri", "K-Meleon", "Light Browser", "Wyzo", "X Browser",
+      "Ghostery Privacy Browser", "Cent Browser", "360 Secure Browser", "Basilisk", "SPARK Browser", "Rocket Browser",
+      "Slimjet", "ICAB", "NetSurf", "Zetakey", "Deepnet Explorer", "Superbird", "BlackHawk", "SlimBrowser", "Arora",
+      "Dooble Secure Browser", "Maelstrom", "QuteBrowser", "QupZilla", "Naver Whale", "Browzar", "Otter", "BriskBard",
+      "Epiphany", "Rekonq", "GNOME Web", "Kazehakase", "Opera Neon", "WebPositive", "Aurora", "Torxy", "Tungsten Browser",
+      "Avira Scout", "Cliqz", "Roccat Browser", "Breach Browser", "NetCaptor", "Iceweasel", "Konqueror", "Links",
+      "Lynx", "Galeon", "TenFourFox", "Polarity Browser", "Uzbl", "Midnight Browser"
+    ];
 
-      const engines = [
-        { name: "🔍 Google", url: `https://www.google.com/search?q=${q}` },
-        { name: "🦆 DuckDuckGo", url: `https://duckduckgo.com/?q=${q}` },
-        { name: "🔎 Bing", url: `https://www.bing.com/search?q=${q}` },
-        { name: "🌐 Yahoo", url: `https://search.yahoo.com/search?p=${q}` },
-        { name: "📺 YouTube", url: `https://www.youtube.com/results?search_query=${q}` },
-        { name: "📚 Wikipédia", url: `https://sk.wikipedia.org/wiki/Špeciálne:Hľadať?search=${q}` }
-      ];
-
-      const div = document.getElementById("results");
-      div.innerHTML = `<h2>🔽 Výber vyhľadávača pre: <i>${decodeURIComponent(q)}</i></h2>`;
-      engines.forEach(engine => {
-        div.innerHTML += `<a href="${engine.url}" target="_blank">${engine.name}</a>`;
-      });
-    }
+    const list = document.getElementById("browserList");
+    browsers.forEach(name => {
+      list.innerHTML += `<a href="#" onclick="alert('${name}')">🌐 ${name}</a>`;
+    });
   </script>
 
 </body>
