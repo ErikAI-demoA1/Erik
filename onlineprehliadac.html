@@ -2,63 +2,23 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌐 ErikAI Webový Prehliadač</title>
-  <style>
-    body {
-      background-color: #111;
-      color: white;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    input[type="text"] {
-      width: 90%;
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 5px;
-      border: none;
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 10px 25px;
-      font-size: 18px;
-      border-radius: 5px;
-      border: none;
-      background-color: #00c853;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #00b342;
-    }
-  </style>
+  <title>ErikAI Webový Prehliadač</title>
 </head>
-<body>
+<body style="background-color: black; color: white; text-align: center;">
+  <h2>🌐 ErikAI Webový Prehliadač</h2>
+  <p>Zadaj, čo chceš vyhľadať (napr. Erik Mohylák):</p>
 
-  <h1>🌍 ErikAI Webový Prehliadač</h1>
-  <p>Zadaj webový odkaz (napr. <code>erikaios.online</code>):</p>
-
-  <input type="text" id="urlInput" placeholder="https://erikaios.online">
-  <br>
-  <button onclick="otvorOdkaz()">🌐 Otvoriť odkaz</button>
+  <input type="text" id="searchInput" placeholder="Napr. Erik Mohylák" style="padding: 10px; width: 80%;">
+  <button onclick="searchGoogle()" style="padding: 10px; background-color: green; color: white;">🔍 Vyhľadať</button>
 
   <script>
-    function otvorOdkaz() {
-      let link = document.getElementById("urlInput").value.trim();
-      if (link === "") {
-        alert("Zadaj webový odkaz.");
-        return;
+    function searchGoogle() {
+      const query = document.getElementById('searchInput').value.trim();
+      if (query !== "") {
+        const encoded = encodeURIComponent(query);
+        window.open(`https://www.google.com/search?q=${encoded}`, "_blank");
       }
-
-      // ak chýba https:// alebo http://, automaticky pridá https://
-      if (!link.startsWith("http://") && !link.startsWith("https://")) {
-        link = "https://" + link;
-      }
-
-      window.open(link, "_blank"); // otvorí v novom okne alebo karte
     }
   </script>
-
 </body>
 </html>
