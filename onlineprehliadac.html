@@ -7,7 +7,7 @@
   <style>
     body {
       background-color: #000;
-      color: #00bfff;
+      color: #00ffff;
       font-family: sans-serif;
       text-align: center;
       padding-top: 50px;
@@ -15,28 +15,28 @@
     input, button {
       padding: 10px;
       font-size: 16px;
-      margin: 5px;
+      margin: 10px;
     }
     button {
       background-color: #00cc66;
-      border: none;
       color: white;
-      cursor: pointer;
+      border: none;
     }
   </style>
 </head>
 <body>
   <h2>🌐 ErikAI Webový Prehliadač</h2>
-  <p>Zadaj, čo chceš vyhľadať:</p>
-  <input type="text" id="dotaz" placeholder="napr. Erik Mohylák" />
+  <p>Zadaj, čo chceš nájsť (napr. ErikAI):</p>
+  <input type="text" id="dotaz" placeholder="napr. ErikAI">
   <button onclick="hladat()">🔍 Vyhľadať</button>
 
   <script>
     function hladat() {
-      const vyraz = document.getElementById('dotaz').value.trim();
-      if (vyraz !== '') {
-        const url = 'https://duckduckgo.com/?q=' + encodeURIComponent(vyraz) + '&t=erikai';
-        window.location.href = url; // Otvorí rovno výsledok v DuckDuckGo
+      const dotaz = document.getElementById('dotaz').value.trim();
+      if (dotaz !== '') {
+        const prikaz = '\\ ' + dotaz; // \\ znamená automaticky otvoriť prvý výsledok
+        const url = 'https://duckduckgo.com/?q=' + encodeURIComponent(prikaz);
+        window.location.href = url;
       }
     }
   </script>
