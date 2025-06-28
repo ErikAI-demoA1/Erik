@@ -2,65 +2,172 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>🌐 ErikAI Webový Prehliadač – Zoznam 100 prehliadačov</title>
+  <title>ErikAI Webový Prehliadač</title>
   <style>
     body {
       background-color: #000;
-      color: #00ccff;
+      color: #fff;
       font-family: sans-serif;
       text-align: center;
-      padding: 1.5rem;
+      padding: 2rem;
     }
-    h1 {
-      color: #00ffff;
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
+    input, button {
+      font-size: 1.1rem;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 10px;
+      border: none;
+      width: 60%;
     }
-    p {
-      color: #ccc;
-      margin-bottom: 1.5rem;
+    button {
+      background-color: #00bb55;
+      color: white;
+      cursor: pointer;
     }
-    .browser-list a {
+    .results a {
       display: block;
-      margin: 6px 0;
       color: #00ccff;
+      margin: 6px 0;
       font-size: 1.1rem;
       text-decoration: none;
     }
-    .browser-list a:hover {
+    .results a:hover {
       text-decoration: underline;
+    }
+    h2 {
+      margin-top: 2rem;
+      color: #00ffff;
     }
   </style>
 </head>
 <body>
 
-  <h1>🌐 ErikAI – Zoznam Prehliadačov</h1>
-  <p>Prehľad 100 známych prehliadačov na svete</p>
+  <h1>🌐 ErikAI Webový Prehliadač</h1>
+  <p>Zadaj, čo chceš vyhľadať (napr. Erik Mohylák):</p>
+  <input type="text" id="query" placeholder="Napíš, čo chceš nájsť...">
+  <button onclick="search()">🔍 Vyhľadať</button>
 
-  <div class="browser-list" id="browserList"></div>
+  <div class="results" id="results"></div>
 
   <script>
-    const browsers = [
-      "Google Chrome", "Mozilla Firefox", "Safari", "Microsoft Edge", "Opera", "Brave", "Vivaldi", "Tor Browser",
-      "DuckDuckGo Browser", "Samsung Internet", "UC Browser", "Yandex Browser", "Puffin", "Maxthon", "Ecosia Browser",
-      "Aloha Browser", "AVG Secure Browser", "Avast Secure Browser", "KaiOS Browser", "Internet Explorer",
-      "Netscape Navigator", "Chromium", "Comodo Dragon", "SRWare Iron", "Waterfox", "Pale Moon", "SeaMonkey",
-      "Orion Browser", "Beaker Browser", "Blisk", "Dolphin Browser", "Flynx", "Phoenix Browser", "QQ Browser",
-      "Sleipnir", "JioPages", "Kiwi Browser", "Min Browser", "Midori", "UR Browser", "Lunascape", "Hi Browser",
-      "Epic Privacy Browser", "Coc Coc", "Tor Browser Alpha", "Microsoft Internet TV", "Avant Browser", "Amigo",
-      "IceDragon", "Dooble", "Otter Browser", "Falkon", "Colibri", "K-Meleon", "Light Browser", "Wyzo", "X Browser",
-      "Ghostery Privacy Browser", "Cent Browser", "360 Secure Browser", "Basilisk", "SPARK Browser", "Rocket Browser",
-      "Slimjet", "ICAB", "NetSurf", "Zetakey", "Deepnet Explorer", "Superbird", "BlackHawk", "SlimBrowser", "Arora",
-      "Dooble Secure Browser", "Maelstrom", "QuteBrowser", "QupZilla", "Naver Whale", "Browzar", "Otter", "BriskBard",
-      "Epiphany", "Rekonq", "GNOME Web", "Kazehakase", "Opera Neon", "WebPositive", "Aurora", "Torxy", "Tungsten Browser",
-      "Avira Scout", "Cliqz", "Roccat Browser", "Breach Browser", "NetCaptor", "Iceweasel", "Konqueror", "Links",
-      "Lynx", "Galeon", "TenFourFox", "Polarity Browser", "Uzbl", "Midnight Browser"
-    ];
+    
+    function search() {
+      const q = document.getElementById("query").value.trim().toLowerCase();
+      const div = document.getElementById("results");
+      div.innerHTML = "";
 
-    const list = document.getElementById("browserList");
-    browsers.forEach(name => {
-      list.innerHTML += `<a href="#" onclick="alert('${name}')">🌐 ${name}</a>`;
-    });
+      if (!q) return;
+
+      if (q.includes("erikai")) {
+        div.innerHTML = `<h2>🌐 Prehliadače ErikAI:</h2>`;
+        browserList.forEach(name => {
+          div.innerHTML += `<a href="#" onclick="alert('${name}')">🌐 ${name}</a>`;
+        });
+      } else {
+        const encoded = encodeURIComponent(q);
+        const engines = [
+  { name: "🌐 Google Chrome", url: "https://www.google.com/search?q=Google+Chrome" },
+  { name: "🌐 Mozilla Firefox", url: "https://www.google.com/search?q=Mozilla+Firefox" },
+  { name: "🌐 Safari", url: "https://www.google.com/search?q=Safari+browser" },
+  { name: "🌐 Microsoft Edge", url: "https://www.google.com/search?q=Microsoft+Edge" },
+  { name: "🌐 Opera", url: "https://www.google.com/search?q=Opera+browser" },
+  { name: "🌐 Brave", url: "https://www.google.com/search?q=Brave+browser" },
+  { name: "🌐 Vivaldi", url: "https://www.google.com/search?q=Vivaldi+browser" },
+  { name: "🌐 Tor Browser", url: "https://www.google.com/search?q=Tor+Browser" },
+  { name: "🌐 DuckDuckGo Browser", url: "https://www.google.com/search?q=DuckDuckGo+Browser" },
+  { name: "🌐 Samsung Internet", url: "https://www.google.com/search?q=Samsung+Internet+Browser" },
+  { name: "🌐 UC Browser", url: "https://www.google.com/search?q=UC+Browser" },
+  { name: "🌐 Yandex Browser", url: "https://www.google.com/search?q=Yandex+Browser" },
+  { name: "🌐 Puffin", url: "https://www.google.com/search?q=Puffin+Browser" },
+  { name: "🌐 Maxthon", url: "https://www.google.com/search?q=Maxthon+Browser" },
+  { name: "🌐 Ecosia Browser", url: "https://www.google.com/search?q=Ecosia+Browser" },
+  { name: "🌐 Aloha Browser", url: "https://www.google.com/search?q=Aloha+Browser" },
+  { name: "🌐 AVG Secure Browser", url: "https://www.google.com/search?q=AVG+Secure+Browser" },
+  { name: "🌐 Avast Secure Browser", url: "https://www.google.com/search?q=Avast+Secure+Browser" },
+  { name: "🌐 KaiOS Browser", url: "https://www.google.com/search?q=KaiOS+Browser" },
+  { name: "🌐 Internet Explorer", url: "https://www.google.com/search?q=Internet+Explorer" },
+  { name: "🌐 Netscape Navigator", url: "https://www.google.com/search?q=Netscape+Navigator" },
+  { name: "🌐 Chromium", url: "https://www.google.com/search?q=Chromium+Browser" },
+  { name: "🌐 Comodo Dragon", url: "https://www.google.com/search?q=Comodo+Dragon+Browser" },
+  { name: "🌐 SRWare Iron", url: "https://www.google.com/search?q=SRWare+Iron+Browser" },
+  { name: "🌐 Waterfox", url: "https://www.google.com/search?q=Waterfox+Browser" },
+  { name: "🌐 Pale Moon", url: "https://www.google.com/search?q=Pale+Moon+Browser" },
+  { name: "🌐 SeaMonkey", url: "https://www.google.com/search?q=SeaMonkey+Browser" },
+  { name: "🌐 Orion Browser", url: "https://www.google.com/search?q=Orion+Browser" },
+  { name: "🌐 Beaker Browser", url: "https://www.google.com/search?q=Beaker+Browser" },
+  { name: "🌐 Blisk", url: "https://www.google.com/search?q=Blisk+Browser" },
+  { name: "🌐 Dolphin Browser", url: "https://www.google.com/search?q=Dolphin+Browser" },
+  { name: "🌐 Flynx", url: "https://www.google.com/search?q=Flynx+Browser" },
+  { name: "🌐 Phoenix Browser", url: "https://www.google.com/search?q=Phoenix+Browser" },
+  { name: "🌐 QQ Browser", url: "https://www.google.com/search?q=QQ+Browser" },
+  { name: "🌐 Sleipnir", url: "https://www.google.com/search?q=Sleipnir+Browser" },
+  { name: "🌐 JioPages", url: "https://www.google.com/search?q=JioPages+Browser" },
+  { name: "🌐 Kiwi Browser", url: "https://www.google.com/search?q=Kiwi+Browser" },
+  { name: "🌐 Min Browser", url: "https://www.google.com/search?q=Min+Browser" },
+  { name: "🌐 Midori", url: "https://www.google.com/search?q=Midori+Browser" },
+  { name: "🌐 UR Browser", url: "https://www.google.com/search?q=UR+Browser" },
+  { name: "🌐 Lunascape", url: "https://www.google.com/search?q=Lunascape+Browser" },
+  { name: "🌐 Hi Browser", url: "https://www.google.com/search?q=Hi+Browser" },
+  { name: "🌐 Epic Privacy Browser", url: "https://www.google.com/search?q=Epic+Privacy+Browser" },
+  { name: "🌐 Coc Coc", url: "https://www.google.com/search?q=Coc+Coc+Browser" },
+  { name: "🌐 Avant Browser", url: "https://www.google.com/search?q=Avant+Browser" },
+  { name: "🌐 Amigo", url: "https://www.google.com/search?q=Amigo+Browser" },
+  { name: "🌐 IceDragon", url: "https://www.google.com/search?q=IceDragon+Browser" },
+  { name: "🌐 Dooble", url: "https://www.google.com/search?q=Dooble+Browser" },
+  { name: "🌐 Otter Browser", url: "https://www.google.com/search?q=Otter+Browser" },
+  { name: "🌐 Falkon", url: "https://www.google.com/search?q=Falkon+Browser" },
+  { name: "🌐 Colibri", url: "https://www.google.com/search?q=Colibri+Browser" },
+  { name: "🌐 K-Meleon", url: "https://www.google.com/search?q=K-Meleon+Browser" },
+  { name: "🌐 Light Browser", url: "https://www.google.com/search?q=Light+Browser" },
+  { name: "🌐 Wyzo", url: "https://www.google.com/search?q=Wyzo+Browser" },
+  { name: "🌐 X Browser", url: "https://www.google.com/search?q=X+Browser" },
+  { name: "🌐 Ghostery Privacy Browser", url: "https://www.google.com/search?q=Ghostery+Privacy+Browser" },
+  { name: "🌐 Cent Browser", url: "https://www.google.com/search?q=Cent+Browser" },
+  { name: "🌐 360 Secure Browser", url: "https://www.google.com/search?q=360+Secure+Browser" },
+  { name: "🌐 Basilisk", url: "https://www.google.com/search?q=Basilisk+Browser" },
+  { name: "🌐 SPARK Browser", url: "https://www.google.com/search?q=SPARK+Browser" },
+  { name: "🌐 Rocket Browser", url: "https://www.google.com/search?q=Rocket+Browser" },
+  { name: "🌐 Slimjet", url: "https://www.google.com/search?q=Slimjet+Browser" },
+  { name: "🌐 ICAB", url: "https://www.google.com/search?q=ICAB+Browser" },
+  { name: "🌐 NetSurf", url: "https://www.google.com/search?q=NetSurf+Browser" },
+  { name: "🌐 Zetakey", url: "https://www.google.com/search?q=Zetakey+Browser" },
+  { name: "🌐 Deepnet Explorer", url: "https://www.google.com/search?q=Deepnet+Explorer" },
+  { name: "🌐 Superbird", url: "https://www.google.com/search?q=Superbird+Browser" },
+  { name: "🌐 BlackHawk", url: "https://www.google.com/search?q=BlackHawk+Browser" },
+  { name: "🌐 SlimBrowser", url: "https://www.google.com/search?q=SlimBrowser" },
+  { name: "🌐 Arora", url: "https://www.google.com/search?q=Arora+Browser" },
+  { name: "🌐 QuteBrowser", url: "https://www.google.com/search?q=QuteBrowser" },
+  { name: "🌐 QupZilla", url: "https://www.google.com/search?q=QupZilla+Browser" },
+  { name: "🌐 Naver Whale", url: "https://www.google.com/search?q=Naver+Whale+Browser" },
+  { name: "🌐 Browzar", url: "https://www.google.com/search?q=Browzar+Browser" },
+  { name: "🌐 BriskBard", url: "https://www.google.com/search?q=BriskBard+Browser" },
+  { name: "🌐 Epiphany", url: "https://www.google.com/search?q=Epiphany+Browser" },
+  { name: "🌐 Rekonq", url: "https://www.google.com/search?q=Rekonq+Browser" },
+  { name: "🌐 GNOME Web", url: "https://www.google.com/search?q=GNOME+Web" },
+  { name: "🌐 Kazehakase", url: "https://www.google.com/search?q=Kazehakase+Browser" },
+  { name: "🌐 Opera Neon", url: "https://www.google.com/search?q=Opera+Neon" },
+  { name: "🌐 WebPositive", url: "https://www.google.com/search?q=WebPositive+Browser" },
+  { name: "🌐 Aurora", url: "https://www.google.com/search?q=Aurora+Browser" },
+  { name: "🌐 Torxy", url: "https://www.google.com/search?q=Torxy+Browser" },
+  { name: "🌐 Avira Scout", url: "https://www.google.com/search?q=Avira+Scout+Browser" },
+  { name: "🌐 Cliqz", url: "https://www.google.com/search?q=Cliqz+Browser" },
+  { name: "🌐 Roccat Browser", url: "https://www.google.com/search?q=Roccat+Browser" },
+  { name: "🌐 Iceweasel", url: "https://www.google.com/search?q=Iceweasel+Browser" },
+  { name: "🌐 Konqueror", url: "https://www.google.com/search?q=Konqueror+Browser" },
+  { name: "🌐 Links", url: "https://www.google.com/search?q=Links+Browser" },
+  { name: "🌐 Lynx", url: "https://www.google.com/search?q=Lynx+Browser" },
+  { name: "🌐 Galeon", url: "https://www.google.com/search?q=Galeon+Browser" },
+  { name: "🌐 TenFourFox", url: "https://www.google.com/search?q=TenFourFox+Browser" },
+  { name: "🌐 Polarity Browser", url: "https://www.google.com/search?q=Polarity+Browser" },
+  { name: "🌐 Uzbl", url: "https://www.google.com/search?q=Uzbl+Browser" },
+  { name: "🌐 Midnight Browser", url: "https://www.google.com/search?q=Midnight+Browser" }
+];
+        div.innerHTML = `<h2>🔽 Výsledky pre: <i>${q}</i></h2>`;
+        engines.forEach(engine => {
+          div.innerHTML += `<a href="${engine.url}" target="_blank">${engine.name}</a>`;
+        });
+      }
+    }
   </script>
 
 </body>
