@@ -2,56 +2,102 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>ErikAI OS – Hlavná stránka</title>
+  <title>🔧 ErikAI OS Universe</title>
   <style>
     body {
-      background: #111;
+      background: #101010;
       color: white;
       font-family: sans-serif;
       text-align: center;
-      padding: 2rem;
     }
-    .tool-list {
-      max-height: 400px;
-      overflow-y: auto;
-      margin-top: 1rem;
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 20px 0;
+      font-size: 16px;
     }
-    .tool {
+    .link-list a {
+      display: block;
+      padding: 10px;
+      margin: 5px;
       background: #222;
-      margin: 0.5rem auto;
-      padding: 1rem;
-      border-radius: 8px;
-      width: 90%;
-      cursor: pointer;
-      transition: background 0.2s;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
     }
-    .tool:hover {
+    .link-list a:hover {
       background: #333;
     }
   </style>
 </head>
 <body>
 
-<h1>🔧 ErikAI OS Universe</h1>
-<p>Vyber nástroj zo zoznamu:</p>
+  <h2>🔧 ErikAI OS Universe</h2>
+  <input type="text" id="search" placeholder="🔍 Vyhľadaj nástroj podľa názvu...">
 
-<div class="tool-list">
-  <div class="tool" onclick="go('mail.html')">📧 ErikAI Mail</div>
-  <div class="tool" onclick="go('sms.html')">📩 ErikAI SMS</div>
-  <div class="tool" onclick="go('calendar.html')">📅 ErikAI Kalendár</div>
-  <div class="tool" onclick="go('notes.html')">📝 ErikAI Poznámky</div>
-  <div class="tool" onclick="go('alarm.html')">⏰ ErikAI Budík</div>
-  <div class="tool" onclick="go('ai.html')">🤖 ErikAI Asistent</div>
-  <div class="tool" onclick="go('store.html')">🛍️ ErikAI Store</div>
-  <div class="tool" onclick="go('corelang.html')">💻 ErikAI CoreLang</div>
-  <div class="tool" onclick="go('arena.html')">🎮 ErikAI Ultra Arena</div>
-</div>
+  <div class="link-list" id="toolList">
+    <!-- Tvoje odkazy -->
+    <a href="realnastavenie.html">⚙️Návod nastavenie</a>
+    <a href="pocasie.html">🌞ErikAI Počasie</a>
+    <a href="kalendar.html">📑ErikAI Kalendár</a>
+    <a href="hodiny.html">⏱️🕛ErikAI Hodiny a stopky</a>
+    <a href="budik.html">⏰ErikAI Budík</a>
+    <a href="erikai-chat.html">🤖Webová verzia ErikAI Chat</a>
+    <a href="weberikai.html">🤖Otvor aplikáciu (Android)</a>
+    <a href="kalkulacku.html">🧮Kalkulačka Pro</a>
+    <a href="poznamky.html">📝Poznámky</a>
+    <a href="zaznam_nahravok.html">🔊Záznam Nahrávok</a>
+    <a href="fotak.html">📸Kamera & Video</a>
+    <a href="skener.html">📹QR Skener</a>
+    <a href="kompas.html">🧭Kompas</a>
+    <a href="kontakt_hovor.html">☎️📞Kontakty & Hovory</a>
+    <a href="mail.html">📨E-mail</a>
+    <a href="sms.html">🪪SMS</a>
+    <a href="galeria.html">🪟Galéria</a>
+    <a href="mapy.html">🗺️Mapy</a>
+    <a href="spravca_subor.html">🗂️Správca Súborov</a>
+    <a href="dokumenty.html">📃Dokumenty</a>
+    <a href="pdfsk.html">📕PDF</a>
+    <a href="tabulky.html">📊Tabuľky</a>
+    <a href="prezentacie.html">📖Prezentácie</a>
+    <a href="speedmeter.html">🚄Speedmeter</a>
+    <a href="radio.html">📻Rádio</a>
+    <a href="video_editor.html">🎞️Editor videa</a>
+    <a href="qr.html">📹QR generátor</a>
+    <a href="kreslenie.html">📝Kreslenie</a>
+    <a href="translate.html">🌐Prekladač</a>
+    <a href="erikv.html">📺ErikAI TV (čoskoro)</a>
+    <a href="spravy.html">📺Správy a noviny</a>
+    <a href="nudzove.html">🗂️Núdzové info</a>
+    <a href="support.html">🗂️Podpora</a>
+    <a href="erikaicorelang.html">🌐CoreLang</a>
+    <a href="create_pwa.html">🌐Tvorba PWA</a>
+    <a href="hra.html">💻Piškorky</a>
+    <a href="sachy.html">💻Šachy</a>
+    <a href="dama.html">💻Dáma</a>
+    <a href="ludo.html">⚔️Ultra Arena</a>
+    <a href="nastroje.html">👀Pomocné nástroje</a>
+    <a href="generator_hesla_mena.html">👤Generátor hesiel</a>
+    <a href="ukazka.html">👀Ukážka</a>
+    <a href="generator_obrazkov.html">🫂Obrazomix</a>
+    <a href="erikai_tube.html">📹ErikAI Tube</a>
+    <a href="android_apk.html">📲Store pre Android</a>
+    <a href="hudba.html">🔊Hudba</a>
+    <a href="erikai_own_tube.html">📹Own Tube</a>
+    <a href="perrchat.html">📩Perr Chat</a>
+  </div>
 
-<script>
-  function go(link) {
-    window.location.href = link;
-  }
-</script>
+  <script>
+    const search = document.getElementById('search');
+    const links = document.getElementById('toolList').getElementsByTagName('a');
+    search.addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      for (let link of links) {
+        const text = link.textContent.toLowerCase();
+        link.style.display = text.includes(query) ? 'block' : 'none';
+      }
+    });
+  </script>
 
 </body>
 </html>
