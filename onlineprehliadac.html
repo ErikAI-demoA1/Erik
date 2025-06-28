@@ -5,79 +5,74 @@
   <title>🌐 ErikAI Webový Prehliadač</title>
   <style>
     body {
-      background-color: #111;
-      color: #fff;
-      font-family: sans-serif;
+      background-color: #0a0a0a;
+      color: white;
+      font-family: Arial, sans-serif;
       text-align: center;
       padding: 2rem;
     }
-    input {
-      padding: 10px;
-      font-size: 1.1rem;
-      width: 80%;
+    input[type="text"] {
+      width: 90%;
       max-width: 400px;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 6px;
+      border: none;
     }
     button {
       padding: 10px 20px;
-      font-size: 1rem;
-      margin-left: 10px;
-      background-color: green;
+      font-size: 18px;
+      background-color: #04c45c;
       color: white;
       border: none;
+      border-radius: 6px;
+      margin-top: 10px;
       cursor: pointer;
     }
     .results {
       margin-top: 2rem;
-      text-align: left;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 20px;
     }
     .results a {
       display: block;
-      color: #00ccff;
-      text-decoration: none;
+      color: #00bfff;
       margin: 10px 0;
-      font-size: 1rem;
-    }
-    .results a:hover {
-      text-decoration: underline;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <h1>🌐 ErikAI Webový Prehliadač</h1>
-  <p>Zadaj, čo chceš vyhľadať:</p>
-  <input type="text" id="searchInput" placeholder="napr. Erik Mohylák">
-  <button onclick="showLinks()">🔍 Vyhľadať</button>
 
-  <div class="results" id="results"></div>
+  <h2>🌐 ErikAI Webový Prehliadač</h2>
+  <p>Zadaj, čo chceš vyhľadať (napr. Erik Mohylák):</p>
+
+  <input type="text" id="hladanyVyraz" placeholder="Napíš hľadané slovo...">
+  <br>
+  <button onclick="vyhladat()">🔍 Vyhľadať</button>
+
+  <div class="results" id="vysledky"></div>
 
   <script>
-    function showLinks() {
-      const term = document.getElementById('searchInput').value.trim();
-      const base = "https://www.google.com/search?q=" + encodeURIComponent(term);
-      const links = [
-        { name: "🔗 Google – Výsledky", url: base },
-        { name: "📘 Wikipédia", url: "https://sk.wikipedia.org/wiki/" + encodeURIComponent(term) },
-        { name: "🖼️ Obrázky", url: base + "&tbm=isch" },
-        { name: "📰 Správy", url: base + "&tbm=nws" },
-        { name: "🎥 Videá", url: base + "&tbm=vid" },
-        { name: "🌐 Google Mapy", url: "https://www.google.com/maps/search/" + encodeURIComponent(term) },
-        { name: "📚 Knihy", url: base + "&tbm=bks" }
-      ];
+    function vyhladat() {
+      const vyraz = document.getElementById("hladanyVyraz").value.trim();
+      if (!vyraz) return;
 
-      const container = document.getElementById('results');
-      container.innerHTML = "<h2>Výsledky pre: <em>" + term + "</em></h2>";
+      const encoded = encodeURIComponent(vyraz);
+      const resultsDiv = document.getElementById("vysledky");
 
-      links.forEach(link => {
-        const a = document.createElement("a");
-        a.href = link.url;
-        a.textContent = link.name;
-        a.target = "_blank";
-        container.appendChild(a);
-      });
+      resultsDiv.innerHTML = `
+        <p><strong>Výsledky pre:</strong> <em>${vyraz}</em></p>
+        <a href="https://www.google.com/search?q=${encoded}" target="_blank">🔎 Google – Výsledky</a>
+        <a href="https://duckduckgo.com/?q=${encoded}" target="_blank">🦆 DuckDuckGo</a>
+        <a href="https://www.youtube.com/results?search_query=${encoded}" target="_blank">📺 YouTube</a>
+        <a href="https://sk.wikipedia.org/wiki/${encoded}" target="_blank">📘 Wikipédia</a>
+        <a href="https://www.google.com/search?tbm=isch&q=${encoded}" target="_blank">🖼️ Obrázky</a>
+        <a href="https://www.google.com/search?tbm=nws&q=${encoded}" target="_blank">📰 Správy</a>
+        <a href="https://www.google.com/maps/search/${encoded}" target="_blank">🗺️ Google Mapy</a>
+        <a href="https://www.google.com/search?tbm=bks&q=${encoded}" target="_blank">📚 Knihy</a>
+      `;
     }
   </script>
+
 </body>
 </html>
