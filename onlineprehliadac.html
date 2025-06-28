@@ -2,32 +2,63 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌐 ErikAI Webový Prehliadač</title>
   <style>
-    body { font-family: sans-serif; background: #111; color: white; padding: 2rem; text-align: center; }
-    input { padding: 10px; width: 80%; border-radius: 6px; border: none; font-size: 1rem; }
-    button { padding: 10px 20px; border: none; border-radius: 6px; background: #00cc88; color: white; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 10px; }
+    body {
+      background-color: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    input[type="text"] {
+      width: 90%;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 25px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: none;
+      background-color: #00c853;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00b342;
+    }
   </style>
 </head>
 <body>
 
-<h2>🌍 ErikAI Webový Prehliadač</h2>
-<p>Zadaj webový odkaz (napr. https://erikaios.online)</p>
+  <h1>🌍 ErikAI Webový Prehliadač</h1>
+  <p>Zadaj webový odkaz (napr. <code>erikaios.online</code>):</p>
 
-<input type="text" id="odkaz" placeholder="https://..." />
-<br>
-<button onclick="presmeruj()">🔗 Otvoriť odkaz</button>
+  <input type="text" id="urlInput" placeholder="https://erikaios.online">
+  <br>
+  <button onclick="otvorOdkaz()">🌐 Otvoriť odkaz</button>
 
-<script>
-function presmeruj() {
-  const url = document.getElementById("odkaz").value.trim();
-  if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
-    window.location.href = url;
-  } else {
-    alert("Zadaj platný odkaz začínajúci na http:// alebo https://");
-  }
-}
-</script>
+  <script>
+    function otvorOdkaz() {
+      let link = document.getElementById("urlInput").value.trim();
+      if (link === "") {
+        alert("Zadaj webový odkaz.");
+        return;
+      }
+
+      // ak chýba https:// alebo http://, automaticky pridá https://
+      if (!link.startsWith("http://") && !link.startsWith("https://")) {
+        link = "https://" + link;
+      }
+
+      window.open(link, "_blank"); // otvorí v novom okne alebo karte
+    }
+  </script>
 
 </body>
 </html>
