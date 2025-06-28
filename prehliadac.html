@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>ErikAI OS – Hlavná stránka</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    .tool-list {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 1rem;
+    }
+    .tool {
+      background: #222;
+      margin: 0.5rem auto;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 90%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tool:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔧 ErikAI OS Universe</h1>
+<p>Vyber nástroj zo zoznamu:</p>
+
+<div class="tool-list">
+  <div class="tool" onclick="go('mail.html')">📧 ErikAI Mail</div>
+  <div class="tool" onclick="go('sms.html')">📩 ErikAI SMS</div>
+  <div class="tool" onclick="go('calendar.html')">📅 ErikAI Kalendár</div>
+  <div class="tool" onclick="go('notes.html')">📝 ErikAI Poznámky</div>
+  <div class="tool" onclick="go('alarm.html')">⏰ ErikAI Budík</div>
+  <div class="tool" onclick="go('ai.html')">🤖 ErikAI Asistent</div>
+  <div class="tool" onclick="go('store.html')">🛍️ ErikAI Store</div>
+  <div class="tool" onclick="go('corelang.html')">💻 ErikAI CoreLang</div>
+  <div class="tool" onclick="go('arena.html')">🎮 ErikAI Ultra Arena</div>
+</div>
+
+<script>
+  function go(link) {
+    window.location.href = link;
+  }
+</script>
+
+</body>
+</html>
