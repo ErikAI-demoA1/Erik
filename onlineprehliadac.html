@@ -1,78 +1,73 @@
-<!DOCTYPE html>
-<html lang="sk">
+<!DOCTYPE html><html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <title>🌐 ErikAI Webový Prehliadač</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErikAI Webový Prehliadač</title>
   <style>
     body {
-      background-color: #0a0a0a;
-      color: white;
-      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+      font-family: sans-serif;
       text-align: center;
       padding: 2rem;
     }
+    h1 {
+      color: #00ccff;
+    }
     input[type="text"] {
-      width: 90%;
-      max-width: 400px;
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 6px;
+      width: 80%;
+      padding: 0.6rem;
       border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
     }
     button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #04c45c;
+      margin-top: 1rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      background-color: #00cc66;
       color: white;
       border: none;
       border-radius: 6px;
-      margin-top: 10px;
       cursor: pointer;
     }
     .results {
       margin-top: 2rem;
-      font-size: 20px;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .results a {
       display: block;
-      color: #00bfff;
-      margin: 10px 0;
+      color: #00ccff;
       text-decoration: none;
+      margin-bottom: 0.5rem;
     }
   </style>
 </head>
 <body>
-
-  <h2>🌐 ErikAI Webový Prehliadač</h2>
+  <h1>🌐 ErikAI Webový Prehliadač</h1>
   <p>Zadaj, čo chceš vyhľadať (napr. Erik Mohylák):</p>
-
-  <input type="text" id="hladanyVyraz" placeholder="Napíš hľadané slovo...">
+  <input type="text" id="query" placeholder="Napr. Ahoj">
   <br>
-  <button onclick="vyhladat()">🔍 Vyhľadať</button>
-
-  <div class="results" id="vysledky"></div>
-
-  <script>
+  <button onclick="vyhladat()">🔍 Vyhľadať</button>  <div class="results" id="results"></div>  <script>
     function vyhladat() {
-      const vyraz = document.getElementById("hladanyVyraz").value.trim();
-      if (!vyraz) return;
-
-      const encoded = encodeURIComponent(vyraz);
-      const resultsDiv = document.getElementById("vysledky");
-
-      resultsDiv.innerHTML = `
-        <p><strong>Výsledky pre:</strong> <em>${vyraz}</em></p>
-        <a href="https://www.google.com/search?q=${encoded}" target="_blank">🔎 Google – Výsledky</a>
-        <a href="https://duckduckgo.com/?q=${encoded}" target="_blank">🦆 DuckDuckGo</a>
+      const q = document.getElementById("query").value.trim();
+      if (!q) return;
+      const encoded = encodeURIComponent(q);
+      const html = `
+        <h2>Výsledky pre: <em>${q}</em></h2>
+        <a href="https://www.google.com/search?q=${encoded}" target="_blank">🔍 Google – Výsledky</a>
+        <a href="https://duckduckgo.com/?q=${encoded}" target="_blank">🥜 DuckDuckGo</a>
         <a href="https://www.youtube.com/results?search_query=${encoded}" target="_blank">📺 YouTube</a>
-        <a href="https://sk.wikipedia.org/wiki/${encoded}" target="_blank">📘 Wikipédia</a>
-        <a href="https://www.google.com/search?tbm=isch&q=${encoded}" target="_blank">🖼️ Obrázky</a>
-        <a href="https://www.google.com/search?tbm=nws&q=${encoded}" target="_blank">📰 Správy</a>
-        <a href="https://www.google.com/maps/search/${encoded}" target="_blank">🗺️ Google Mapy</a>
+        <a href="https://sk.wikipedia.org/wiki/${encoded}" target="_blank">📗 Wikipédia</a>
+        <a href="https://www.google.com/search?tbm=isch&q=${encoded}" target="_blank">🌟 Obrázky</a>
+        <a href="https://news.google.com/search?q=${encoded}" target="_blank">📰 Správy</a>
+        <a href="https://www.google.com/maps/search/${encoded}" target="_blank">🌍 Google Mapy</a>
         <a href="https://www.google.com/search?tbm=bks&q=${encoded}" target="_blank">📚 Knihy</a>
       `;
+      document.getElementById("results").innerHTML = html;
     }
-  </script>
-
-</body>
+  </script></body>
 </html>
