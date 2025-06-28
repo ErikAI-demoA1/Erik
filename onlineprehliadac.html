@@ -48,8 +48,23 @@
   <button onclick="search()">🔍 Vyhľadať</button>
 
   <div class="results" id="results"></div>
-
-  <script>
+  
+    <script>
+  const browserList = [
+    "Google Chrome", "Mozilla Firefox", "Safari", "Microsoft Edge", "Opera", "Brave", "Vivaldi", "Tor Browser",
+    "DuckDuckGo Browser", "Samsung Internet", "UC Browser", "Yandex Browser", "Puffin", "Maxthon", "Ecosia Browser",
+    "Aloha Browser", "AVG Secure Browser", "Avast Secure Browser", "KaiOS Browser", "Internet Explorer",
+    "Netscape Navigator", "Chromium", "Comodo Dragon", "SRWare Iron", "Waterfox", "Pale Moon", "SeaMonkey",
+    "Orion Browser", "Beaker Browser", "Blisk", "Dolphin Browser", "Flynx", "Phoenix Browser", "QQ Browser",
+    "Sleipnir", "JioPages", "Kiwi Browser", "Min Browser", "Midori", "UR Browser", "Lunascape", "Hi Browser",
+    "Epic Privacy Browser", "Coc Coc", "Avant Browser", "Amigo", "IceDragon", "Dooble", "Otter Browser", "Falkon",
+    "Colibri", "K-Meleon", "Light Browser", "Wyzo", "X Browser", "Ghostery Privacy Browser", "Cent Browser",
+    "360 Secure Browser", "Basilisk", "SPARK Browser", "Rocket Browser", "Slimjet", "ICAB", "NetSurf", "Zetakey",
+    "Deepnet Explorer", "Superbird", "BlackHawk", "SlimBrowser", "Arora", "QuteBrowser", "QupZilla", "Naver Whale",
+    "Browzar", "BriskBard", "Epiphany", "Rekonq", "GNOME Web", "Kazehakase", "Opera Neon", "WebPositive", "Aurora",
+    "Torxy", "Avira Scout", "Cliqz", "Roccat Browser", "Iceweasel", "Konqueror", "Links", "Lynx", "Galeon",
+    "TenFourFox", "Polarity Browser", "Uzbl", "Midnight Browser"
+  ];
     
     function search() {
       const q = document.getElementById("query").value.trim().toLowerCase();
