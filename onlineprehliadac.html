@@ -1,44 +1,71 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ErikAI Webový Prehliadač</title>
+  <meta charset="UTF-8">
+  <title>ErikAI Prehliadač</title>
   <style>
     body {
       background-color: #000;
-      color: #00ffff;
+      color: #fff;
       font-family: sans-serif;
       text-align: center;
-      padding-top: 50px;
+      padding: 2rem;
     }
     input, button {
+      font-size: 1.1rem;
       padding: 10px;
-      font-size: 16px;
       margin: 10px;
+      border-radius: 10px;
+      border: none;
+      width: 60%;
     }
     button {
-      background-color: #00cc66;
+      background-color: #0077cc;
       color: white;
-      border: none;
+      cursor: pointer;
+    }
+    .results a {
+      display: block;
+      color: #00ccff;
+      margin: 10px 0;
+      font-size: 1.1rem;
+      text-decoration: none;
+    }
+    .results a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h2>🌐 ErikAI Webový Prehliadač</h2>
-  <p>Zadaj, čo chceš nájsť (napr. ErikAI):</p>
-  <input type="text" id="dotaz" placeholder="napr. ErikAI">
-  <button onclick="hladat()">🔍 Vyhľadať</button>
+
+  <h1>🌐 ErikAI Vyhľadávač</h1>
+  <p>Zadaj hľadaný výraz a vyber si vyhľadávač:</p>
+  <input type="text" id="query" placeholder="Napíš, čo chceš nájsť...">
+  <button onclick="search()">Vyhľadať 🔍</button>
+
+  <div class="results" id="results"></div>
 
   <script>
-    function hladat() {
-      const dotaz = document.getElementById('dotaz').value.trim();
-      if (dotaz !== '') {
-        const prikaz = '\\ ' + dotaz; // \\ znamená automaticky otvoriť prvý výsledok
-        const url = 'https://duckduckgo.com/?q=' + encodeURIComponent(prikaz);
-        window.location.href = url;
-      }
+    function search() {
+      const q = encodeURIComponent(document.getElementById("query").value.trim());
+      if (!q) return;
+
+      const engines = [
+        { name: "🔍 Google", url: `https://www.google.com/search?q=${q}` },
+        { name: "🦆 DuckDuckGo", url: `https://duckduckgo.com/?q=${q}` },
+        { name: "🔎 Bing", url: `https://www.bing.com/search?q=${q}` },
+        { name: "🌐 Yahoo", url: `https://search.yahoo.com/search?p=${q}` },
+        { name: "📺 YouTube", url: `https://www.youtube.com/results?search_query=${q}` },
+        { name: "📚 Wikipédia", url: `https://sk.wikipedia.org/wiki/Špeciálne:Hľadať?search=${q}` }
+      ];
+
+      const div = document.getElementById("results");
+      div.innerHTML = `<h2>🔽 Výber vyhľadávača pre: <i>${decodeURIComponent(q)}</i></h2>`;
+      engines.forEach(engine => {
+        div.innerHTML += `<a href="${engine.url}" target="_blank">${engine.name}</a>`;
+      });
     }
   </script>
+
 </body>
 </html>
