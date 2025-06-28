@@ -58,6 +58,8 @@ self.addEventListener('install', e => {
         'nudzove.html',
         'support.html',
         'realnastavenie.html',
+        'prehliadac.html',
+        'onlineprehliadac.html',
         'APP_Dowloand/Erik1.jpg',
         'APP_Dowloand/Erik2.jpg',
         'APP_Dowloand/Erik3.jpg',
