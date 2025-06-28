@@ -1,50 +1,43 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <title>🌐 ErikAI Webový Prehliadač</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ErikAI Webový Prehliadač</title>
   <style>
     body {
-      background: #000;
-      color: #00d9ff;
+      background-color: #000;
+      color: #00bfff;
       font-family: sans-serif;
       text-align: center;
       padding-top: 50px;
     }
-    input {
+    input, button {
       padding: 10px;
-      font-size: 18px;
-      width: 70%;
-      max-width: 400px;
-      border-radius: 5px;
-      border: none;
+      font-size: 16px;
+      margin: 5px;
     }
     button {
-      padding: 10px 20px;
-      font-size: 18px;
-      margin-left: 10px;
-      background-color: #00d9ff;
+      background-color: #00cc66;
       border: none;
-      color: black;
+      color: white;
       cursor: pointer;
-      border-radius: 5px;
     }
   </style>
 </head>
 <body>
   <h2>🌐 ErikAI Webový Prehliadač</h2>
-  <p>Zadaj, čo chceš vyhľadať (napr. <i>Erik Mohylák</i>):</p>
-  <input type="text" id="query" placeholder="Hľadať...">
-  <button onclick="search()">🔍 Vyhľadať</button>
+  <p>Zadaj, čo chceš vyhľadať:</p>
+  <input type="text" id="dotaz" placeholder="napr. Erik Mohylák" />
+  <button onclick="hladat()">🔍 Vyhľadať</button>
 
   <script>
-    function search() {
-      const q = document.getElementById("query").value.trim();
-      if (q === "") return;
-      const encoded = encodeURIComponent(q);
-      // Môžeš zmeniť vyhľadávač nižšie
-      const url = `https://duckduckgo.com/?q=${encoded}`;
-      window.location.href = url; // automaticky otvorí výsledky
+    function hladat() {
+      const vyraz = document.getElementById('dotaz').value.trim();
+      if (vyraz !== '') {
+        const url = 'https://duckduckgo.com/?q=' + encodeURIComponent(vyraz) + '&t=erikai';
+        window.location.href = url; // Otvorí rovno výsledok v DuckDuckGo
+      }
     }
   </script>
 </body>
